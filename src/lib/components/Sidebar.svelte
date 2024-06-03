@@ -1,0 +1,26 @@
+<script lang="ts">
+	import { Home, Folders, BookText } from 'lucide-svelte/icons';
+</script>
+
+<nav>
+	<ui class="list-none">
+		<li>
+			<a href="/" class="p-2 flex items-center hover:bg-sky-100 rounded">
+				<Home class="w-5 h-5" />
+				<span class="ml-2 hidden lg:inline">About</span>
+			</a>
+		</li>
+		<li>
+			<a href="/policy" class="p-2 flex items-center hover:bg-sky-100 rounded">
+				<BookText class="w-5 h-5" />
+				<span class="ml-2 hidden lg:inline">Policy Repository</span>
+			</a>
+		</li>
+		<li>
+			<a href="/case" class="p-2 flex items-center hover:bg-sky-100 rounded">
+				<Folders class="w-5 h-5" />
+				<span class="ml-2 hidden lg:inline">Case Repository</span>
+			</a>
+		</li>
+	</ui>
+</nav>
