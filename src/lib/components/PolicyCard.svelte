@@ -19,7 +19,7 @@
 <!-- <a href="/policy/1"> -->
 <div class="my-2">
 	<Card.Root>
-		<a href="/policy/1">
+		<a href="/policy/EipWj5zV7gY8uD4wddP3">
 			<div class="rounded hover:bg-gray-100">
 				<Card.Header>
 					<Card.Description>#ABC</Card.Description>

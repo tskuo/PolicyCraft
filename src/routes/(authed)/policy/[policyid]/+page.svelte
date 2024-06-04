@@ -15,6 +15,28 @@
 	let showAlert = true;
 	let userId = 'user1';
 	let localWatchList = ['user1', 'user2', 'user3'];
+	const discussions = [
+		{
+			id: 'abc',
+			title: 'Discussion title 1',
+			open: true
+		},
+		{
+			id: 'def',
+			title: 'Discussion title 2',
+			open: true
+		},
+		{
+			id: 'ghi',
+			title: 'Discussion title 3',
+			open: true
+		},
+		{
+			id: 'jkl',
+			title: 'Closed discussion 1',
+			open: false
+		}
+	];
 </script>
 
 <div>
@@ -125,7 +147,7 @@
 				</Tabs.List>
 				<Tabs.Content value="open" class="mx-1">
 					<Accordion.Root>
-						{#each data.policy.discussions as discussion (discussion.id)}
+						{#each discussions as discussion (discussion.id)}
 							{#if discussion.open}
 								<Accordion.Item value="item-{discussion.id}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
@@ -163,7 +185,7 @@
 				</Tabs.Content>
 				<Tabs.Content value="closed" class="mx-1">
 					<Accordion.Root>
-						{#each data.policy.discussions as discussion (discussion.id)}
+						{#each discussions as discussion (discussion.id)}
 							{#if !discussion.open}
 								<Accordion.Item value="item-{discussion.id}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
