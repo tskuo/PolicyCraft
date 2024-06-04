@@ -3,10 +3,20 @@
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Accordion from '$lib/components/ui/accordion';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Check, Ban, CircleHelp, Maximize, TriangleAlert } from 'lucide-svelte/icons';
 
 	export let showAlert = false;
+	let voteAllow = ['user1', 'user2', 'user3', 'user4', 'user5'];
+	let voteDisallow = ['user6', 'user7', 'user8'];
+	let voteUnsure = ['user9'];
+	let userId = 'user1';
+
+	let totalUsers = 20;
+	$: percentAllow = Math.floor((100 / totalUsers) * voteAllow.length);
+	$: percentDisallow = Math.floor((100 / totalUsers) * voteDisallow.length);
+	$: percentUnsure = Math.floor((100 / totalUsers) * voteUnsure.length);
 </script>
 
 <Card.Root>
@@ -97,20 +107,47 @@
 			totam accusamus numquam officia ex magnam nesciunt. Doloremque quis magni consequuntur esse
 			assumenda sunt tenetur rem commodi?
 		</p>
-		<div class="w-full border h-3 bg-gray-200 mt-4 mb-2 rounded"></div>
-		<p>52 votes</p>
+		<!-- <div class="w-full border h-3 bg-gray-200 mt-4 mb-2 rounded"></div>-->
+		<div class="flex w-full h-3 mt-4 mb-2">
+			{#if voteAllow.includes(userId) || voteDisallow.includes(userId) || voteUnsure.includes(userId)}
+				<div class="bg-green-200" style="width: {percentAllow}%"></div>
+				<div class="bg-red-200" style="width: {percentDisallow}%"></div>
+				<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
+			{:else}
+				<div class="w-full bg-gray-100" />
+			{/if}
+		</div>
+		<p>{voteAllow.length + voteDisallow.length + voteUnsure.length} votes</p>
 	</Card.Content>
 	<Card.Footer>
 		<ToggleGroup.Root type="single" class="w-full grid grid-cols-3">
-			<ToggleGroup.Item value="allow" aria-label="Toggle allow">
-				<Check class="h-4 w-4" />
-			</ToggleGroup.Item>
-			<ToggleGroup.Item value="disallow" aria-label="Toggle disallow">
-				<Ban class="h-4 w-4" />
-			</ToggleGroup.Item>
-			<ToggleGroup.Item value="unsure" aria-label="Toggle unsure">
-				<CircleHelp class="h-4 w-4" />
-			</ToggleGroup.Item>
+			{#if voteAllow.includes(userId)}
+				<ToggleGroup.Item value="allow" aria-label="Toggle allow" class="bg-green-200">
+					<Check class="h-4 w-4" />
+				</ToggleGroup.Item>
+			{:else}
+				<ToggleGroup.Item value="allow" aria-label="Toggle allow">
+					<Check class="h-4 w-4" />
+				</ToggleGroup.Item>
+			{/if}
+			{#if voteDisallow.includes(userId)}
+				<ToggleGroup.Item value="disallow" aria-label="Toggle disallow" class="bg-red-200">
+					<Ban class="h-4 w-4" />
+				</ToggleGroup.Item>
+			{:else}
+				<ToggleGroup.Item value="disallow" aria-label="Toggle disallow">
+					<Ban class="h-4 w-4" />
+				</ToggleGroup.Item>
+			{/if}
+			{#if voteUnsure.includes(userId)}
+				<ToggleGroup.Item value="unsure" aria-label="Toggle unsure" class="bg-gray-200">
+					<CircleHelp class="h-4 w-4" />
+				</ToggleGroup.Item>
+			{:else}
+				<ToggleGroup.Item value="unsure" aria-label="Toggle unsure">
+					<CircleHelp class="h-4 w-4" />
+				</ToggleGroup.Item>
+			{/if}
 		</ToggleGroup.Root>
 	</Card.Footer>
 </Card.Root>

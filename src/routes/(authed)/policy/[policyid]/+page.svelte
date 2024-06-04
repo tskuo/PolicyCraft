@@ -7,13 +7,14 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import CaseCard from '$lib/components/CaseCard.svelte';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import { Input } from '$lib/components/ui/input';
 	import { Eye, Pencil, TriangleAlert, Send } from 'lucide-svelte/icons';
 
 	export let data;
 
 	let showAlert = true;
+	let userId = 'user1';
+	let localWatchList = ['user1', 'user2', 'user3'];
 </script>
 
 <div>
@@ -32,8 +33,24 @@
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
 				<div>
-					<Toggle class="mr-1">
-						<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
+					<Toggle
+						class="mr-1"
+						pressed={localWatchList.includes(userId)}
+						on:click={() => {
+							console.log('clicked');
+							if (localWatchList.includes(userId)) {
+								localWatchList = localWatchList.filter((id) => id !== userId);
+							} else {
+								localWatchList = [...localWatchList, userId];
+							}
+							console.log(localWatchList);
+						}}
+					>
+						{#if localWatchList.includes(userId)}
+							<Eye class="h-4 w-4 mr-2 text-sky-500" />{localWatchList.length}
+						{:else}
+							<Eye class="h-4 w-4 mr-2" />{localWatchList.length}
+						{/if}
 					</Toggle>
 					<Button>
 						<Pencil class="h-4 w-4 mr-2" />Edit policy
