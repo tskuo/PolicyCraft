@@ -13,6 +13,13 @@
 	} from 'lucide-svelte/icons';
 	import CaseCard from './CaseCard.svelte';
 
+	export let id = '';
+	export let title = '';
+	export let content = '';
+	export let watchList: string[] = [];
+	export let cases: any[] = [];
+	export let discussions: any[] = [];
+
 	let compactView = true;
 </script>
 
@@ -22,18 +29,11 @@
 		<a href="/policy/EipWj5zV7gY8uD4wddP3">
 			<div class="rounded hover:bg-gray-100">
 				<Card.Header>
-					<Card.Description>#ABC</Card.Description>
-					<Card.Title>All ideas must be your own</Card.Title>
+					<Card.Description>#{id}</Card.Description>
+					<Card.Title>{title}</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati ipsum molestiae
-						adipisci neque officia dolore explicabo similique, vitae sunt dolores, ullam, hic
-						aspernatur. Dignissimos, similique id non commodi magnam harum. Lorem ipsum dolor sit
-						amet consectetur, adipisicing elit. Voluptatem odio illo reiciendis, repellendus culpa,
-						ipsum corrupti aspernatur eligendi velit, quo consequatur ratione excepturi delectus
-						incidunt nihil quas vel voluptate ad?
-					</p>
+					<p>{content}</p>
 				</Card.Content>
 			</div>
 		</a>
@@ -55,7 +55,7 @@
 					</button>
 					<button on:click|preventDefault>
 						<Toggle class="ml-1">
-							<Eye class="h-4 w-4 mr-2" />32
+							<Eye class="h-4 w-4 mr-2" />{watchList.length}
 						</Toggle>
 					</button>
 				</div>
@@ -76,36 +76,36 @@
 		{#if compactView === false}
 			<Card.Content>
 				<h3 class="font-bold mb-2">Related Cases</h3>
-				<div class="flex justify-center w-full">
-					<Carousel.Root opts={{ align: 'start' }} class="w-11/12">
-						<Carousel.Content>
-							{#each Array(5) as _, i (i)}
-								<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-									<CaseCard></CaseCard>
-								</Carousel.Item>
-							{/each}
-						</Carousel.Content>
-						<Carousel.Previous />
-						<Carousel.Next />
-					</Carousel.Root>
-				</div>
+				{#if cases.length > 0}
+					<div class="flex justify-center w-full">
+						<Carousel.Root opts={{ align: 'start' }} class="w-11/12">
+							<Carousel.Content>
+								{#each cases as c}
+									<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
+										<CaseCard caseId={c.caseId}></CaseCard>
+									</Carousel.Item>
+								{/each}
+							</Carousel.Content>
+							<Carousel.Previous />
+							<Carousel.Next />
+						</Carousel.Root>
+					</div>
+				{:else}
+					<p class="text-sm">There are no related cases.</p>
+				{/if}
 				<h3 class="font-bold mt-4 mb-2">Discussions</h3>
 				<Table.Root>
 					<Table.Body>
-						<Table.Row>
-							<Table.Cell class="font-medium"
-								>Is information summarization part of brainstorming?</Table.Cell
-							>
-							<Table.Cell class="text-right">3 comments</Table.Cell>
-						</Table.Row>
-						<Table.Row>
-							<Table.Cell class="font-medium">What counts as prototype?</Table.Cell>
-							<Table.Cell class="text-right">5 comments</Table.Cell>
-						</Table.Row>
-						<Table.Row>
-							<Table.Cell class="font-medium">The definition of idea ownership?</Table.Cell>
-							<Table.Cell class="text-right">1 comments</Table.Cell>
-						</Table.Row>
+						{#if discussions.length > 0}
+							{#each discussions as discussion}
+								<Table.Row>
+									<Table.Cell class="font-medium">{discussion.title}</Table.Cell>
+									<Table.Cell class="text-right">{discussion.comments.length} comments</Table.Cell>
+								</Table.Row>
+							{/each}
+						{:else}
+							<p>There are no discussions.</p>
+						{/if}
 					</Table.Body>
 				</Table.Root>
 			</Card.Content>

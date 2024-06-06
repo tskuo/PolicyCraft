@@ -8,7 +8,6 @@
 
 <div class="grid grid-cols-4">
 	<div class="col-span-3 p-2">
-		<!-- <h1 class="font-bold text-lg my-2">Create a new policy or case</h1> -->
 		<Tabs.Root value="policy" class="w-full">
 			<Tabs.List class="grid w-full grid-cols-2">
 				<Tabs.Trigger value="policy">Policy</Tabs.Trigger>

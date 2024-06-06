@@ -3,11 +3,12 @@
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Accordion from '$lib/components/ui/accordion';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Check, Ban, CircleHelp, Maximize, TriangleAlert } from 'lucide-svelte/icons';
 
+	export let caseId = '';
 	export let showAlert = false;
+
 	let voteAllow = ['user1', 'user2', 'user3', 'user4', 'user5'];
 	let voteDisallow = ['user6', 'user7', 'user8'];
 	let voteUnsure = ['user9'];
@@ -92,7 +93,7 @@
 							</Dialog.Content>
 						</Dialog.Root>
 					</button>
-					<p>Case #123</p>
+					<p>Case #{caseId}</p>
 				</div>
 				{#if showAlert === true}<TriangleAlert class="w-4 h-4" />{/if}
 			</div>
@@ -107,7 +108,6 @@
 			totam accusamus numquam officia ex magnam nesciunt. Doloremque quis magni consequuntur esse
 			assumenda sunt tenetur rem commodi?
 		</p>
-		<!-- <div class="w-full border h-3 bg-gray-200 mt-4 mb-2 rounded"></div>-->
 		<div class="flex w-full h-3 mt-4 mb-2">
 			{#if voteAllow.includes(userId) || voteDisallow.includes(userId) || voteUnsure.includes(userId)}
 				<div class="bg-green-200" style="width: {percentAllow}%"></div>

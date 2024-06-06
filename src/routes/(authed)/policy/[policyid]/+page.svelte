@@ -50,7 +50,7 @@
 						</Breadcrumb.Item>
 						<Breadcrumb.Separator />
 						<Breadcrumb.Item>
-							<Breadcrumb.Page>Policy #{data.policy.id}</Breadcrumb.Page>
+							<Breadcrumb.Page class="capitalize">{data.policy.title}</Breadcrumb.Page>
 						</Breadcrumb.Item>
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
@@ -91,7 +91,7 @@
 					</Alert.Description>
 				</Alert.Root>
 			{/if}
-			<h1 class="font-bold text-xl mt-4">{data.policy.title}</h1>
+			<h1 class="font-bold text-xl mt-4 capitalize">{data.policy.title}</h1>
 			<p class="leading-relaxed my-2">
 				{data.policy.content}
 			</p>
@@ -131,11 +131,9 @@
 				</div>
 			</div>
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1">
-				<CaseCard showAlert={true} />
-				<CaseCard showAlert={true} />
-				<CaseCard />
-				<CaseCard />
-				<CaseCard />
+				{#each data.policy.cases as c}
+					<CaseCard caseId={c.caseId} showAlert={true} />
+				{/each}
 			</div>
 		</div>
 		<div class="col-span-1 p-2">
@@ -147,26 +145,17 @@
 				</Tabs.List>
 				<Tabs.Content value="open" class="mx-1">
 					<Accordion.Root>
-						{#each discussions as discussion (discussion.id)}
+						{#each data.policy.discussions as discussion}
 							{#if discussion.open}
-								<Accordion.Item value="item-{discussion.id}" class="text-sm">
+								<Accordion.Item value="item-{discussion.title}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
 									<Accordion.Content>
-										<p class="font-bold py-2">Purple Koala</p>
-										<p class="bg-gray-100 rounded p-2 mb-2">
-											Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque
-											eos placeat molestias tempore ducimus nihil lib
-										</p>
-										<p class="font-bold py-2">Yellow Cat</p>
-										<p class="bg-gray-100 rounded p-2 mb-2">
-											Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque
-											eos placeat molestias tempore ducimus nihil lib
-										</p>
-										<p class="font-bold py-2">Blue Elephant</p>
-										<p class="bg-gray-100 rounded p-2 mb-2">
-											Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque
-											eos placeat molestias tempore ducimus nihil lib
-										</p>
+										{#each discussion.comments as comment}
+											<p class="font-bold py-2">{comment.userId}</p>
+											<p class="bg-gray-100 rounded p-2 mb-2">
+												{comment.text}
+											</p>
+										{/each}
 										<form class="flex w-full mt-4 items-center space-x-2">
 											<Input
 												name="comment-{discussion.id}"
@@ -185,26 +174,17 @@
 				</Tabs.Content>
 				<Tabs.Content value="closed" class="mx-1">
 					<Accordion.Root>
-						{#each discussions as discussion (discussion.id)}
+						{#each data.policy.discussions as discussion}
 							{#if !discussion.open}
-								<Accordion.Item value="item-{discussion.id}" class="text-sm">
+								<Accordion.Item value="item-{discussion.title}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
 									<Accordion.Content>
-										<p class="font-bold py-2">Purple Koala</p>
-										<p class="bg-gray-100 rounded p-2 mb-2">
-											Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque
-											eos placeat molestias tempore ducimus nihil lib
-										</p>
-										<p class="font-bold py-2">Yellow Cat</p>
-										<p class="bg-gray-100 rounded p-2 mb-2">
-											Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque
-											eos placeat molestias tempore ducimus nihil lib
-										</p>
-										<p class="font-bold py-2">Blue Elephant</p>
-										<p class="bg-gray-100 rounded p-2 mb-2">
-											Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque
-											eos placeat molestias tempore ducimus nihil lib
-										</p>
+										{#each discussion.comments as comment}
+											<p class="font-bold py-2">{comment.userId}</p>
+											<p class="bg-gray-100 rounded p-2 mb-2">
+												{comment.text}
+											</p>
+										{/each}
 									</Accordion.Content>
 								</Accordion.Item>
 							{/if}

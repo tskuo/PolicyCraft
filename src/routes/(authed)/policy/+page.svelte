@@ -3,6 +3,8 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select';
 	import PolicyCard from '$lib/components/PolicyCard.svelte';
+
+	export let data;
 </script>
 
 <div class="grid grid-cols-4">
@@ -36,9 +38,13 @@
 		</div>
 		<Separator class="my-4" />
 		<div>
-			{#each Array(5) as _, i (i)}
-				<PolicyCard />
-			{/each}
+			{#if data.policies.length > 0}
+				{#each data.policies as policy (policy.id)}
+					<PolicyCard {...policy} />
+				{/each}
+			{:else}
+				<p>The policy repository is empty.</p>
+			{/if}
 		</div>
 	</div>
 </div>
