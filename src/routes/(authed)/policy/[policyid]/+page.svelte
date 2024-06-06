@@ -8,35 +8,13 @@
 	import * as Accordion from '$lib/components/ui/accordion';
 	import CaseCard from '$lib/components/CaseCard.svelte';
 	import { Input } from '$lib/components/ui/input';
-	import { Eye, Pencil, TriangleAlert, Send } from 'lucide-svelte/icons';
+	import { Eye, Pencil, TriangleAlert, Send, Plus } from 'lucide-svelte/icons';
 
 	export let data;
 
 	let showAlert = true;
 	let userId = 'user1';
 	let localWatchList = ['user1', 'user2', 'user3'];
-	const discussions = [
-		{
-			id: 'abc',
-			title: 'Discussion title 1',
-			open: true
-		},
-		{
-			id: 'def',
-			title: 'Discussion title 2',
-			open: true
-		},
-		{
-			id: 'ghi',
-			title: 'Discussion title 3',
-			open: true
-		},
-		{
-			id: 'jkl',
-			title: 'Closed discussion 1',
-			open: false
-		}
-	];
 </script>
 
 <div>
@@ -59,7 +37,6 @@
 						class="mr-1"
 						pressed={localWatchList.includes(userId)}
 						on:click={() => {
-							console.log('clicked');
 							if (localWatchList.includes(userId)) {
 								localWatchList = localWatchList.filter((id) => id !== userId);
 							} else {
@@ -170,6 +147,11 @@
 								</Accordion.Item>
 							{/if}
 						{/each}
+						<div class="flex justify-center mt-2">
+							<Button class="bg-white hover:bg-secondary text-foreground"
+								><Plus class="h-4 w-4 mr-2" />New discussion</Button
+							>
+						</div>
 					</Accordion.Root>
 				</Tabs.Content>
 				<Tabs.Content value="closed" class="mx-1">
