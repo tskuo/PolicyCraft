@@ -8,5 +8,5 @@ export const GET = async ({ params }) => {
 	if (docSnap.exists()) {
 		return json({ ...docSnap.data(), id: docSnap.id });
 	}
-	throw error(404, `Policy #${params.policyId} doesn't exist.`);
+	throw error(404, `Policy #${params.policyId} not found.`);
 };

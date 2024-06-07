@@ -70,7 +70,7 @@
 			{/if}
 			<h1 class="font-bold text-xl mt-4 capitalize">{data.policy.title}</h1>
 			<p class="leading-relaxed my-2">
-				{data.policy.content}
+				{data.policy.description}
 			</p>
 
 			<h3 class="font-bold mt-6 text-lg">Related Cases</h3>
@@ -122,7 +122,7 @@
 				</Tabs.List>
 				<Tabs.Content value="open" class="mx-1">
 					<Accordion.Root>
-						{#each data.policy.discussions as discussion}
+						<!-- {#each data.policy.discussions as discussion}
 							{#if discussion.open}
 								<Accordion.Item value="item-{discussion.title}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
@@ -146,17 +146,15 @@
 									</Accordion.Content>
 								</Accordion.Item>
 							{/if}
-						{/each}
+						{/each} -->
 						<div class="flex justify-center mt-2">
-							<Button class="bg-white hover:bg-secondary text-foreground"
-								><Plus class="h-4 w-4 mr-2" />New discussion</Button
-							>
+							<Button variant="ghost"><Plus class="h-4 w-4 mr-2" />New discussion</Button>
 						</div>
 					</Accordion.Root>
 				</Tabs.Content>
 				<Tabs.Content value="closed" class="mx-1">
 					<Accordion.Root>
-						{#each data.policy.discussions as discussion}
+						<!-- {#each data.policy.discussions as discussion}
 							{#if !discussion.open}
 								<Accordion.Item value="item-{discussion.title}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
@@ -170,7 +168,7 @@
 									</Accordion.Content>
 								</Accordion.Item>
 							{/if}
-						{/each}
+						{/each} -->
 					</Accordion.Root>
 				</Tabs.Content>
 			</Tabs.Root>

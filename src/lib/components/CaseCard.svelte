@@ -122,7 +122,7 @@
 	<Card.Footer>
 		<ToggleGroup.Root type="single" class="w-full grid grid-cols-3">
 			{#if voteAllow.includes(userId)}
-				<ToggleGroup.Item value="allow" aria-label="Toggle allow" class="bg-green-200">
+				<ToggleGroup.Item value="allow" aria-label="Toggle allow">
 					<Check class="h-4 w-4" />
 				</ToggleGroup.Item>
 			{:else}
@@ -131,7 +131,7 @@
 				</ToggleGroup.Item>
 			{/if}
 			{#if voteDisallow.includes(userId)}
-				<ToggleGroup.Item value="disallow" aria-label="Toggle disallow" class="bg-red-200">
+				<ToggleGroup.Item value="disallow" aria-label="Toggle disallow">
 					<Ban class="h-4 w-4" />
 				</ToggleGroup.Item>
 			{:else}
@@ -140,7 +140,7 @@
 				</ToggleGroup.Item>
 			{/if}
 			{#if voteUnsure.includes(userId)}
-				<ToggleGroup.Item value="unsure" aria-label="Toggle unsure" class="bg-gray-200">
+				<ToggleGroup.Item value="unsure" aria-label="Toggle unsure">
 					<CircleHelp class="h-4 w-4" />
 				</ToggleGroup.Item>
 			{:else}

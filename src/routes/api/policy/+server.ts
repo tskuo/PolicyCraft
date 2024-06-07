@@ -12,6 +12,12 @@ export const GET = async () => {
 		});
 		return json(res);
 	} catch (e) {
-		throw error(400, 'an error occured');
+		throw error(400, 'Fail to fetch data from Firestore.');
 	}
+};
+
+export const POST = async ({ request }) => {
+	const { form } = await request.json();
+	const id = 'testing';
+	return json({ id }, { status: 201 });
 };

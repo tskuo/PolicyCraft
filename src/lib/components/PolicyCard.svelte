@@ -15,10 +15,10 @@
 
 	export let id = '';
 	export let title = '';
-	export let content = '';
+	export let description = '';
 	export let watchList: string[] = [];
 	export let cases: any[] = [];
-	export let discussions: any[] = [];
+	export let openDiscussions: any[] = [];
 
 	let compactView = true;
 </script>
@@ -26,14 +26,14 @@
 <!-- <a href="/policy/1"> -->
 <div class="my-2">
 	<Card.Root>
-		<a href="/policy/EipWj5zV7gY8uD4wddP3">
+		<a href="/policy/{id}">
 			<div class="rounded hover:bg-gray-100">
 				<Card.Header>
-					<Card.Description>#{id}</Card.Description>
+					<!-- <Card.Description>#{id}</Card.Description> -->
 					<Card.Title>{title}</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<p>{content}</p>
+					<p>{description}</p>
 				</Card.Content>
 			</div>
 		</a>
@@ -65,10 +65,10 @@
 						<TriangleAlert class="w-4 h-4 mr-2" />3
 					</div>
 					<div class="flex mx-2 items-center">
-						<Folder class="w-4 h-4 mr-2" />3
+						<Folder class="w-4 h-4 mr-2" />{cases.length}
 					</div>
 					<div class="flex mx-2 items-center">
-						<MessageSquare class="w-4 h-4 mr-2" />3
+						<MessageSquare class="w-4 h-4 mr-2" />{openDiscussions.length}
 					</div>
 				</div>
 			</div>
@@ -93,18 +93,18 @@
 				{:else}
 					<p class="text-sm">There are no related cases.</p>
 				{/if}
-				<h3 class="font-bold mt-4 mb-2">Discussions</h3>
+				<h3 class="font-bold mt-4 mb-2">Open discussions</h3>
 				<Table.Root>
 					<Table.Body>
-						{#if discussions.length > 0}
-							{#each discussions as discussion}
+						{#if openDiscussions.length > 0}
+							{#each openDiscussions as discussion}
 								<Table.Row>
 									<Table.Cell class="font-medium">{discussion.title}</Table.Cell>
-									<Table.Cell class="text-right">{discussion.comments.length} comments</Table.Cell>
+									<!-- <Table.Cell class="text-right">{discussion.comments.length} comments</Table.Cell> -->
 								</Table.Row>
 							{/each}
 						{:else}
-							<p>There are no discussions.</p>
+							<p>There are no open discussions.</p>
 						{/if}
 					</Table.Body>
 				</Table.Root>

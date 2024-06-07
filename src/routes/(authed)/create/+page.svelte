@@ -1,9 +1,20 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import * as Form from '$lib/components/ui/form/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
+	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+	import { enhance } from '$app/forms';
+	// import { enhance } from '$app/forms';
+
+	// export let data;
+	// export let form;
+
+	import type { PageData } from './$types.js';
+	import SettingsForm from './settings-form.svelte';
+	export let data: PageData;
 </script>
 
 <div class="grid grid-cols-4">
@@ -17,23 +28,25 @@
 				<Card.Root>
 					<Card.Header>
 						<Card.Title>Create a new policy</Card.Title>
-						<Card.Description>
-							Make changes to your account here. Click save when you're done.
-						</Card.Description>
+						<Card.Description>Policy creation guidelines ...</Card.Description>
 					</Card.Header>
 					<Card.Content class="space-y-2">
-						<div class="space-y-1">
-							<Label for="name">Name</Label>
-							<Input id="name" value="Pedro Duarte" />
-						</div>
-						<div class="space-y-1">
-							<Label for="username">Username</Label>
-							<Input id="username" value="@peduarte" />
-						</div>
+						<SettingsForm data={data.form} />
+						<!-- <form method="POST">
+							<div class="space-y-1 my-2">
+								<Label for="policy-title">Title</Label>
+								<Input name="title" id="policy-title" />
+							</div>
+							<div class="space-y-1 my-2">
+								<Label for="policy-description">Description</Label>
+								<Textarea name="description" id="policy-description" />
+							</div>
+							<div class="space-y-2 mt-6">
+								<Form.Button>Submit</Form.Button>
+							</div>
+						</form> -->
 					</Card.Content>
-					<Card.Footer>
-						<Button>Submit</Button>
-					</Card.Footer>
+					<!-- <Card.Footer></Card.Footer> -->
 				</Card.Root>
 			</Tabs.Content>
 			<Tabs.Content value="case">

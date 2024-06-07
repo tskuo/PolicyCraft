@@ -29,6 +29,6 @@ if (!getApps().length) {
 	app = initializeApp(firebaseConfig);
 }
 
-export const db = getFirestore(app);
+export const db = getFirestore(app, 'policycraft');
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
