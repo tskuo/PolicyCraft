@@ -5,19 +5,42 @@
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Check, Ban, CircleHelp, Maximize, TriangleAlert } from 'lucide-svelte/icons';
+	import type { Timestamp } from 'firebase/firestore';
 
-	export let caseId = '';
+	export let id = '';
+	export let createAt: Timestamp;
+	export let description = '';
+	export let reasons = {
+		allow: [],
+		disallow: []
+	};
+	export let title = '';
+	export let votes = {
+		allow: [] as string[],
+		disallow: [] as string[],
+		unsure: [] as string[]
+	};
+
 	export let showAlert = false;
 
-	let voteAllow = ['user1', 'user2', 'user3', 'user4', 'user5'];
-	let voteDisallow = ['user6', 'user7', 'user8'];
-	let voteUnsure = ['user9'];
 	let userId = 'user1';
+	let userVote = '';
+	$: {
+		if (votes.allow.includes(userId)) {
+			userVote = 'allow';
+		} else if (votes.disallow.includes(userId)) {
+			userVote = 'disallow';
+		} else if (votes.unsure.includes(userId)) {
+			userVote = 'unsure';
+		} else {
+			userVote = '';
+		}
+	}
 
-	let totalUsers = 20;
-	$: percentAllow = Math.floor((100 / totalUsers) * voteAllow.length);
-	$: percentDisallow = Math.floor((100 / totalUsers) * voteDisallow.length);
-	$: percentUnsure = Math.floor((100 / totalUsers) * voteUnsure.length);
+	$: totalUsers = votes.allow.length + votes.disallow.length + votes.unsure.length;
+	$: percentAllow = Math.floor((100 / totalUsers) * votes.allow.length);
+	$: percentDisallow = Math.floor((100 / totalUsers) * votes.disallow.length);
+	$: percentUnsure = Math.floor((100 / totalUsers) * votes.unsure.length);
 </script>
 
 <Card.Root>
@@ -32,84 +55,84 @@
 							</Dialog.Trigger>
 							<Dialog.Content class="sm:max-w-lg max-h-screen overflow-y-scroll">
 								<Dialog.Header>
-									<Dialog.Description>Case #123</Dialog.Description>
+									<Dialog.Description>Case #{id}</Dialog.Description>
 									<Dialog.Title class="leading-normal">
-										Bob uses ChatGPT to generate ideas for reading reflection
+										{title}
 									</Dialog.Title>
 								</Dialog.Header>
 								<p>
-									Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum repellendus aperiam
-									vero possimus sequi iste architecto nulla voluptatibus commodi iure, placeat natus
-									doloribus obcaecati veniam ex deserunt voluptates molestiae eius.
+									{description}
 								</p>
-								<div class="w-full border h-3 bg-gray-200 mt-2 rounded"></div>
-								<p>52 votes</p>
-								<ToggleGroup.Root type="single" class="w-full grid grid-cols-3">
-									<ToggleGroup.Item value="allow" aria-label="Toggle allow">
+								<!-- <div class="w-full border h-3 bg-gray-200 mt-2 rounded"></div> -->
+								<div class="flex w-full h-3 mt-2 mb-2 rounded">
+									{#if userVote !== ''}
+										<div class="bg-green-200" style="width: {percentAllow}%"></div>
+										<div class="bg-red-200" style="width: {percentDisallow}%"></div>
+										<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
+									{:else}
+										<div class="w-full bg-gray-100" />
+									{/if}
+								</div>
+
+								<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
+								<ToggleGroup.Root type="single" class="w-full grid grid-cols-3" value={userVote}>
+									<ToggleGroup.Item
+										value="allow"
+										aria-label="Toggle allow"
+										class="data-[state=on]:bg-green-200"
+									>
 										<Check class="h-4 w-4" />
 									</ToggleGroup.Item>
-									<ToggleGroup.Item value="disallow" aria-label="Toggle disallow">
+									<ToggleGroup.Item
+										value="disallow"
+										aria-label="Toggle disallow"
+										class="data-[state=on]:bg-red-200"
+									>
 										<Ban class="h-4 w-4" />
 									</ToggleGroup.Item>
-									<ToggleGroup.Item value="unsure" aria-label="Toggle unsure">
+									<ToggleGroup.Item
+										value="unsure"
+										aria-label="Toggle unsure"
+										class="data-[state=on]:bg-gray-200"
+									>
 										<CircleHelp class="h-4 w-4" />
 									</ToggleGroup.Item>
 								</ToggleGroup.Root>
 								<h3 class="font-bold">Allow Reasons</h3>
 								<Accordion.Root class="w-full">
-									<Accordion.Item value="item-1">
-										<Accordion.Trigger>Is it accessible?</Accordion.Trigger>
-										<Accordion.Content
-											>Yes. It adheres to the WAI-ARIA design pattern.</Accordion.Content
-										>
-									</Accordion.Item>
-									<Accordion.Item value="item-2">
-										<Accordion.Trigger>Is it styled?</Accordion.Trigger>
-										<Accordion.Content>
-											Yes. It comes with default styles that matches the other components'
-											aesthetic.
-										</Accordion.Content>
-									</Accordion.Item>
-									<Accordion.Item value="item-3">
-										<Accordion.Trigger>Is it styled?</Accordion.Trigger>
-										<Accordion.Content>
-											Yes. It comes with default styles that matches the other components'
-											aesthetic.
-										</Accordion.Content>
-									</Accordion.Item>
+									{#each reasons.allow as reason (reason.id)}
+										<Accordion.Item value={reason.id}>
+											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
+											<Accordion.Content>{reason.description}</Accordion.Content>
+										</Accordion.Item>
+									{/each}
 								</Accordion.Root>
 								<h3 class="font-bold">Disallow Reasons</h3>
 								<Accordion.Root class="w-full">
-									<Accordion.Item value="item-1">
-										<Accordion.Trigger>Is it accessible?</Accordion.Trigger>
-										<Accordion.Content
-											>Yes. It adheres to the WAI-ARIA design pattern.</Accordion.Content
-										>
-									</Accordion.Item>
+									{#each reasons.disallow as reason (reason.id)}
+										<Accordion.Item value={reason.id}>
+											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
+											<Accordion.Content>{reason.description}</Accordion.Content>
+										</Accordion.Item>
+									{/each}
 								</Accordion.Root>
 								<Dialog.Footer>
-									<Button href="/case/1">Open case</Button>
+									<Button href="/case/{id}">Open case</Button>
 								</Dialog.Footer>
 							</Dialog.Content>
 						</Dialog.Root>
 					</button>
-					<p>Case #{caseId}</p>
+					<p>Case #{id}</p>
 				</div>
 				{#if showAlert === true}<TriangleAlert class="w-4 h-4" />{/if}
 			</div>
 		</Card.Description>
-		<Card.Title class="leading-normal">
-			Bob uses ChatGPT to generate ideas for reading reflection
-		</Card.Title>
+		<Card.Title class="leading-normal">{title}</Card.Title>
 	</Card.Header>
 	<Card.Content>
-		<p>
-			Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error deserunt nam debitis cumque
-			totam accusamus numquam officia ex magnam nesciunt. Doloremque quis magni consequuntur esse
-			assumenda sunt tenetur rem commodi?
-		</p>
+		<p>{description}</p>
 		<div class="flex w-full h-3 mt-4 mb-2">
-			{#if voteAllow.includes(userId) || voteDisallow.includes(userId) || voteUnsure.includes(userId)}
+			{#if userVote !== ''}
 				<div class="bg-green-200" style="width: {percentAllow}%"></div>
 				<div class="bg-red-200" style="width: {percentDisallow}%"></div>
 				<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
@@ -117,10 +140,10 @@
 				<div class="w-full bg-gray-100" />
 			{/if}
 		</div>
-		<p>{voteAllow.length + voteDisallow.length + voteUnsure.length} votes</p>
+		<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
 	</Card.Content>
 	<Card.Footer>
-		<ToggleGroup.Root type="single" class="w-full grid grid-cols-3">
+		<ToggleGroup.Root type="single" class="w-full grid grid-cols-3" value={userVote}>
 			<ToggleGroup.Item
 				value="allow"
 				aria-label="Toggle allow"

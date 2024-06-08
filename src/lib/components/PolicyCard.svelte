@@ -84,7 +84,7 @@
 							<Carousel.Content>
 								{#each cases as c}
 									<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-										<CaseCard caseId={c.caseId}></CaseCard>
+										<CaseCard></CaseCard>
 									</Carousel.Item>
 								{/each}
 							</Carousel.Content>

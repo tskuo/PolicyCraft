@@ -9,6 +9,6 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		return { policies };
 	}
 
-	throw error(404, 'fetching error');
+	throw error(404, 'Fail to load policies.');
 	// throw redirect(307, '/policy');
 };
