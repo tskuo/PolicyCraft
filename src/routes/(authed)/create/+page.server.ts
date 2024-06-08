@@ -1,12 +1,5 @@
-// export const actions = {
-// 	default: async ({ cookies, request }) => {
-// 		const data = await request.formData();
-// 		console.log(data.get('title'), data.get('description'));
-// 	}
-// };
-
 import type { PageServerLoad, Actions } from './$types.js';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { polictCreateFormSchema } from './schema';
@@ -18,7 +11,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	default: async (event) => {
+	createPolicy: async (event) => {
 		const form = await superValidate(event, zod(polictCreateFormSchema));
 
 		if (!form.valid) {
@@ -26,19 +19,17 @@ export const actions: Actions = {
 				form
 			});
 		}
-		console.log(form);
 		const res = await event.fetch('/api/policy', {
 			method: 'POST',
-			body: JSON.stringify({ form }),
-			headers: {
-				'Content-Type': 'appplication/json'
-			}
+			body: JSON.stringify({ form })
+			// headers: {
+			// 	'Content-Type': 'appplication/json'
+			// }
 		});
-		// console.log(res);
 		const test = await res.json();
-		console.log(test);
-		return {
-			form
-		};
+		throw redirect(303, `/policy/${test.id}`);
+		// return {
+		// 	form
+		// };
 	}
 };

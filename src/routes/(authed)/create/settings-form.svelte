@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
+	import { Textarea } from '$lib/components/ui/textarea';
 	import { polictCreateFormSchema, type PolictCreateFormSchema } from './schema';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -14,7 +15,7 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<form method="POST" use:enhance>
+<form method="POST" use:enhance action="?/createPolicy">
 	<Form.Field {form} name="title">
 		<Form.Control let:attrs>
 			<Form.Label>Title</Form.Label>
@@ -26,7 +27,7 @@
 	<Form.Field {form} name="description">
 		<Form.Control let:attrs>
 			<Form.Label>Description</Form.Label>
-			<Input {...attrs} bind:value={$formData.description} />
+			<Textarea {...attrs} bind:value={$formData.description} />
 		</Form.Control>
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
 		<Form.FieldErrors />

@@ -1,7 +1,8 @@
 import { json, error } from '@sveltejs/kit';
-import { collection, getDocs } from 'firebase/firestore';
+import { serverTimestamp, addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
+// Get all policies from the database
 export const GET = async () => {
 	try {
 		const querySnapshot = await getDocs(collection(db, 'policy'));
@@ -16,8 +17,25 @@ export const GET = async () => {
 	}
 };
 
+// Create a new policy
 export const POST = async ({ request }) => {
-	const { form } = await request.json();
-	const id = 'testing';
-	return json({ id }, { status: 201 });
+	try {
+		const { form } = await request.json();
+		const docRef = await addDoc(collection(db, 'policy'), {
+			cases: [],
+			createAt: serverTimestamp(),
+			description: form.data.description,
+			openDiscussions: [],
+			title: form.data.title,
+			watchList: []
+		});
+		return json({ id: docRef.id }, { status: 201 });
+	} catch (e) {
+		throw error(400, 'Fail to create a new policy in the database.');
+	}
+
+	// const { form } = await request.json();
+	// console.log(form.data.title);
+	// const id = 'testing';
+	// return json({ id }, { status: 201 });
 };
