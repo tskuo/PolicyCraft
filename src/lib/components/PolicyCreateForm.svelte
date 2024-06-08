@@ -2,14 +2,14 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { polictCreateFormSchema, type PolictCreateFormSchema } from './schema';
+	import { policyCreateFormSchema, type PolicyCreateFormSchema } from '$lib/schema';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	export let data: SuperValidated<Infer<PolictCreateFormSchema>>;
+	export let data: SuperValidated<Infer<PolicyCreateFormSchema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(polictCreateFormSchema)
+		validators: zodClient(policyCreateFormSchema)
 	});
 
 	const { form: formData, enhance } = form;
