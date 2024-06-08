@@ -34,7 +34,7 @@
 				</Breadcrumb.Root>
 				<div>
 					<Toggle
-						class="mr-1"
+						class="mr-1 data-[state=on]:bg-sky-200"
 						pressed={localWatchList.includes(userId)}
 						on:click={() => {
 							if (localWatchList.includes(userId)) {
@@ -45,11 +45,12 @@
 							console.log(localWatchList);
 						}}
 					>
-						{#if localWatchList.includes(userId)}
+						<!-- {#if localWatchList.includes(userId)}
 							<Eye class="h-4 w-4 mr-2 text-sky-500" />{localWatchList.length}
 						{:else}
 							<Eye class="h-4 w-4 mr-2" />{localWatchList.length}
-						{/if}
+						{/if} -->
+						<Eye class="h-4 w-4 mr-2" />{localWatchList.length}
 					</Toggle>
 					<Button>
 						<Pencil class="h-4 w-4 mr-2" />Edit policy

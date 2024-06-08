@@ -121,33 +121,27 @@
 	</Card.Content>
 	<Card.Footer>
 		<ToggleGroup.Root type="single" class="w-full grid grid-cols-3">
-			{#if voteAllow.includes(userId)}
-				<ToggleGroup.Item value="allow" aria-label="Toggle allow">
-					<Check class="h-4 w-4" />
-				</ToggleGroup.Item>
-			{:else}
-				<ToggleGroup.Item value="allow" aria-label="Toggle allow">
-					<Check class="h-4 w-4" />
-				</ToggleGroup.Item>
-			{/if}
-			{#if voteDisallow.includes(userId)}
-				<ToggleGroup.Item value="disallow" aria-label="Toggle disallow">
-					<Ban class="h-4 w-4" />
-				</ToggleGroup.Item>
-			{:else}
-				<ToggleGroup.Item value="disallow" aria-label="Toggle disallow">
-					<Ban class="h-4 w-4" />
-				</ToggleGroup.Item>
-			{/if}
-			{#if voteUnsure.includes(userId)}
-				<ToggleGroup.Item value="unsure" aria-label="Toggle unsure">
-					<CircleHelp class="h-4 w-4" />
-				</ToggleGroup.Item>
-			{:else}
-				<ToggleGroup.Item value="unsure" aria-label="Toggle unsure">
-					<CircleHelp class="h-4 w-4" />
-				</ToggleGroup.Item>
-			{/if}
+			<ToggleGroup.Item
+				value="allow"
+				aria-label="Toggle allow"
+				class="data-[state=on]:bg-green-200"
+			>
+				<Check class="h-4 w-4" />
+			</ToggleGroup.Item>
+			<ToggleGroup.Item
+				value="disallow"
+				aria-label="Toggle disallow"
+				class="data-[state=on]:bg-red-200"
+			>
+				<Ban class="h-4 w-4" />
+			</ToggleGroup.Item>
+			<ToggleGroup.Item
+				value="unsure"
+				aria-label="Toggle unsure"
+				class="data-[state=on]:bg-gray-200"
+			>
+				<CircleHelp class="h-4 w-4" />
+			</ToggleGroup.Item>
 		</ToggleGroup.Root>
 	</Card.Footer>
 </Card.Root>

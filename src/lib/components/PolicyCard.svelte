@@ -54,7 +54,7 @@
 						</Toggle>
 					</button>
 					<button on:click|preventDefault>
-						<Toggle class="ml-1">
+						<Toggle class="ml-1 data-[state=on]:bg-sky-200">
 							<Eye class="h-4 w-4 mr-2" />{watchList.length}
 						</Toggle>
 					</button>
