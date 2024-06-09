@@ -110,7 +110,7 @@
 			</div>
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1">
 				{#each data.policy.cases as c}
-					<CaseCard showAlert={true} />
+					<CaseCard showAlert={true} {...c} />
 				{/each}
 			</div>
 		</div>

@@ -1,11 +1,9 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
 	import type { PageData } from './$types.js';
 	import PolicyCreateForm from '$lib/components/PolicyCreateForm.svelte';
+	import CaseCreateForm from '$lib/components/CaseCreateForm.svelte';
 	export let data: PageData;
 </script>
 
@@ -23,7 +21,7 @@
 						<Card.Description>Policy creation guidelines ...</Card.Description>
 					</Card.Header>
 					<Card.Content class="space-y-2">
-						<PolicyCreateForm data={data.form} />
+						<PolicyCreateForm data={data.form1} />
 					</Card.Content>
 					<!-- <Card.Footer></Card.Footer> -->
 				</Card.Root>
@@ -32,23 +30,12 @@
 				<Card.Root>
 					<Card.Header>
 						<Card.Title>Create a new case</Card.Title>
-						<Card.Description>
-							Change your password here. After saving, you'll be logged out.
-						</Card.Description>
+						<Card.Description>Case creation guidelines ...</Card.Description>
 					</Card.Header>
 					<Card.Content class="space-y-2">
-						<div class="space-y-1">
-							<Label for="current">Current password</Label>
-							<Input id="current" type="password" />
-						</div>
-						<div class="space-y-1">
-							<Label for="new">New password</Label>
-							<Input id="new" type="password" />
-						</div>
+						<CaseCreateForm data={data.form2} />
 					</Card.Content>
-					<Card.Footer>
-						<Button>Submit</Button>
-					</Card.Footer>
+					<!-- <Card.Footer></Card.Footer> -->
 				</Card.Root>
 			</Tabs.Content>
 		</Tabs.Root>

@@ -33,9 +33,4 @@ export const POST = async ({ request }) => {
 	} catch (e) {
 		throw error(400, 'Fail to create a new policy in the database.');
 	}
-
-	// const { form } = await request.json();
-	// console.log(form.data.title);
-	// const id = 'testing';
-	// return json({ id }, { status: 201 });
 };
