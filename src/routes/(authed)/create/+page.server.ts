@@ -27,8 +27,8 @@ export const actions: Actions = {
 			// 	'Content-Type': 'appplication/json'
 			// }
 		});
-		const test = await res.json();
-		throw redirect(303, `/policy/${test.id}`);
+		const data = await res.json();
+		throw redirect(303, `/policy/${data.id}`);
 		// return {
 		// 	form
 		// };
@@ -51,8 +51,8 @@ export const actions: Actions = {
 			// 	'Content-Type': 'appplication/json'
 			// }
 		});
-		const test = await res.json();
-		throw redirect(303, `/case/${test.id}`);
+		const data = await res.json();
+		throw redirect(303, `/case/${data.id}`);
 		// return {
 		// 	form
 		// };
