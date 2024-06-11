@@ -20,7 +20,7 @@ export const actions: Actions = {
 				form
 			});
 		}
-		const res = await event.fetch('/api/policy', {
+		const res = await event.fetch('/api/policies', {
 			method: 'POST',
 			body: JSON.stringify({ form })
 			// headers: {
@@ -28,7 +28,7 @@ export const actions: Actions = {
 			// }
 		});
 		const data = await res.json();
-		throw redirect(303, `/policy/${data.id}`);
+		throw redirect(303, `/policies/${data.id}`);
 		// return {
 		// 	form
 		// };
@@ -44,7 +44,7 @@ export const actions: Actions = {
 				form
 			});
 		}
-		const res = await event.fetch('/api/case', {
+		const res = await event.fetch('/api/cases', {
 			method: 'POST',
 			body: JSON.stringify({ form })
 			// headers: {
@@ -52,7 +52,7 @@ export const actions: Actions = {
 			// }
 		});
 		const data = await res.json();
-		throw redirect(303, `/case/${data.id}`);
+		throw redirect(303, `/cases/${data.id}`);
 		// return {
 		// 	form
 		// };

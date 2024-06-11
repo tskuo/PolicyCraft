@@ -11,13 +11,13 @@
 			</a>
 		</li>
 		<li>
-			<a href="/policy" class="p-2 flex items-center hover:bg-sky-100 rounded">
+			<a href="/policies" class="p-2 flex items-center hover:bg-sky-100 rounded">
 				<BookText class="w-5 h-5" />
 				<span class="ml-2 hidden lg:inline">Policy Repository</span>
 			</a>
 		</li>
 		<li>
-			<a href="/case" class="p-2 flex items-center hover:bg-sky-100 rounded">
+			<a href="/cases" class="p-2 flex items-center hover:bg-sky-100 rounded">
 				<Folders class="w-5 h-5" />
 				<span class="ml-2 hidden lg:inline">Case Repository</span>
 			</a>

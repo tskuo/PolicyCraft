@@ -5,7 +5,7 @@ import { db } from '$lib/firebase';
 // Get all cases from the database
 export const GET = async () => {
 	try {
-		const querySnapshot = await getDocs(collection(db, 'case'));
+		const querySnapshot = await getDocs(collection(db, 'cases'));
 		const res: any[] = [];
 		querySnapshot.forEach((doc) => {
 			const c = { id: doc.id, ...doc.data() };
@@ -32,7 +32,7 @@ export const POST = async ({ request }) => {
 			votes.unsure = [userId];
 		}
 
-		const docRef = await addDoc(collection(db, 'case'), {
+		const docRef = await addDoc(collection(db, 'cases'), {
 			createAt: serverTimestamp(),
 			description: form.data.description,
 			reasons: {
@@ -41,6 +41,20 @@ export const POST = async ({ request }) => {
 			},
 			title: form.data.title,
 			votes: votes
+		});
+
+		const logRef = await addDoc(collection(db, 'actionLogs'), {
+			action: 'createCase',
+			createAt: serverTimestamp(),
+			input: {
+				title: form.data.title,
+				description: form.data.description
+			},
+			targetCollection: 'cases',
+			targetDocumentId: docRef.id,
+			targetSubCollection: '',
+			targetSubDocumentId: '',
+			userId: 'user1'
 		});
 		return json({ id: docRef.id }, { status: 201 });
 	} catch (e) {

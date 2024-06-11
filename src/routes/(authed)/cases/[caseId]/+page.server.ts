@@ -2,7 +2,7 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
-	const res = await fetch(`/api/case/${params.caseId}`);
+	const res = await fetch(`/api/cases/${params.caseId}`);
 	const c = await res.json();
 
 	if (res.ok) {

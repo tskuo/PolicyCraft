@@ -1,11 +1,19 @@
 import { json, error } from '@sveltejs/kit';
-import { serverTimestamp, addDoc, collection, getDocs } from 'firebase/firestore';
+import {
+	serverTimestamp,
+	addDoc,
+	collection,
+	getDocs,
+	doc,
+	Timestamp,
+	runTransaction
+} from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
 // Get all policies from the database
 export const GET = async () => {
 	try {
-		const querySnapshot = await getDocs(collection(db, 'policy'));
+		const querySnapshot = await getDocs(collection(db, 'policies'));
 		const res: any[] = [];
 		querySnapshot.forEach((doc) => {
 			const policy = { id: doc.id, ...doc.data() };
@@ -21,13 +29,26 @@ export const GET = async () => {
 export const POST = async ({ request }) => {
 	try {
 		const { form } = await request.json();
-		const docRef = await addDoc(collection(db, 'policy'), {
+		const docRef = await addDoc(collection(db, 'policies'), {
 			cases: [],
 			createAt: serverTimestamp(),
 			description: form.data.description,
-			openDiscussions: [],
+			discussions: [],
 			title: form.data.title,
-			watchList: []
+			watchList: ['user1']
+		});
+		const logRef = await addDoc(collection(db, 'actionLogs'), {
+			action: 'createPolicy',
+			createAt: serverTimestamp(),
+			input: {
+				title: form.data.title,
+				description: form.data.description
+			},
+			targetCollection: 'policies',
+			targetDocumentId: docRef.id,
+			targetSubCollection: '',
+			targetSubDocumentId: '',
+			userId: 'user1'
 		});
 		return json({ id: docRef.id }, { status: 201 });
 	} catch (e) {

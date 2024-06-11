@@ -3,10 +3,10 @@ import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firesto
 import { db } from '$lib/firebase';
 
 export const GET = async ({ params }) => {
-	const docRef = doc(db, 'policy', params.policyId);
+	const docRef = doc(db, 'cases', params.caseId);
 	const docSnap = await getDoc(docRef);
 	if (docSnap.exists()) {
 		return json({ ...docSnap.data(), id: docSnap.id });
 	}
-	throw error(404, `Policy #${params.policyId} not found.`);
+	throw error(404, `Policy #${params.caseId} not found.`);
 };

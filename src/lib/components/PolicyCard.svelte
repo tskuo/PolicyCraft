@@ -22,13 +22,15 @@
 	export let title = '';
 	export let watchList: string[] = [];
 
+	let userId = 'user1';
+
 	let compactView = true;
 </script>
 
 <!-- <a href="/policy/1"> -->
 <div class="my-2">
 	<Card.Root>
-		<a href="/policy/{id}">
+		<a href="/policies/{id}">
 			<div class="rounded hover:bg-gray-100">
 				<Card.Header>
 					<!-- <Card.Description>#{id}</Card.Description> -->
@@ -56,7 +58,7 @@
 						</Toggle>
 					</button>
 					<button on:click|preventDefault>
-						<Toggle class="ml-1 data-[state=on]:bg-sky-200">
+						<Toggle class="ml-1 data-[state=on]:bg-sky-100" pressed={watchList.includes(userId)}>
 							<Eye class="h-4 w-4 mr-2" />{watchList.length}
 						</Toggle>
 					</button>

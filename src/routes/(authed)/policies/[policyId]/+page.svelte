@@ -7,14 +7,12 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import CaseCard from '$lib/components/CaseCard.svelte';
-	import { Input } from '$lib/components/ui/input';
 	import { Eye, Pencil, TriangleAlert, Send, Plus } from 'lucide-svelte/icons';
 
 	export let data;
 
-	let showAlert = true;
+	let showAlert = false;
 	let userId = 'user1';
-	let localWatchList = ['user1', 'user2', 'user3'];
 </script>
 
 <div>
@@ -24,7 +22,7 @@
 				<Breadcrumb.Root class="my-2">
 					<Breadcrumb.List>
 						<Breadcrumb.Item>
-							<Breadcrumb.Link href="/policy">Policy Repository</Breadcrumb.Link>
+							<Breadcrumb.Link href="/policies">Policy Repository</Breadcrumb.Link>
 						</Breadcrumb.Item>
 						<Breadcrumb.Separator />
 						<Breadcrumb.Item>
@@ -34,23 +32,10 @@
 				</Breadcrumb.Root>
 				<div>
 					<Toggle
-						class="mr-1 data-[state=on]:bg-sky-200"
-						pressed={localWatchList.includes(userId)}
-						on:click={() => {
-							if (localWatchList.includes(userId)) {
-								localWatchList = localWatchList.filter((id) => id !== userId);
-							} else {
-								localWatchList = [...localWatchList, userId];
-							}
-							console.log(localWatchList);
-						}}
+						class="mr-1 data-[state=on]:bg-sky-100"
+						pressed={data.policy.watchList.includes(userId)}
 					>
-						<!-- {#if localWatchList.includes(userId)}
-							<Eye class="h-4 w-4 mr-2 text-sky-500" />{localWatchList.length}
-						{:else}
-							<Eye class="h-4 w-4 mr-2" />{localWatchList.length}
-						{/if} -->
-						<Eye class="h-4 w-4 mr-2" />{localWatchList.length}
+						<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
 					</Toggle>
 					<Button>
 						<Pencil class="h-4 w-4 mr-2" />Edit policy
@@ -108,14 +93,17 @@
 					</Button>
 				</div>
 			</div>
-			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1">
-				<!-- {#each data.policy.cases as c}
-					<CaseCard showAlert={true} {...c} />
-				{/each} -->
-				{#each data.cases as c}
-					<CaseCard showAlert={true} {...c} />
-				{/each}
-			</div>
+			{#if data.cases.length > 0}
+				<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1">
+					{#each data.cases as c}
+						<CaseCard {...c} />
+					{/each}
+				</div>
+			{:else}
+				<p class="mt-2">
+					There are no related cases yet. Add related cases with the edit case button.
+				</p>
+			{/if}
 		</div>
 		<div class="col-span-1 p-2">
 			<h3 class="font-bold text-lg mt-2">Discussions</h3>

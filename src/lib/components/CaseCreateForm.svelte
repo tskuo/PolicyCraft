@@ -62,41 +62,18 @@
 		</RadioGroup.Root>
 		<Form.FieldErrors />
 	</Form.Fieldset>
+
 	<!-- <Form.Fieldset {form} name="userVote">
-		<Form.Legend>Your vote</Form.Legend>
-		<ToggleGroup.Root type="single" class="w-full grid grid-cols-3" bind:value={$formData.userVote}>
+		<Form.Legend>Toggle A, B, or C</Form.Legend>
+		<ToggleGroup.Root bind:value={$formData.userVote} class="flex">
 			<Form.Control let:attrs>
-				<ToggleGroup.Item
-					value="allow"
-					{...attrs}
-					aria-label="Toggle allow"
-					class="data-[state=on]:bg-green-200"
-				>
-					<Check class="h-4 w-4" />
-				</ToggleGroup.Item>
-				<Form.Label></Form.Label>
+				<ToggleGroup.Item value="A" {...attrs}><Form.Label>A</Form.Label></ToggleGroup.Item>
 			</Form.Control>
 			<Form.Control let:attrs>
-				<ToggleGroup.Item
-					value="disallow"
-					{...attrs}
-					aria-label="Toggle disallow"
-					class="data-[state=on]:bg-red-200"
-				>
-					<Ban class="h-4 w-4" />
-				</ToggleGroup.Item>
-				<Form.Label></Form.Label>
+				<ToggleGroup.Item value="B" {...attrs}><Form.Label>B</Form.Label></ToggleGroup.Item>
 			</Form.Control>
 			<Form.Control let:attrs>
-				<ToggleGroup.Item
-					value="unsure"
-					{...attrs}
-					aria-label="Toggle unsure"
-					class="data-[state=on]:bg-gray-200"
-				>
-					<CircleHelp class="h-4 w-4" />
-				</ToggleGroup.Item>
-				<Form.Label></Form.Label>
+				<ToggleGroup.Item value="C" {...attrs}><Form.Label>C</Form.Label></ToggleGroup.Item>
 			</Form.Control>
 		</ToggleGroup.Root>
 		<Form.FieldErrors />
@@ -104,4 +81,4 @@
 
 	<Form.Button class="mt-6">Submit</Form.Button>
 </form>
-<SuperDebug data={$formData} />
+<!-- <SuperDebug data={$formData} /> -->

@@ -21,7 +21,8 @@
 		unsure: [] as string[]
 	};
 
-	export let showAlert = false;
+	export let label = '';
+	let showAlert = false;
 
 	let userId = 'user1';
 	let userVote = '';
@@ -117,12 +118,18 @@
 									{/each}
 								</Accordion.Root>
 								<Dialog.Footer>
-									<Button href="/case/{id}">Open case</Button>
+									<Button href="/cases/{id}">Open case</Button>
 								</Dialog.Footer>
 							</Dialog.Content>
 						</Dialog.Root>
 					</button>
-					<p>Case #{id}</p>
+					{#if label == 'allow'}
+						<p class="bg-green-200 px-1 rounded">allow by this policy</p>
+					{:else if label == 'disallow'}
+						<p class="bg-red-200 px-1 rounded">disallow by this policy</p>
+					{:else if label == 'unsure'}
+						<p class="bg-gray-200 px-1 rounded">unsure under this policy</p>
+					{/if}
 				</div>
 				{#if showAlert === true}<TriangleAlert class="w-4 h-4" />{/if}
 			</div>

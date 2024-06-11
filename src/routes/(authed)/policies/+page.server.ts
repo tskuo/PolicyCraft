@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-	const res = await fetch('/api/policy');
+	const res = await fetch('/api/policies');
 	const policies = await res.json();
 
 	if (res.ok) {

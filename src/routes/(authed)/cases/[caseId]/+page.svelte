@@ -5,7 +5,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import CaseCard from '$lib/components/CaseCard.svelte';
 	import PolicyCard from '$lib/components/PolicyCard.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
@@ -42,7 +41,7 @@
 				<Breadcrumb.Root class="my-2">
 					<Breadcrumb.List>
 						<Breadcrumb.Item>
-							<Breadcrumb.Link href="/case">Case Repository</Breadcrumb.Link>
+							<Breadcrumb.Link href="/cases">Case Repository</Breadcrumb.Link>
 						</Breadcrumb.Item>
 						<Breadcrumb.Separator />
 						<Breadcrumb.Item>
