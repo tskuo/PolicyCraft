@@ -16,3 +16,10 @@ export const caseCreateFormSchema = z.object({
 });
 
 export type CaseCreateFormSchema = typeof caseCreateFormSchema;
+
+export const messageCreateFormSchema = z.object({
+	message: z.string().min(1),
+	id: z.string()
+});
+
+export type MessageCreateFormSchema = typeof messageCreateFormSchema;

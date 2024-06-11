@@ -2,11 +2,24 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Textarea } from '$lib/components/ui/textarea';
+	import * as Form from '$lib/components/ui/form';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { messageCreateFormSchema, type MessageCreateFormSchema } from '$lib/schema';
+	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	export let discussions: any[] = [];
+
+	export let data: SuperValidated<Infer<MessageCreateFormSchema>>;
+
+	const form = superForm(data, {
+		validators: zodClient(messageCreateFormSchema)
+	});
+
+	const { form: formData, enhance } = form;
+
 	$: openDiscussions = discussions.filter((discussion) => discussion.open == true);
 	$: closedDiscussion = discussions.filter((discussion) => discussion.open == false);
-	$: console.log(openDiscussions);
 </script>
 
 <h3 class="font-bold text-lg mt-2">Discussions</h3>
@@ -28,7 +41,27 @@
 									{comment.message}
 								</p>
 							{/each}
-							<Textarea placeholder="Type your message here." class="mt-4 outline-none" />
+							<!-- <Textarea placeholder="Type your message here." class="mt-4 outline-none" /> -->
+							<form method="POST" use:enhance action="?/createMessage">
+								<Form.Field {form} name="message">
+									<Form.Control let:attrs>
+										<!-- <Form.Label>Description</Form.Label> -->
+										<Textarea
+											{...attrs}
+											bind:value={$formData.message}
+											placeholder="Type your message here."
+											class="mt-4 outline-none"
+										/>
+									</Form.Control>
+									<Form.FieldErrors />
+								</Form.Field>
+								<Form.Field {form} name="id">
+									<Form.Control let:attrs>
+										<Input type="hidden" {...attrs} value={discussion.id} />
+									</Form.Control>
+								</Form.Field>
+								<Form.Button>Submit</Form.Button>
+							</form>
 						</Accordion.Content>
 					</Accordion.Item>
 				{/each}

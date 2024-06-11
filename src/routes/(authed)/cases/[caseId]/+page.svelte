@@ -157,7 +157,7 @@
 			<PolicyCard /> -->
 		</div>
 		<div class="col-span-1 p-2">
-			<DiscussionPanel discussions={data.discussions} />
+			<DiscussionPanel discussions={data.discussions} data={data.form} />
 		</div>
 	</div>
 </div>
