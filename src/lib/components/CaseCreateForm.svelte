@@ -37,25 +37,25 @@
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Fieldset {form} name="userVote" class="space-y-3">
-		<Form.Legend>Notify me about...</Form.Legend>
+	<Form.Fieldset {form} name="userVote" class="space-y-5 mt-4">
+		<Form.Legend>Your vote on the case</Form.Legend>
 		<RadioGroup.Root bind:value={$formData.userVote} class="flex flex-col space-y-1">
 			<div class="flex items-center space-x-3 space-y-0">
 				<Form.Control let:attrs>
 					<RadioGroup.Item value="allow" {...attrs} />
-					<Form.Label class="font-normal">Allow</Form.Label>
+					<Form.Label class="font-normal">This case should be allowed</Form.Label>
 				</Form.Control>
 			</div>
 			<div class="flex items-center space-x-3 space-y-0">
 				<Form.Control let:attrs>
 					<RadioGroup.Item value="disallow" {...attrs} />
-					<Form.Label class="font-normal">Disallow</Form.Label>
+					<Form.Label class="font-normal">This case should be disallowed</Form.Label>
 				</Form.Control>
 			</div>
 			<div class="flex items-center space-x-3 space-y-0">
 				<Form.Control let:attrs>
 					<RadioGroup.Item value="unsure" {...attrs} />
-					<Form.Label class="font-normal">Unsure</Form.Label>
+					<Form.Label class="font-normal">I am unsure about this case</Form.Label>
 				</Form.Control>
 			</div>
 			<RadioGroup.Input name="userVote" />

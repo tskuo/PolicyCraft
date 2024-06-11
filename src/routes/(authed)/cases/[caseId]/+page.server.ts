@@ -6,7 +6,21 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 	const c = await res.json();
 
 	if (res.ok) {
-		return { c };
+		let discussions = [];
+
+		for (const d of c.discussions) {
+			const response = await fetch(`/api/discussions/${d}`);
+			if (response.ok) {
+				const dd = await response.json();
+				dd.id = d;
+				discussions.push(dd);
+			} else {
+				const dd = await response.json();
+				console.log(dd.message);
+			}
+		}
+
+		return { c, discussions };
 	}
 
 	throw error(404, `Case #${params.caseId} doesn't exist.`);

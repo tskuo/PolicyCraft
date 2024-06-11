@@ -35,6 +35,7 @@ export const POST = async ({ request }) => {
 		const docRef = await addDoc(collection(db, 'cases'), {
 			createAt: serverTimestamp(),
 			description: form.data.description,
+			discussions: [],
 			reasons: {
 				allow: [],
 				disallow: []

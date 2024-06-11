@@ -6,10 +6,8 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import PolicyCard from '$lib/components/PolicyCard.svelte';
-	import * as Tabs from '$lib/components/ui/tabs';
-	import * as Accordion from '$lib/components/ui/accordion';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import { ThumbsUp, Pencil, Ellipsis, Check, Ban, CircleHelp, EarIcon } from 'lucide-svelte/icons';
+	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 
 	export let data;
 
@@ -155,83 +153,11 @@
 			</div>
 
 			<h3 class="font-bold mt-6 text-lg">Related Policies</h3>
-			<PolicyCard />
-			<PolicyCard />
+			<!-- <PolicyCard />
+			<PolicyCard /> -->
 		</div>
 		<div class="col-span-1 p-2">
-			<h3 class="font-bold text-lg mt-2">Discussions</h3>
-			<Tabs.Root value="open" class="w-full mt-4">
-				<Tabs.List class="grid w-full grid-cols-2">
-					<Tabs.Trigger value="open">Open</Tabs.Trigger>
-					<Tabs.Trigger value="closed">Closed</Tabs.Trigger>
-				</Tabs.List>
-				<Tabs.Content value="open" class="mx-1">
-					<Accordion.Root>
-						<Accordion.Item value="item-1" class="text-sm">
-							<Accordion.Trigger>Is summarization brainstorming?</Accordion.Trigger>
-							<Accordion.Content>
-								<p class="font-bold py-2">Purple Koala</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque eos
-									placeat molestias tempore ducimus nihil lib
-								</p>
-								<p class="font-bold py-2">Yellow Cat</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque eos
-									placeat molestias tempore ducimus nihil lib
-								</p>
-								<p class="font-bold py-2">Blue Elephant</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque eos
-									placeat molestias tempore ducimus nihil lib
-								</p>
-								<Textarea placeholder="Type your message here." class="mt-4 outline-none" />
-							</Accordion.Content>
-						</Accordion.Item>
-						<Accordion.Item value="item-2" class="text-sm">
-							<Accordion.Trigger>What counts as prototype?</Accordion.Trigger>
-							<Accordion.Content>
-								<p class="font-bold py-2">Blue Elephant</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque eos
-									placeat molestias tempore ducimus nihil lib
-								</p>
-								<Textarea placeholder="Type your message here." class="mt-4" />
-							</Accordion.Content>
-						</Accordion.Item>
-						<Accordion.Item value="item-3" class=" text-sm">
-							<Accordion.Trigger>The definition of idea ownership?</Accordion.Trigger>
-							<Accordion.Content>
-								<p class="font-bold py-2">Blue Elephant</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque eos
-									placeat molestias tempore ducimus nihil lib
-								</p>
-								<Textarea placeholder="Type your message here." class="mt-4" />
-							</Accordion.Content>
-						</Accordion.Item>
-					</Accordion.Root>
-				</Tabs.Content>
-				<Tabs.Content value="closed" class="mx-1">
-					<Accordion.Root>
-						<Accordion.Item value="item-1" class="text-sm">
-							<Accordion.Trigger>Is it ssdas?</Accordion.Trigger>
-							<Accordion.Content>
-								<p class="font-bold py-2">Blue Elephant</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque eos
-									placeat molestias tempore ducimus nihil lib
-								</p>
-								<p class="font-bold py-2">Blue Elephant</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora illum cumque eos
-									placeat molestias tempore ducimus nihil lib
-								</p>
-							</Accordion.Content>
-						</Accordion.Item>
-					</Accordion.Root>
-				</Tabs.Content>
-			</Tabs.Root>
+			<DiscussionPanel discussions={data.discussions} />
 		</div>
 	</div>
 </div>

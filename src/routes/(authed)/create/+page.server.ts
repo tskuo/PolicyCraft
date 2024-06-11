@@ -36,9 +36,6 @@ export const actions: Actions = {
 	createCase: async (event) => {
 		const form = await superValidate(event, zod(caseCreateFormSchema));
 
-		console.log('server action: createCase');
-		console.log(form);
-
 		if (!form.valid) {
 			return fail(400, {
 				form
