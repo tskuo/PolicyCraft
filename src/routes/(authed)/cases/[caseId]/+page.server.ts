@@ -1,6 +1,6 @@
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { messageCreateFormSchema } from '$lib/schema';
+import { messageCreateFormSchema, discussionCreateFormSchema } from '$lib/schema';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -10,18 +10,23 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 
 	if (res.ok) {
 		let discussions = [];
-		for (const d of c.discussions) {
-			const response = await fetch(`/api/discussions/${d}`);
+		for (const discussionId of c.discussions) {
+			const response = await fetch(`/api/discussions/${discussionId}`);
 			if (response.ok) {
 				const dd = await response.json();
-				dd.id = d;
+				dd.id = discussionId;
 				discussions.push(dd);
 			} else {
 				const dd = await response.json();
 				console.log(dd.message);
 			}
 		}
-		return { c, discussions, form: await superValidate(zod(messageCreateFormSchema)) };
+		return {
+			c,
+			discussions,
+			formMessage: await superValidate(zod(messageCreateFormSchema)),
+			formDiscussion: await superValidate(zod(discussionCreateFormSchema))
+		};
 	}
 	throw error(404, `Case #${params.caseId} doesn't exist.`);
 	// throw redirect(307, '/case');
@@ -45,6 +50,26 @@ export const actions: Actions = {
 		});
 		const data = await res.json();
 
+		return {
+			form
+		};
+	},
+	createDiscussion: async (event) => {
+		const form = await superValidate(event, zod(discussionCreateFormSchema));
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
+		}
+
+		const res = await event.fetch(`/api/discussions`, {
+			method: 'POST',
+			body: JSON.stringify({ form, entity: 'cases', entityId: event.params.caseId })
+		});
+
+		const data = await res.json();
+
+		console.log(data.id);
 		return {
 			form
 		};

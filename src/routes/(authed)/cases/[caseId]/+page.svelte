@@ -6,7 +6,7 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import PolicyCard from '$lib/components/PolicyCard.svelte';
-	import { ThumbsUp, Pencil, Ellipsis, Check, Ban, CircleHelp, EarIcon } from 'lucide-svelte/icons';
+	import { ThumbsUp, Pencil, Ellipsis, Check, Ban, CircleHelp } from 'lucide-svelte/icons';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 
 	export let data;
@@ -157,7 +157,11 @@
 			<PolicyCard /> -->
 		</div>
 		<div class="col-span-1 p-2">
-			<DiscussionPanel discussions={data.discussions} data={data.form} />
+			<DiscussionPanel
+				discussions={data.discussions}
+				dataMessage={data.formMessage}
+				dataDiscussion={data.formDiscussion}
+			/>
 		</div>
 	</div>
 </div>

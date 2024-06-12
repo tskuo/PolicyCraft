@@ -23,3 +23,10 @@ export const messageCreateFormSchema = z.object({
 });
 
 export type MessageCreateFormSchema = typeof messageCreateFormSchema;
+
+export const discussionCreateFormSchema = z.object({
+	title: z.string().min(1).max(30),
+	message: z.string().min(1)
+});
+
+export type DiscussionCreateFormSchema = typeof discussionCreateFormSchema;
