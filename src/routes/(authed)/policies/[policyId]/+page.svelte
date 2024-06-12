@@ -7,6 +7,7 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import CaseCard from '$lib/components/CaseCard.svelte';
+	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 	import { Eye, Pencil, TriangleAlert, Send, Plus } from 'lucide-svelte/icons';
 
 	export let data;
@@ -106,7 +107,12 @@
 			{/if}
 		</div>
 		<div class="col-span-1 p-2">
-			<h3 class="font-bold text-lg mt-2">Discussions</h3>
+			<DiscussionPanel
+				discussions={data.discussions}
+				dataMessage={data.formMessage}
+				dataDiscussion={data.formDiscussion}
+			/>
+			<!-- <h3 class="font-bold text-lg mt-2">Discussions</h3>
 			<Tabs.Root value="open" class="w-full mt-4">
 				<Tabs.List class="grid w-full grid-cols-2">
 					<Tabs.Trigger value="open">Open</Tabs.Trigger>
@@ -114,7 +120,7 @@
 				</Tabs.List>
 				<Tabs.Content value="open" class="mx-1">
 					<Accordion.Root>
-						<!-- {#each data.policy.discussions as discussion}
+						{#each data.policy.discussions as discussion}
 							{#if discussion.open}
 								<Accordion.Item value="item-{discussion.title}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
@@ -138,7 +144,7 @@
 									</Accordion.Content>
 								</Accordion.Item>
 							{/if}
-						{/each} -->
+						{/each}
 						<div class="flex justify-center mt-2">
 							<Button variant="ghost"><Plus class="h-4 w-4 mr-2" />New discussion</Button>
 						</div>
@@ -146,7 +152,7 @@
 				</Tabs.Content>
 				<Tabs.Content value="closed" class="mx-1">
 					<Accordion.Root>
-						<!-- {#each data.policy.discussions as discussion}
+						{#each data.policy.discussions as discussion}
 							{#if !discussion.open}
 								<Accordion.Item value="item-{discussion.title}" class="text-sm">
 									<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
@@ -160,10 +166,10 @@
 									</Accordion.Content>
 								</Accordion.Item>
 							{/if}
-						{/each} -->
+						{/each}
 					</Accordion.Root>
 				</Tabs.Content>
-			</Tabs.Root>
+			</Tabs.Root> -->
 		</div>
 	</div>
 </div>

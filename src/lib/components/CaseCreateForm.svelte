@@ -16,8 +16,6 @@
 	});
 
 	const { form: formData, enhance } = form;
-
-	$: console.log($formData.userVote);
 </script>
 
 <form method="POST" use:enhance action="?/createCase">

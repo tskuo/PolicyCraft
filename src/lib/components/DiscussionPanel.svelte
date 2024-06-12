@@ -86,14 +86,7 @@
 		</Accordion.Root>
 		<div class="mt-2"></div>
 		{#if showNewDiscussionPanel}
-			<form
-				method="POST"
-				use:enhance2
-				action="?/createDiscussion"
-				on:submit={() => {
-					showNewDiscussionPanel = !showNewDiscussionPanel;
-				}}
-			>
+			<form method="POST" use:enhance2 action="?/createDiscussion">
 				<Form.Field form={formDiscussion} name="title">
 					<Form.Control let:attrs>
 						<Input

@@ -18,6 +18,8 @@ export const POST = async ({ request }) => {
 		const docRef = await addDoc(collection(db, 'discussions'), {
 			createAt: serverTimestamp(),
 			open: true,
+			targetEntity: entity,
+			targetEntityId: entityId,
 			title: form.data.title,
 			userId: 'user1'
 		});
