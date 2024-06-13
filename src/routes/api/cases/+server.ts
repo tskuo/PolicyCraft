@@ -36,10 +36,7 @@ export const POST = async ({ request }) => {
 			createAt: serverTimestamp(),
 			description: form.data.description,
 			discussions: [],
-			reasons: {
-				allow: [],
-				disallow: []
-			},
+			reasons: [],
 			title: form.data.title,
 			votes: votes
 		});

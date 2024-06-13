@@ -85,7 +85,6 @@ export const actions: Actions = {
 
 		const data = await res.json();
 
-		console.log(data.id);
 		return {
 			form
 		};

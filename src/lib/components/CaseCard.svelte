@@ -9,6 +9,7 @@
 
 	export let id = '';
 	export let createAt: Timestamp;
+	export let discussions;
 	export let description = '';
 	export let reasons = {
 		allow: [],
@@ -100,23 +101,23 @@
 									</ToggleGroup.Item>
 								</ToggleGroup.Root>
 								<h3 class="font-bold">Allow Reasons</h3>
-								<Accordion.Root class="w-full">
+								<!-- <Accordion.Root class="w-full">
 									{#each reasons.allow as reason (reason.id)}
 										<Accordion.Item value={reason.id}>
 											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
 											<Accordion.Content>{reason.description}</Accordion.Content>
 										</Accordion.Item>
 									{/each}
-								</Accordion.Root>
+								</Accordion.Root> -->
 								<h3 class="font-bold">Disallow Reasons</h3>
-								<Accordion.Root class="w-full">
+								<!-- <Accordion.Root class="w-full">
 									{#each reasons.disallow as reason (reason.id)}
 										<Accordion.Item value={reason.id}>
 											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
 											<Accordion.Content>{reason.description}</Accordion.Content>
 										</Accordion.Item>
 									{/each}
-								</Accordion.Root>
+								</Accordion.Root> -->
 								<Dialog.Footer>
 									<Button href="/cases/{id}">Open case</Button>
 								</Dialog.Footer>
