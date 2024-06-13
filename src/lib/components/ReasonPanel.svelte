@@ -16,7 +16,12 @@
 	export let dataReason: SuperValidated<Infer<ReasonCreateFormSchema>>;
 
 	const form = superForm(dataReason, {
-		validators: zodClient(reasonCreateFormSchema)
+		validators: zodClient(reasonCreateFormSchema),
+		onUpdated({ form }) {
+			if (form.valid) {
+				showCreateReasonForm = false;
+			}
+		}
 	});
 
 	const { form: formData, enhance } = form;
@@ -28,7 +33,7 @@
 </script>
 
 <div class="flex justify-between items-center">
-	<h3 class="font-bold mt-6 text-lg">Vote Reasons</h3>
+	<h3 class="font-bold text-lg">Vote Reasons</h3>
 	<Button
 		on:click={() => {
 			showCreateReasonForm = !showCreateReasonForm;

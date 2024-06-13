@@ -26,7 +26,12 @@
 	});
 
 	const formDiscussion = superForm(dataDiscussion, {
-		validators: zodClient(discussionCreateFormSchema)
+		validators: zodClient(discussionCreateFormSchema),
+		onUpdated({ form }) {
+			if (form.valid) {
+				showNewDiscussionPanel = false;
+			}
+		}
 	});
 
 	const { form: formDataMessage, enhance: enhance1 } = formMessage;

@@ -8,13 +8,7 @@
 	import type { Timestamp } from 'firebase/firestore';
 
 	export let id = '';
-	export let createAt: Timestamp;
-	export let discussions;
 	export let description = '';
-	export let reasons = {
-		allow: [],
-		disallow: []
-	};
 	export let title = '';
 	export let votes = {
 		allow: [] as string[],
@@ -132,7 +126,7 @@
 						<p class="bg-gray-200 px-1 rounded">unsure under this policy</p>
 					{/if}
 				</div>
-				{#if showAlert === true}<TriangleAlert class="w-4 h-4" />{/if}
+				{#if showAlert}<TriangleAlert class="w-4 h-4" />{/if}
 			</div>
 		</Card.Description>
 		<Card.Title class="leading-normal">{title}</Card.Title>
