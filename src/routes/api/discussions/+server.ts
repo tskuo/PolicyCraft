@@ -3,10 +3,8 @@ import {
 	serverTimestamp,
 	addDoc,
 	collection,
-	getDocs,
 	doc,
 	Timestamp,
-	runTransaction,
 	updateDoc,
 	arrayUnion
 } from 'firebase/firestore';
@@ -30,6 +28,20 @@ export const POST = async ({ request }) => {
 		});
 		await updateDoc(doc(db, entity, entityId), {
 			discussions: arrayUnion(docRef.id)
+		});
+
+		await addDoc(collection(db, 'actionLogs'), {
+			action: 'createDiscussion',
+			createAt: serverTimestamp(),
+			input: {
+				title: form.data.title,
+				description: form.data.message
+			},
+			targetCollection: 'discussions',
+			targetDocumentId: docRef.id,
+			targetSubCollection: '',
+			targetSubDocumentId: '',
+			userId: 'user1'
 		});
 
 		return json({ id: docRef.id }, { status: 201 });

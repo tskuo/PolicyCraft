@@ -84,8 +84,6 @@
 						</Accordion.Content>
 					</Accordion.Item>
 				{/each}
-			{:else}
-				<p class="text-sm mt-4">There are no open discussions.</p>
 			{/if}
 		</Accordion.Root>
 		<div class="mt-2"></div>
