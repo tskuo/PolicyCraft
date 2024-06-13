@@ -1,15 +1,14 @@
 <script lang="ts">
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
-	import { Toggle } from '$lib/components/ui/toggle';
-	import * as Card from '$lib/components/ui/card';
-	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import PolicyCard from '$lib/components/PolicyCard.svelte';
-	import { ThumbsUp, Pencil, Ellipsis, Check, Ban, CircleHelp } from 'lucide-svelte/icons';
+	import { Ellipsis, Check, Ban, CircleHelp } from 'lucide-svelte/icons';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
+	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 
 	export let data;
+	// export let form;
 
 	let userId = 'user1';
 	let userVote = '';
@@ -105,52 +104,12 @@
 					<div class="w-full bg-gray-100" />
 				{/if}
 			</div>
-			<div class="flex justify-between items-center">
-				<h3 class="font-bold mt-6 text-lg">Vote Reasons</h3>
-				<Button>
-					<Pencil class="h-4 w-4 mr-2" />Add reason
-				</Button>
-			</div>
-			<div class="grid grid-cols-2 my-4 gap-2">
-				<div>
-					<h4 class="font-semibold text-center">Allow ({data.c.reasons.allow.length})</h4>
-					{#each data.c.reasons.allow as reason (reason.id)}
-						<Card.Root class="mt-2">
-							<Card.Header>
-								<Card.Title>{reason.title}</Card.Title>
-								<Card.Description>{reason.author}</Card.Description>
-							</Card.Header>
-							<Card.Content>
-								<p>{reason.description}</p>
-							</Card.Content>
-							<Card.Footer>
-								<Toggle aria-label="Toggle italic">
-									<ThumbsUp class="mr-2 h-4 w-4" />{reason.likes.length}
-								</Toggle>
-							</Card.Footer>
-						</Card.Root>
-					{/each}
-				</div>
-				<div>
-					<h4 class="font-semibold text-center">Disallow ({data.c.reasons.disallow.length})</h4>
-					{#each data.c.reasons.disallow as reason (reason.id)}
-						<Card.Root class="mt-2">
-							<Card.Header>
-								<Card.Title>{reason.title}</Card.Title>
-								<Card.Description>{reason.author}</Card.Description>
-							</Card.Header>
-							<Card.Content>
-								<p>{reason.description}</p>
-							</Card.Content>
-							<Card.Footer>
-								<Toggle aria-label="Toggle italic">
-									<ThumbsUp class="mr-2 h-4 w-4" />{reason.likes.length}
-								</Toggle>
-							</Card.Footer>
-						</Card.Root>
-					{/each}
-				</div>
-			</div>
+			<ReasonPanel
+				reasons={data.reasons}
+				dataReason={data.formReason}
+				label1="allow"
+				label2="disallow"
+			/>
 
 			<h3 class="font-bold mt-6 text-lg">Related Policies</h3>
 			<!-- <PolicyCard />

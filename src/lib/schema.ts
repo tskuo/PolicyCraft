@@ -1,3 +1,4 @@
+import { Description } from 'formsnap';
 import { z } from 'zod';
 
 export const policyCreateFormSchema = z.object({
@@ -30,3 +31,13 @@ export const discussionCreateFormSchema = z.object({
 });
 
 export type DiscussionCreateFormSchema = typeof discussionCreateFormSchema;
+
+export const reasonCreateFormSchema = z.object({
+	title: z.string().min(1).max(50),
+	description: z.string().min(1),
+	label: z.enum(['allow', 'disallow', 'upvote', 'downvote'], {
+		required_error: 'You need to label the reason.'
+	})
+});
+
+export type ReasonCreateFormSchema = typeof reasonCreateFormSchema;
