@@ -31,8 +31,25 @@
 				</Breadcrumb.Root>
 				<div>
 					<Toggle
-						class="mr-1 data-[state=on]:bg-sky-100"
+						aria-label="Toggle watch"
+						class="data-[state=on]:bg-sky-100"
 						pressed={data.policy.watchList.includes(userId)}
+						onPressedChange={async (pressed) => {
+							let newWatchList;
+							if (data.policy.watchList.includes(userId)) {
+								newWatchList = data.policy.watchList.filter((u) => u !== userId);
+							} else {
+								newWatchList = [...data.policy.watchList, 'user1'];
+							}
+							data.policy.watchList = newWatchList;
+							await fetch(`/api/policies/${data.policy.id}`, {
+								method: 'PATCH',
+								body: JSON.stringify({ pressed, action: 'updateWatchList' }),
+								headers: {
+									'Content-Type': 'application/json'
+								}
+							});
+						}}
 					>
 						<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
 					</Toggle>

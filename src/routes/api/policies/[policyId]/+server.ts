@@ -1,5 +1,14 @@
 import { json, error } from '@sveltejs/kit';
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import {
+	addDoc,
+	arrayRemove,
+	arrayUnion,
+	collection,
+	doc,
+	getDoc,
+	serverTimestamp,
+	updateDoc
+} from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
 export const GET = async ({ params }) => {
@@ -9,4 +18,41 @@ export const GET = async ({ params }) => {
 		return json({ ...docSnap.data(), id: docSnap.id });
 	}
 	throw error(404, `Policy #${params.policyId} not found.`);
+};
+
+export const PATCH = async ({ request, params }) => {
+	try {
+		const { pressed, action } = await request.json();
+		if (action == 'updateWatchList') {
+			let actionName = '';
+			if (pressed) {
+				actionName = 'watchPolicy';
+				await updateDoc(doc(db, 'policies', params.policyId), {
+					watchList: arrayUnion('user1')
+				});
+			} else {
+				actionName = 'unwatchPolicy';
+				await updateDoc(doc(db, 'policies', params.policyId), {
+					watchList: arrayRemove('user1')
+				});
+			}
+			await addDoc(collection(db, 'actionLogs'), {
+				action: actionName,
+				createAt: serverTimestamp(),
+				input: {
+					title: '',
+					description: ''
+				},
+				targetCollection: 'policies',
+				targetDocumentId: params.policyId,
+				targetSubCollection: '',
+				targetSubDocumentId: '',
+				userId: 'user1'
+			});
+			return json({ status: 201 });
+		}
+		return json({ status: 201 });
+	} catch (e) {
+		throw error(400, 'Sorry, something went wrong.');
+	}
 };
