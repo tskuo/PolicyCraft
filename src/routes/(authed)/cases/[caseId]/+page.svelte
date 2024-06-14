@@ -128,13 +128,36 @@
 					data.c.votes.disallow.length +
 					data.c.votes.unsure.length})
 			</h3>
-			<div class="flex w-full h-3 my-4 rounded">
+			<div class="flex w-full h-4 my-4 rounded">
 				{#if userVote !== undefined}
-					<div class="bg-green-200" style="width: {percentAllow}%"></div>
-					<div class="bg-red-200" style="width: {percentDisallow}%"></div>
-					<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
+					{#if percentAllow != 0}
+						<div
+							class="bg-green-200 flex justify-center items-center text-sm"
+							style="width: {percentAllow}%"
+						>
+							{percentAllow}%
+						</div>
+					{/if}
+					{#if percentDisallow != 0}
+						<div
+							class="bg-red-200 flex justify-center items-center text-sm"
+							style="width: {percentDisallow}%"
+						>
+							{percentDisallow}%
+						</div>
+					{/if}
+					{#if percentUnsure != 0}
+						<div
+							class="bg-gray-200 flex justify-center items-center text-sm"
+							style="width: {percentUnsure}%"
+						>
+							{percentUnsure}%
+						</div>
+					{/if}
 				{:else}
-					<div class="w-full bg-gray-100" />
+					<div class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500">
+						vote to see distribution
+					</div>
 				{/if}
 			</div>
 			<ReasonPanel
