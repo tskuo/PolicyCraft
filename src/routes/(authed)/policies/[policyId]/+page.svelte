@@ -4,11 +4,9 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import * as Alert from '$lib/components/ui/alert';
 	import * as Select from '$lib/components/ui/select';
-	import * as Tabs from '$lib/components/ui/tabs';
-	import * as Accordion from '$lib/components/ui/accordion';
 	import CaseCard from '$lib/components/CaseCard.svelte';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
-	import { Eye, Pencil, TriangleAlert, Send, Plus } from 'lucide-svelte/icons';
+	import { Eye, Pencil, TriangleAlert } from 'lucide-svelte/icons';
 
 	export let data;
 

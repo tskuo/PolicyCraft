@@ -100,7 +100,27 @@
 					<p>{reason.description}</p>
 				</Card.Content>
 				<Card.Footer>
-					<Toggle aria-label="Toggle italic">
+					<Toggle
+						aria-label="Toggle like"
+						class="data-[state=on]:bg-sky-100"
+						pressed={reason.likeList.includes('user1')}
+						onPressedChange={async (pressed) => {
+							let newLikeList;
+							if (reason.likeList.includes('user1')) {
+								newLikeList = reason.likeList.filter((u) => u !== 'user1');
+							} else {
+								newLikeList = [...reason.likeList, 'user1'];
+							}
+							reason.likeList = newLikeList;
+							await fetch(`/api/reasons/${reason.id}`, {
+								method: 'PATCH',
+								body: JSON.stringify({ pressed }),
+								headers: {
+									'Content-Type': 'application/json'
+								}
+							});
+						}}
+					>
 						<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
 					</Toggle>
 				</Card.Footer>
@@ -119,7 +139,27 @@
 					<p>{reason.description}</p>
 				</Card.Content>
 				<Card.Footer>
-					<Toggle aria-label="Toggle italic">
+					<Toggle
+						aria-label="Toggle like"
+						class="data-[state=on]:bg-sky-100"
+						pressed={reason.likeList.includes('user1')}
+						onPressedChange={async (pressed) => {
+							let newLikeList;
+							if (reason.likeList.includes('user1')) {
+								newLikeList = reason.likeList.filter((u) => u !== 'user1');
+							} else {
+								newLikeList = [...reason.likeList, 'user1'];
+							}
+							reason.likeList = newLikeList;
+							await fetch(`/api/reasons/${reason.id}`, {
+								method: 'PATCH',
+								body: JSON.stringify({ pressed }),
+								headers: {
+									'Content-Type': 'application/json'
+								}
+							});
+						}}
+					>
 						<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
 					</Toggle>
 				</Card.Footer>
