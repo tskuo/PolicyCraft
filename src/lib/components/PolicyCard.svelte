@@ -58,9 +58,33 @@
 						</Toggle>
 					</button>
 					<button on:click|preventDefault>
-						<Toggle class="ml-1 data-[state=on]:bg-sky-100" pressed={watchList.includes(userId)}>
+						<Toggle
+							aria-label="Toggle watch"
+							class="ml-1 data-[state=on]:bg-sky-100"
+							pressed={watchList.includes(userId)}
+							onPressedChange={async (pressed) => {
+								let newWatchList;
+								if (watchList.includes(userId)) {
+									newWatchList = watchList.filter((u) => u !== userId);
+								} else {
+									newWatchList = [...watchList, userId];
+								}
+								watchList = newWatchList;
+								await fetch(`/api/policies/${id}`, {
+									method: 'PATCH',
+									body: JSON.stringify({ pressed, action: 'updateWatchList' }),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								});
+							}}
+						>
 							<Eye class="h-4 w-4 mr-2" />{watchList.length}
 						</Toggle>
+
+						<!-- <Toggle class="ml-1 data-[state=on]:bg-sky-100" pressed={watchList.includes(userId)}>
+							<Eye class="h-4 w-4 mr-2" />{watchList.length}
+						</Toggle> -->
 					</button>
 				</div>
 
