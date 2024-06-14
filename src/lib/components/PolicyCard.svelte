@@ -81,10 +81,6 @@
 						>
 							<Eye class="h-4 w-4 mr-2" />{watchList.length}
 						</Toggle>
-
-						<!-- <Toggle class="ml-1 data-[state=on]:bg-sky-100" pressed={watchList.includes(userId)}>
-							<Eye class="h-4 w-4 mr-2" />{watchList.length}
-						</Toggle> -->
 					</button>
 				</div>
 

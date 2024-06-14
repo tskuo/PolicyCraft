@@ -11,17 +11,49 @@
 	// export let form;
 
 	let userId = 'user1';
-	let userVote = '';
-	$: {
-		if (data.c.votes.allow.includes(userId)) {
-			userVote = 'allow';
-		} else if (data.c.votes.disallow.includes(userId)) {
-			userVote = 'disallow';
-		} else if (data.c.votes.unsure.includes(userId)) {
-			userVote = 'unsure';
+	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
+
+	const handleVote = async (value: string | undefined) => {
+		console.log('value: ', value);
+		let allowList, disallowList, unsureList;
+		if (value == 'allow') {
+			allowList = [...data.c.votes.allow, userId];
+			disallowList = data.c.votes.disallow.filter((u: string) => u !== userId);
+			unsureList = data.c.votes.unsure.filter((u: string) => u !== userId);
+		} else if (value == 'disallow') {
+			disallowList = [...data.c.votes.disallow, userId];
+			allowList = data.c.votes.allow.filter((u: string) => u !== userId);
+			unsureList = data.c.votes.unsure.filter((u: string) => u !== userId);
+		} else if (value == 'unsure') {
+			unsureList = [...data.c.votes.unsure, userId];
+			disallowList = data.c.votes.disallow.filter((u: string) => u !== userId);
+			allowList = data.c.votes.allow.filter((u: string) => u !== userId);
 		} else {
-			userVote = '';
+			allowList = data.c.votes.allow.filter((u: string) => u !== userId);
+			disallowList = data.c.votes.disallow.filter((u: string) => u !== userId);
+			unsureList = data.c.votes.unsure.filter((u: string) => u !== userId);
 		}
+		data.c.votes.allow = allowList;
+		data.c.votes.disallow = disallowList;
+		data.c.votes.unsure = unsureList;
+
+		await fetch(`/api/cases/${data.c.id}`, {
+			method: 'PATCH',
+			body: JSON.stringify({ value }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+	};
+
+	$: if (data.c.votes.allow.includes(userId)) {
+		userVote = 'allow';
+	} else if (data.c.votes.disallow.includes(userId)) {
+		userVote = 'disallow';
+	} else if (data.c.votes.unsure.includes(userId)) {
+		userVote = 'unsure';
+	} else {
+		userVote = undefined;
 	}
 
 	$: totalUsers =
@@ -66,6 +98,7 @@
 				variant="outline"
 				class="flex justify-start my-4"
 				value={userVote}
+				onValueChange={(value) => handleVote(value)}
 			>
 				<ToggleGroup.Item
 					value="allow"
@@ -96,7 +129,7 @@
 					data.c.votes.unsure.length})
 			</h3>
 			<div class="flex w-full h-3 my-4 rounded">
-				{#if userVote !== ''}
+				{#if userVote !== undefined}
 					<div class="bg-green-200" style="width: {percentAllow}%"></div>
 					<div class="bg-red-200" style="width: {percentDisallow}%"></div>
 					<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
