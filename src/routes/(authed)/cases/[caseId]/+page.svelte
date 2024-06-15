@@ -14,7 +14,6 @@
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {
-		console.log('value: ', value);
 		let allowList, disallowList, unsureList;
 		if (value == 'allow') {
 			allowList = [...data.c.votes.allow, userId];

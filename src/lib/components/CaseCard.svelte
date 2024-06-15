@@ -20,17 +20,49 @@
 	let showAlert = false;
 
 	let userId = 'user1';
-	let userVote = '';
-	$: {
-		if (votes.allow.includes(userId)) {
-			userVote = 'allow';
-		} else if (votes.disallow.includes(userId)) {
-			userVote = 'disallow';
-		} else if (votes.unsure.includes(userId)) {
-			userVote = 'unsure';
+	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
+
+	const handleVote = async (value: string | undefined) => {
+		console.log('value: ', value);
+		let allowList, disallowList, unsureList;
+		if (value == 'allow') {
+			allowList = [...votes.allow, userId];
+			disallowList = votes.disallow.filter((u: string) => u !== userId);
+			unsureList = votes.unsure.filter((u: string) => u !== userId);
+		} else if (value == 'disallow') {
+			disallowList = [...votes.disallow, userId];
+			allowList = votes.allow.filter((u: string) => u !== userId);
+			unsureList = votes.unsure.filter((u: string) => u !== userId);
+		} else if (value == 'unsure') {
+			unsureList = [...votes.unsure, userId];
+			disallowList = votes.disallow.filter((u: string) => u !== userId);
+			allowList = votes.allow.filter((u: string) => u !== userId);
 		} else {
-			userVote = '';
+			allowList = votes.allow.filter((u: string) => u !== userId);
+			disallowList = votes.disallow.filter((u: string) => u !== userId);
+			unsureList = votes.unsure.filter((u: string) => u !== userId);
 		}
+		votes.allow = allowList;
+		votes.disallow = disallowList;
+		votes.unsure = unsureList;
+
+		await fetch(`/api/cases/${id}`, {
+			method: 'PATCH',
+			body: JSON.stringify({ value }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+	};
+
+	$: if (votes.allow.includes(userId)) {
+		userVote = 'allow';
+	} else if (votes.disallow.includes(userId)) {
+		userVote = 'disallow';
+	} else if (votes.unsure.includes(userId)) {
+		userVote = 'unsure';
+	} else {
+		userVote = undefined;
 	}
 
 	$: totalUsers = votes.allow.length + votes.disallow.length + votes.unsure.length;
@@ -60,18 +92,48 @@
 									{description}
 								</p>
 								<!-- <div class="w-full border h-3 bg-gray-200 mt-2 rounded"></div> -->
-								<div class="flex w-full h-3 mt-2 mb-2 rounded">
-									{#if userVote !== ''}
-										<div class="bg-green-200" style="width: {percentAllow}%"></div>
-										<div class="bg-red-200" style="width: {percentDisallow}%"></div>
-										<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
+								<div class="flex w-full h-4 mt-2 mb-2 rounded">
+									{#if userVote !== undefined}
+										{#if percentAllow != 0}
+											<div
+												class="bg-green-200 flex justify-center items-center text-sm"
+												style="width: {percentAllow}%"
+											>
+												{percentAllow}%
+											</div>
+										{/if}
+										{#if percentDisallow != 0}
+											<div
+												class="bg-red-200 flex justify-center items-center text-sm"
+												style="width: {percentDisallow}%"
+											>
+												{percentDisallow}%
+											</div>
+										{/if}
+										{#if percentUnsure != 0}
+											<div
+												class="bg-gray-200 flex justify-center items-center text-sm"
+												style="width: {percentUnsure}%"
+											>
+												{percentUnsure}%
+											</div>
+										{/if}
 									{:else}
-										<div class="w-full bg-gray-100" />
+										<div
+											class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500"
+										>
+											vote to see distribution
+										</div>
 									{/if}
 								</div>
 
 								<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
-								<ToggleGroup.Root type="single" class="w-full grid grid-cols-3" value={userVote}>
+								<ToggleGroup.Root
+									type="single"
+									class="w-full grid grid-cols-3"
+									value={userVote}
+									onValueChange={(value) => handleVote(value)}
+								>
 									<ToggleGroup.Item
 										value="allow"
 										aria-label="Toggle allow"
@@ -134,7 +196,7 @@
 	<Card.Content>
 		<p>{description}</p>
 		<div class="flex w-full h-3 mt-4 mb-2">
-			{#if userVote !== ''}
+			{#if userVote !== undefined}
 				<div class="bg-green-200" style="width: {percentAllow}%"></div>
 				<div class="bg-red-200" style="width: {percentDisallow}%"></div>
 				<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
@@ -145,7 +207,12 @@
 		<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
 	</Card.Content>
 	<Card.Footer>
-		<ToggleGroup.Root type="single" class="w-full grid grid-cols-3" value={userVote}>
+		<ToggleGroup.Root
+			type="single"
+			class="w-full grid grid-cols-3"
+			value={userVote}
+			onValueChange={(value) => handleVote(value)}
+		>
 			<ToggleGroup.Item
 				value="allow"
 				aria-label="Toggle allow"
