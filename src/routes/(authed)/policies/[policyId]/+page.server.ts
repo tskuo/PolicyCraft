@@ -15,6 +15,17 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 			if (response.ok) {
 				const cc = await response.json();
 				cc.label = c.label;
+
+				let reasons = [];
+				for (const reasonId of cc.reasons) {
+					const resReason = await fetch(`/api/reasons/${reasonId}`);
+					if (resReason.ok) {
+						const rr = await resReason.json();
+						rr.id = reasonId;
+						reasons.push(rr);
+					}
+				}
+				cc.reasons = reasons;
 				cases.push(cc);
 			} else {
 				const cc = await response.json();
