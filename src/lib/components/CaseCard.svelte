@@ -9,6 +9,7 @@
 
 	export let id = '';
 	export let description = '';
+	export let reasons: any[];
 	export let title = '';
 	export let votes = {
 		allow: [] as string[],
@@ -23,7 +24,6 @@
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {
-		console.log('value: ', value);
 		let allowList, disallowList, unsureList;
 		if (value == 'allow') {
 			allowList = [...votes.allow, userId];
@@ -69,6 +69,9 @@
 	$: percentAllow = Math.floor((100 / totalUsers) * votes.allow.length);
 	$: percentDisallow = Math.floor((100 / totalUsers) * votes.disallow.length);
 	$: percentUnsure = Math.floor((100 / totalUsers) * votes.unsure.length);
+
+	$: reasonsAllow = reasons.filter((r) => r.label == 'allow');
+	$: reasonsDisallow = reasons.filter((r) => r.label == 'disallow');
 </script>
 
 <Card.Root>
@@ -91,7 +94,6 @@
 								<p>
 									{description}
 								</p>
-								<!-- <div class="w-full border h-3 bg-gray-200 mt-2 rounded"></div> -->
 								<div class="flex w-full h-4 mt-2 mb-2 rounded">
 									{#if userVote !== undefined}
 										{#if percentAllow != 0}
@@ -126,7 +128,6 @@
 										</div>
 									{/if}
 								</div>
-
 								<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
 								<ToggleGroup.Root
 									type="single"
@@ -156,24 +157,24 @@
 										<CircleHelp class="h-4 w-4" />
 									</ToggleGroup.Item>
 								</ToggleGroup.Root>
-								<h3 class="font-bold">Allow Reasons</h3>
-								<!-- <Accordion.Root class="w-full">
-									{#each reasons.allow as reason (reason.id)}
+								<h3 class="font-bold mt-6">Allow Reasons ({reasonsAllow.length})</h3>
+								<Accordion.Root class="w-full">
+									{#each reasonsAllow as reason (reason.id)}
 										<Accordion.Item value={reason.id}>
 											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
 											<Accordion.Content>{reason.description}</Accordion.Content>
 										</Accordion.Item>
 									{/each}
-								</Accordion.Root> -->
-								<h3 class="font-bold">Disallow Reasons</h3>
-								<!-- <Accordion.Root class="w-full">
-									{#each reasons.disallow as reason (reason.id)}
+								</Accordion.Root>
+								<h3 class="font-bold">Disallow Reasons ({reasonsDisallow.length})</h3>
+								<Accordion.Root class="w-full">
+									{#each reasonsDisallow as reason (reason.id)}
 										<Accordion.Item value={reason.id}>
 											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
 											<Accordion.Content>{reason.description}</Accordion.Content>
 										</Accordion.Item>
 									{/each}
-								</Accordion.Root> -->
+								</Accordion.Root>
 								<Dialog.Footer>
 									<Button href="/cases/{id}">Open case</Button>
 								</Dialog.Footer>
@@ -194,7 +195,13 @@
 		<Card.Title class="leading-normal">{title}</Card.Title>
 	</Card.Header>
 	<Card.Content>
-		<p>{description}</p>
+		<p>
+			{#if description.length <= 200}
+				{description}
+			{:else}
+				{description.substring(0, 200)}...
+			{/if}
+		</p>
 		<div class="flex w-full h-3 mt-4 mb-2">
 			{#if userVote !== undefined}
 				<div class="bg-green-200" style="width: {percentAllow}%"></div>

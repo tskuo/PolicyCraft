@@ -6,11 +6,8 @@ import {
 	collection,
 	doc,
 	getDoc,
-	getDocs,
-	query,
 	serverTimestamp,
-	updateDoc,
-	where
+	updateDoc
 } from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
