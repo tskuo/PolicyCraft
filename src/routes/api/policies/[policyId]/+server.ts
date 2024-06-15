@@ -22,7 +22,7 @@ export const GET = async ({ params }) => {
 
 export const PATCH = async ({ request, params }) => {
 	try {
-		const { pressed, action } = await request.json();
+		const { pressed, form, action } = await request.json();
 		if (action == 'updateWatchList') {
 			let actionName = '';
 			if (pressed) {
@@ -50,8 +50,26 @@ export const PATCH = async ({ request, params }) => {
 				userId: 'user1'
 			});
 			return json({ status: 201 });
+		} else if (action == 'editPolicy') {
+			await updateDoc(doc(db, 'policies', params.policyId), {
+				title: form.data.title,
+				description: form.data.description
+			});
+			await addDoc(collection(db, 'actionLogs'), {
+				action: 'editPolicy',
+				createAt: serverTimestamp(),
+				input: {
+					title: form.data.title,
+					description: form.data.description
+				},
+				targetCollection: 'policies',
+				targetDocumentId: params.policyId,
+				targetSubCollection: '',
+				targetSubDocumentId: '',
+				userId: 'user1'
+			});
 		}
-		return json({ status: 201 });
+		throw error(400, 'Sorry, something went wrong.');
 	} catch (e) {
 		throw error(400, 'Sorry, something went wrong.');
 	}

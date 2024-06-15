@@ -53,7 +53,7 @@
 					>
 						<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
 					</Toggle>
-					<Button>
+					<Button href="/policies/{data.policy.id}/editpolicy">
 						<Pencil class="h-4 w-4 mr-2" />Edit policy
 					</Button>
 				</div>
@@ -104,7 +104,7 @@
 					</div>
 				</div>
 				<div class="flex">
-					<Button>
+					<Button href="/policies/{data.policy.id}/editcase">
 						<Pencil class="h-4 w-4 mr-2" />Edit cases
 					</Button>
 				</div>
