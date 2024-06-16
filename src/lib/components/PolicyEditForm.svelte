@@ -1,6 +1,9 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
+	import * as Card from '$lib/components/ui/card/index.js';
+	import * as Carousel from '$lib/components/ui/carousel/index.js';
+	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { policyEditFormSchema, type PolicyEditFormSchema } from '$lib/schema';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
@@ -30,5 +33,29 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
+	<div class="flex justify-center">
+		<Carousel.Root
+			opts={{
+				align: 'center'
+			}}
+			class="w-full max-w-[80%]"
+		>
+			<Carousel.Content>
+				{#each Array(5) as _, i (i)}
+					<Carousel.Item>
+						<div class="p-1">
+							<Card.Root>
+								<Card.Content class="flex  items-center justify-center p-6">
+									<span class="text-3xl font-semibold">{i + 1}</span>
+								</Card.Content>
+							</Card.Root>
+						</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous />
+			<Carousel.Next />
+		</Carousel.Root>
+	</div>
 	<Form.Button class="mt-6">Submit</Form.Button>
 </form>

@@ -12,11 +12,9 @@
 		ChevronsDownUp
 	} from 'lucide-svelte/icons';
 	import CaseCard from './CaseCard.svelte';
-	import type { Timestamp } from 'firebase/firestore';
 
 	export let id = '';
 	export let cases: any[] = [];
-	export let createAt: Timestamp;
 	export let description = '';
 	export let openDiscussions: any[] = [];
 	export let title = '';

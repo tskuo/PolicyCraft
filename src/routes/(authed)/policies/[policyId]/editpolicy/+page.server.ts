@@ -7,15 +7,40 @@ import { policyEditFormSchema } from '$lib/schema';
 export const load: PageServerLoad = async ({ fetch, params }) => {
 	const res = await fetch(`/api/policies/${params.policyId}`);
 	const policy = await res.json();
+
 	const form = await superValidate(zod(policyEditFormSchema));
 
 	if (res.ok) {
+		let cases = [];
+		for (const c of policy.cases) {
+			const resCase = await fetch(`/api/cases/${c.caseId}`);
+			if (resCase.ok) {
+				const cc = await resCase.json();
+				cc.label = c.label;
+
+				let reasons = [];
+				for (const reasonId of cc.reasons) {
+					const resReason = await fetch(`/api/reasons/${reasonId}`);
+					if (resReason.ok) {
+						const rr = await resReason.json();
+						rr.id = reasonId;
+						reasons.push(rr);
+					}
+				}
+				cc.reasons = reasons;
+				cases.push(cc);
+			}
+		}
+
 		form.data.title = policy.title;
 		form.data.description = policy.description;
+		console.log(cases);
+		// form.data.cases = cases;
 		return { policy, form };
 	}
 
-	throw error(404, 'Fail to load policies.');
+	throw error(404, 'Fail to load this page.');
+
 	// throw redirect(307, '/policy');
 };
 
