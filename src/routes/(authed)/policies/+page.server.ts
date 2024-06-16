@@ -27,6 +27,20 @@ export const load: PageServerLoad = async ({ fetch }) => {
 				}
 			}
 			policy.cases = cases;
+
+			let openDiscussions = [];
+			for (const discussionId of policy.discussions) {
+				const resDiscussion = await fetch(`/api/discussions/${discussionId}`);
+				if (resDiscussion.ok) {
+					const dd = await resDiscussion.json();
+					// only show open discussion
+					if (dd.open) {
+						dd.id = discussionId;
+						openDiscussions.push(dd);
+					}
+				}
+			}
+			policy.openDiscussions = openDiscussions;
 		}
 
 		return { policies };
