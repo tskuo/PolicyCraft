@@ -53,7 +53,8 @@ export const PATCH = async ({ request, params }) => {
 		} else if (action == 'editPolicy') {
 			await updateDoc(doc(db, 'policies', params.policyId), {
 				title: form.data.title,
-				description: form.data.description
+				description: form.data.description,
+				cases: form.data.cases
 			});
 			await addDoc(collection(db, 'actionLogs'), {
 				action: 'editPolicy',

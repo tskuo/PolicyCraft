@@ -8,7 +8,9 @@
 	import type { Timestamp } from 'firebase/firestore';
 
 	export let id = '';
+	export let createAt: Timestamp;
 	export let description = '';
+	export let discussions: string[];
 	export let reasons: any[];
 	export let title = '';
 	export let votes = {

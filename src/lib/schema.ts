@@ -10,7 +10,13 @@ export type PolicyCreateFormSchema = typeof policyCreateFormSchema;
 
 export const policyEditFormSchema = z.object({
 	title: z.string().min(1).max(80),
-	description: z.string().min(1)
+	description: z.string().min(1),
+	cases: z
+		.object({
+			caseId: z.string(),
+			label: z.string()
+		})
+		.array()
 });
 
 export type PolicyEditFormSchema = typeof policyEditFormSchema;

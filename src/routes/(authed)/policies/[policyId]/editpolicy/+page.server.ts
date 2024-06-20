@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 	const form = await superValidate(zod(policyEditFormSchema));
 
 	if (res.ok) {
-		let cases = [];
+		let cases = new Map();
 		for (const c of policy.cases) {
 			const resCase = await fetch(`/api/cases/${c.caseId}`);
 			if (resCase.ok) {
@@ -28,15 +28,14 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 					}
 				}
 				cc.reasons = reasons;
-				cases.push(cc);
+				cases.set(cc.id, cc);
 			}
 		}
 
 		form.data.title = policy.title;
 		form.data.description = policy.description;
-		console.log(cases);
-		// form.data.cases = cases;
-		return { policy, form };
+		form.data.cases = policy.cases;
+		return { policy, form, cases };
 	}
 
 	throw error(404, 'Fail to load this page.');
