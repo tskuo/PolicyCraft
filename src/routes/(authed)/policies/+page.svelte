@@ -1,5 +1,4 @@
 <script lang="ts">
-	import CaseCard from '$lib/components/CaseCard.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select';
 	import PolicyCard from '$lib/components/PolicyCard.svelte';

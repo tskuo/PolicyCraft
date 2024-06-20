@@ -76,145 +76,147 @@
 	$: reasonsDisallow = reasons.filter((r) => r.label == 'disallow');
 </script>
 
-<Card.Root>
-	<Card.Header>
-		<Card.Description>
-			<div class="flex justify-between items-center">
-				<div class="flex items-center">
-					<button class="mr-2" on:click|preventDefault>
-						<Dialog.Root>
-							<Dialog.Trigger class="items-center flex">
-								<Maximize class="w-4 h-4" />
-							</Dialog.Trigger>
-							<Dialog.Content class="sm:max-w-lg max-h-screen overflow-y-scroll">
-								<Dialog.Header>
-									<!-- <Dialog.Description>Case #{id}</Dialog.Description> -->
-									<Dialog.Title class="leading-normal">
-										{title}
-									</Dialog.Title>
-								</Dialog.Header>
-								<p>
-									{description}
-								</p>
-								<div class="flex w-full h-4 mt-2 mb-2 rounded">
-									{#if userVote !== undefined}
-										{#if percentAllow != 0}
+<Card.Root class="hover:bg-gray-50">
+	<a href="/cases/{id}">
+		<Card.Header>
+			<Card.Description>
+				<div class="flex justify-between items-center">
+					<div class="flex items-center">
+						<button class="mr-2" on:click|preventDefault>
+							<Dialog.Root>
+								<Dialog.Trigger class="items-center flex">
+									<Maximize class="w-4 h-4" />
+								</Dialog.Trigger>
+								<Dialog.Content class="sm:max-w-lg max-h-screen overflow-y-scroll">
+									<Dialog.Header>
+										<!-- <Dialog.Description>Case #{id}</Dialog.Description> -->
+										<Dialog.Title class="leading-normal">
+											{title}
+										</Dialog.Title>
+									</Dialog.Header>
+									<p>
+										{description}
+									</p>
+									<div class="flex w-full h-4 mt-2 mb-2 rounded">
+										{#if userVote !== undefined}
+											{#if percentAllow != 0}
+												<div
+													class="bg-green-200 flex justify-center items-center text-sm"
+													style="width: {percentAllow}%"
+												>
+													{percentAllow}%
+												</div>
+											{/if}
+											{#if percentDisallow != 0}
+												<div
+													class="bg-red-200 flex justify-center items-center text-sm"
+													style="width: {percentDisallow}%"
+												>
+													{percentDisallow}%
+												</div>
+											{/if}
+											{#if percentUnsure != 0}
+												<div
+													class="bg-gray-200 flex justify-center items-center text-sm"
+													style="width: {percentUnsure}%"
+												>
+													{percentUnsure}%
+												</div>
+											{/if}
+										{:else}
 											<div
-												class="bg-green-200 flex justify-center items-center text-sm"
-												style="width: {percentAllow}%"
+												class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500"
 											>
-												{percentAllow}%
+												vote to see distribution
 											</div>
 										{/if}
-										{#if percentDisallow != 0}
-											<div
-												class="bg-red-200 flex justify-center items-center text-sm"
-												style="width: {percentDisallow}%"
-											>
-												{percentDisallow}%
-											</div>
-										{/if}
-										{#if percentUnsure != 0}
-											<div
-												class="bg-gray-200 flex justify-center items-center text-sm"
-												style="width: {percentUnsure}%"
-											>
-												{percentUnsure}%
-											</div>
-										{/if}
-									{:else}
-										<div
-											class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500"
+									</div>
+									<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
+									<ToggleGroup.Root
+										type="single"
+										class="w-full grid grid-cols-3"
+										value={userVote}
+										onValueChange={(value) => handleVote(value)}
+									>
+										<ToggleGroup.Item
+											value="allow"
+											aria-label="Toggle allow"
+											class="data-[state=on]:bg-green-200"
 										>
-											vote to see distribution
-										</div>
-									{/if}
-								</div>
-								<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
-								<ToggleGroup.Root
-									type="single"
-									class="w-full grid grid-cols-3"
-									value={userVote}
-									onValueChange={(value) => handleVote(value)}
-								>
-									<ToggleGroup.Item
-										value="allow"
-										aria-label="Toggle allow"
-										class="data-[state=on]:bg-green-200"
-									>
-										<Check class="h-4 w-4" />
-									</ToggleGroup.Item>
-									<ToggleGroup.Item
-										value="disallow"
-										aria-label="Toggle disallow"
-										class="data-[state=on]:bg-red-200"
-									>
-										<Ban class="h-4 w-4" />
-									</ToggleGroup.Item>
-									<ToggleGroup.Item
-										value="unsure"
-										aria-label="Toggle unsure"
-										class="data-[state=on]:bg-gray-200"
-									>
-										<CircleHelp class="h-4 w-4" />
-									</ToggleGroup.Item>
-								</ToggleGroup.Root>
-								<h3 class="font-bold mt-6">Allow Reasons ({reasonsAllow.length})</h3>
-								<Accordion.Root class="w-full">
-									{#each reasonsAllow as reason (reason.id)}
-										<Accordion.Item value={reason.id}>
-											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
-											<Accordion.Content>{reason.description}</Accordion.Content>
-										</Accordion.Item>
-									{/each}
-								</Accordion.Root>
-								<h3 class="font-bold">Disallow Reasons ({reasonsDisallow.length})</h3>
-								<Accordion.Root class="w-full">
-									{#each reasonsDisallow as reason (reason.id)}
-										<Accordion.Item value={reason.id}>
-											<Accordion.Trigger>{reason.title}</Accordion.Trigger>
-											<Accordion.Content>{reason.description}</Accordion.Content>
-										</Accordion.Item>
-									{/each}
-								</Accordion.Root>
-								<Dialog.Footer>
-									<Button href="/cases/{id}">Open case</Button>
-								</Dialog.Footer>
-							</Dialog.Content>
-						</Dialog.Root>
-					</button>
-					{#if label == 'allow'}
-						<p class="bg-green-200 px-1 rounded">allow by this policy</p>
-					{:else if label == 'disallow'}
-						<p class="bg-red-200 px-1 rounded">disallow by this policy</p>
-					{:else if label == 'unsure'}
-						<p class="bg-gray-200 px-1 rounded">unsure under this policy</p>
-					{/if}
+											<Check class="h-4 w-4" />
+										</ToggleGroup.Item>
+										<ToggleGroup.Item
+											value="disallow"
+											aria-label="Toggle disallow"
+											class="data-[state=on]:bg-red-200"
+										>
+											<Ban class="h-4 w-4" />
+										</ToggleGroup.Item>
+										<ToggleGroup.Item
+											value="unsure"
+											aria-label="Toggle unsure"
+											class="data-[state=on]:bg-gray-200"
+										>
+											<CircleHelp class="h-4 w-4" />
+										</ToggleGroup.Item>
+									</ToggleGroup.Root>
+									<h3 class="font-bold mt-6">Allow Reasons ({reasonsAllow.length})</h3>
+									<Accordion.Root class="w-full">
+										{#each reasonsAllow as reason (reason.id)}
+											<Accordion.Item value={reason.id}>
+												<Accordion.Trigger>{reason.title}</Accordion.Trigger>
+												<Accordion.Content>{reason.description}</Accordion.Content>
+											</Accordion.Item>
+										{/each}
+									</Accordion.Root>
+									<h3 class="font-bold">Disallow Reasons ({reasonsDisallow.length})</h3>
+									<Accordion.Root class="w-full">
+										{#each reasonsDisallow as reason (reason.id)}
+											<Accordion.Item value={reason.id}>
+												<Accordion.Trigger>{reason.title}</Accordion.Trigger>
+												<Accordion.Content>{reason.description}</Accordion.Content>
+											</Accordion.Item>
+										{/each}
+									</Accordion.Root>
+									<Dialog.Footer>
+										<Button href="/cases/{id}">Open case</Button>
+									</Dialog.Footer>
+								</Dialog.Content>
+							</Dialog.Root>
+						</button>
+						{#if label == 'allow'}
+							<p class="bg-green-200 px-1 rounded">allow by this policy</p>
+						{:else if label == 'disallow'}
+							<p class="bg-red-200 px-1 rounded">disallow by this policy</p>
+						{:else if label == 'unsure'}
+							<p class="bg-gray-200 px-1 rounded">unsure under this policy</p>
+						{/if}
+					</div>
+					{#if showAlert}<TriangleAlert class="w-4 h-4" />{/if}
 				</div>
-				{#if showAlert}<TriangleAlert class="w-4 h-4" />{/if}
+			</Card.Description>
+			<Card.Title class="leading-normal">{title}</Card.Title>
+		</Card.Header>
+		<Card.Content>
+			<p>
+				{#if description.length <= 200}
+					{description}
+				{:else}
+					{description.substring(0, 200)}...
+				{/if}
+			</p>
+			<div class="flex w-full h-3 mt-4 mb-2">
+				{#if userVote !== undefined}
+					<div class="bg-green-200" style="width: {percentAllow}%"></div>
+					<div class="bg-red-200" style="width: {percentDisallow}%"></div>
+					<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
+				{:else}
+					<div class="w-full bg-gray-100" />
+				{/if}
 			</div>
-		</Card.Description>
-		<Card.Title class="leading-normal">{title}</Card.Title>
-	</Card.Header>
-	<Card.Content>
-		<p>
-			{#if description.length <= 200}
-				{description}
-			{:else}
-				{description.substring(0, 200)}...
-			{/if}
-		</p>
-		<div class="flex w-full h-3 mt-4 mb-2">
-			{#if userVote !== undefined}
-				<div class="bg-green-200" style="width: {percentAllow}%"></div>
-				<div class="bg-red-200" style="width: {percentDisallow}%"></div>
-				<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
-			{:else}
-				<div class="w-full bg-gray-100" />
-			{/if}
-		</div>
-		<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
-	</Card.Content>
+			<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
+		</Card.Content>
+	</a>
 	<Card.Footer>
 		<ToggleGroup.Root
 			type="single"

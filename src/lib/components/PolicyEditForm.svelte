@@ -55,7 +55,7 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<div>
+	{#if $formData.cases.length !== 0}
 		<Form.Fieldset {form} name="cases">
 			<Form.Legend>Check related case labels</Form.Legend>
 			<Form.Description>
@@ -113,6 +113,6 @@
 				</Carousel.Root>
 			</div>
 		</Form.Fieldset>
-	</div>
+	{/if}
 	<Form.Button class="mt-6" disabled={!allowSubmit}>Submit</Form.Button>
 </form>
