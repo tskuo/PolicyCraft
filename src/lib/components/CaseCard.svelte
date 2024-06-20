@@ -88,7 +88,7 @@
 							</Dialog.Trigger>
 							<Dialog.Content class="sm:max-w-lg max-h-screen overflow-y-scroll">
 								<Dialog.Header>
-									<Dialog.Description>Case #{id}</Dialog.Description>
+									<!-- <Dialog.Description>Case #{id}</Dialog.Description> -->
 									<Dialog.Title class="leading-normal">
 										{title}
 									</Dialog.Title>

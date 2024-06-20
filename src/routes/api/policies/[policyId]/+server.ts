@@ -51,6 +51,15 @@ export const PATCH = async ({ request, params }) => {
 			});
 			return json({ status: 201 });
 		} else if (action == 'editPolicy') {
+			const docSnap = await getDoc(doc(db, 'policies', params.policyId));
+			const originalPolicy = docSnap.data();
+			let originalCases = new Map();
+			if (originalPolicy) {
+				originalPolicy.cases.forEach((c: { caseId: string; label: string }) => {
+					originalCases.set(c.caseId, c.label);
+				});
+			}
+
 			await updateDoc(doc(db, 'policies', params.policyId), {
 				title: form.data.title,
 				description: form.data.description,
@@ -69,6 +78,26 @@ export const PATCH = async ({ request, params }) => {
 				targetSubDocumentId: '',
 				userId: 'user1'
 			});
+
+			for (const c of form.data.cases) {
+				if (c.label !== originalCases.get(c.caseId)) {
+					await addDoc(collection(db, 'actionLogs'), {
+						action: 'editCaseWhileEditingPolicy',
+						createAt: serverTimestamp(),
+						input: {
+							title: c.caseId,
+							description: c.label
+						},
+						targetCollection: 'policies',
+						targetDocumentId: params.policyId,
+						targetSubCollection: '',
+						targetSubDocumentId: '',
+						userId: 'user1'
+					});
+				}
+			}
+
+			return json({ status: 201 });
 		}
 		throw error(400, 'Sorry, something went wrong.');
 	} catch (e) {
