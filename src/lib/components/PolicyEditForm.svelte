@@ -56,7 +56,7 @@
 		<Form.FieldErrors />
 	</Form.Field>
 	{#if $formData.cases.length !== 0}
-		<Form.Fieldset {form} name="cases">
+		<Form.Fieldset {form} name="cases" class="mt-4">
 			<Form.Legend>Check related case labels</Form.Legend>
 			<Form.Description>
 				Please check the labels of related cases to see if your policy edit will result in any

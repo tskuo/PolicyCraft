@@ -1,5 +1,8 @@
 <script lang="ts">
+	import PolicyEditCaseForm from '$lib/components/PolicyEditCaseForm.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
+
+	export let data;
 </script>
 
 <div class="grid grid-cols-4">
@@ -11,7 +14,7 @@
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
-					<Breadcrumb.Link href="/policies/">xx</Breadcrumb.Link>
+					<Breadcrumb.Link href="/policies/{data.policy.id}">{data.policy.title}</Breadcrumb.Link>
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
@@ -19,5 +22,10 @@
 				</Breadcrumb.Item>
 			</Breadcrumb.List>
 		</Breadcrumb.Root>
+		<PolicyEditCaseForm
+			data={data.form}
+			relatedCases={data.relatedCases}
+			allCases={data.allCases}
+		/>
 	</div>
 </div>

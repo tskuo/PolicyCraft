@@ -6,8 +6,6 @@ export const policyCreateFormSchema = z.object({
 	description: z.string().min(1)
 });
 
-export type PolicyCreateFormSchema = typeof policyCreateFormSchema;
-
 export const policyEditFormSchema = z.object({
 	title: z.string().min(1).max(80),
 	description: z.string().min(1),
@@ -19,7 +17,14 @@ export const policyEditFormSchema = z.object({
 		.array()
 });
 
-export type PolicyEditFormSchema = typeof policyEditFormSchema;
+export const policyEditCaseFormSchema = z.object({
+	cases: z
+		.object({
+			caseId: z.string(),
+			label: z.string()
+		})
+		.array()
+});
 
 export const caseCreateFormSchema = z.object({
 	title: z.string().min(1).max(80),
@@ -29,21 +34,15 @@ export const caseCreateFormSchema = z.object({
 	})
 });
 
-export type CaseCreateFormSchema = typeof caseCreateFormSchema;
-
 export const messageCreateFormSchema = z.object({
 	message: z.string().min(1),
 	id: z.string()
 });
 
-export type MessageCreateFormSchema = typeof messageCreateFormSchema;
-
 export const discussionCreateFormSchema = z.object({
 	title: z.string().min(1).max(30),
 	message: z.string().min(1)
 });
-
-export type DiscussionCreateFormSchema = typeof discussionCreateFormSchema;
 
 export const reasonCreateFormSchema = z.object({
 	title: z.string().min(1).max(50),
@@ -53,4 +52,10 @@ export const reasonCreateFormSchema = z.object({
 	})
 });
 
+export type PolicyCreateFormSchema = typeof policyCreateFormSchema;
+export type PolicyEditFormSchema = typeof policyEditFormSchema;
+export type CaseCreateFormSchema = typeof caseCreateFormSchema;
+export type MessageCreateFormSchema = typeof messageCreateFormSchema;
+export type DiscussionCreateFormSchema = typeof discussionCreateFormSchema;
 export type ReasonCreateFormSchema = typeof reasonCreateFormSchema;
+export type PolicyEditCaseFormSchema = typeof policyEditCaseFormSchema;
