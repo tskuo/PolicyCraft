@@ -111,6 +111,12 @@
 					<Form.FieldErrors />
 				</Form.Field>
 				<Form.Button>Submit</Form.Button>
+				<Button
+					variant="secondary"
+					on:click={() => {
+						showNewDiscussionPanel = false;
+					}}>Cancel</Button
+				>
 			</form>
 		{:else}
 			<Button
