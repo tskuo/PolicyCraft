@@ -1,4 +1,3 @@
-import { Description } from 'formsnap';
 import { z } from 'zod';
 
 export const policyCreateFormSchema = z.object({

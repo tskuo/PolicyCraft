@@ -12,7 +12,7 @@
 	import SuperDebug from 'sveltekit-superforms';
 
 	import { browser } from '$app/environment';
-	import { X, Plus } from 'lucide-svelte';
+	import { X, Plus, Search } from 'lucide-svelte';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
 	export let relatedCases;
@@ -69,14 +69,9 @@
 		<div class="my-4">
 			<h3 class="text-sm font-medium my-2">Add more cases</h3>
 			<div class="flex items-center space-x-2">
-				<Input
-					placeholder="Search from the case repository by title or description"
-					class="w-full"
-					bind:value={searchText}
-				/>
-				<Button
-					variant="secondary"
-					on:click={() => {
+				<form
+					class="grow"
+					on:submit|preventDefault={() => {
 						if (searchText) {
 							searchCases = allCases.filter((c) => {
 								let title = c.title.toLowerCase();
@@ -86,12 +81,27 @@
 									description.includes(searchText.toLowerCase())
 								);
 							});
-						} else {
-							searchCases = [];
-							searchResultText = 'Your search did not match any cases.';
 						}
-					}}>Search</Button
+						if (searchCases.length == 0) {
+							if (searchText) {
+								searchResultText = `Your search - ${searchText} - did not match any cases.`;
+							} else {
+								searchResultText = 'Search results will appear here.';
+							}
+						}
+					}}
 				>
+					<div class="relative">
+						<Search
+							class="absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%] text-muted-foreground"
+						/>
+						<Input
+							placeholder="Search from the case repository by title or description"
+							class="pl-8"
+							bind:value={searchText}
+						/>
+					</div>
+				</form>
 
 				<p>OR</p>
 				<Button variant="secondary">Create new case</Button>
@@ -163,6 +173,6 @@
 	<Form.Button>Submit</Form.Button>
 </form>
 
-<!-- {#if browser}
+{#if browser}
 	<SuperDebug data={$formData} />
-{/if} -->
+{/if}

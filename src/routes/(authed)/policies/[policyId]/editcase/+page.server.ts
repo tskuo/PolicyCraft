@@ -1,19 +1,19 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { policyEditCaseFormSchema } from '$lib/schema';
 
 export const load: PageServerLoad = async ({ fetch, params }) => {
-	const res = await fetch(`/api/policies/${params.policyId}`);
-	const policy = await res.json();
+	const resPolicy = await fetch(`/api/policies/${params.policyId}`);
+	const policy = await resPolicy.json();
 
-	const res2 = await fetch('/api/cases');
-	const allCases = await res2.json();
+	const resCases = await fetch('/api/cases');
+	const allCases = await resCases.json();
 
 	const form = await superValidate(zod(policyEditCaseFormSchema));
 
-	if (res.ok) {
+	if (resPolicy.ok) {
 		let relatedCases = new Map();
 		for (const c of policy.cases) {
 			const resCase = await fetch(`/api/cases/${c.caseId}`);
