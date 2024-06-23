@@ -76,7 +76,7 @@
 	$: reasonsDisallow = reasons.filter((r) => r.label == 'disallow');
 </script>
 
-<Card.Root class="hover:bg-gray-50">
+<Card.Root class="hover:bg-gray-50 h-full">
 	<a href="/cases/{id}">
 		<Card.Header>
 			<Card.Description>
@@ -205,7 +205,11 @@
 					{description.substring(0, 200)}...
 				{/if}
 			</p>
-			<div class="flex w-full h-3 mt-4 mb-2">
+		</Card.Content>
+	</a>
+	<Card.Footer>
+		<div class="w-full">
+			<div class="flex w-full h-3 mb-2">
 				{#if userVote !== undefined}
 					<div class="bg-green-200" style="width: {percentAllow}%"></div>
 					<div class="bg-red-200" style="width: {percentDisallow}%"></div>
@@ -214,37 +218,35 @@
 					<div class="w-full bg-gray-100" />
 				{/if}
 			</div>
-			<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
-		</Card.Content>
-	</a>
-	<Card.Footer>
-		<ToggleGroup.Root
-			type="single"
-			class="w-full grid grid-cols-3"
-			value={userVote}
-			onValueChange={(value) => handleVote(value)}
-		>
-			<ToggleGroup.Item
-				value="allow"
-				aria-label="Toggle allow"
-				class="data-[state=on]:bg-green-200"
+			<p class="mb-2">{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
+			<ToggleGroup.Root
+				type="single"
+				class="w-full grid grid-cols-3"
+				value={userVote}
+				onValueChange={(value) => handleVote(value)}
 			>
-				<Check class="h-4 w-4" />
-			</ToggleGroup.Item>
-			<ToggleGroup.Item
-				value="disallow"
-				aria-label="Toggle disallow"
-				class="data-[state=on]:bg-red-200"
-			>
-				<Ban class="h-4 w-4" />
-			</ToggleGroup.Item>
-			<ToggleGroup.Item
-				value="unsure"
-				aria-label="Toggle unsure"
-				class="data-[state=on]:bg-gray-200"
-			>
-				<CircleHelp class="h-4 w-4" />
-			</ToggleGroup.Item>
-		</ToggleGroup.Root>
+				<ToggleGroup.Item
+					value="allow"
+					aria-label="Toggle allow"
+					class="data-[state=on]:bg-green-200"
+				>
+					<Check class="h-4 w-4" />
+				</ToggleGroup.Item>
+				<ToggleGroup.Item
+					value="disallow"
+					aria-label="Toggle disallow"
+					class="data-[state=on]:bg-red-200"
+				>
+					<Ban class="h-4 w-4" />
+				</ToggleGroup.Item>
+				<ToggleGroup.Item
+					value="unsure"
+					aria-label="Toggle unsure"
+					class="data-[state=on]:bg-gray-200"
+				>
+					<CircleHelp class="h-4 w-4" />
+				</ToggleGroup.Item>
+			</ToggleGroup.Root>
+		</div>
 	</Card.Footer>
 </Card.Root>

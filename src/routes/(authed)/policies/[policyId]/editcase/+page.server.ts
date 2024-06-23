@@ -1,57 +1,43 @@
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { policyEditCaseFormSchema } from '$lib/schema';
 
 export const load: PageServerLoad = async ({ fetch, params }) => {
-	const resPolicy = await fetch(`/api/policies/${params.policyId}`);
-	const policy = await resPolicy.json();
+	try {
+		const resPolicy = await fetch(`/api/policies/${params.policyId}`);
+		const policy = await resPolicy.json();
 
-	const resCases = await fetch('/api/cases');
-	const allCases = await resCases.json();
+		const resCases = await fetch('/api/cases');
+		const allCases = await resCases.json();
 
-	const form = await superValidate(zod(policyEditCaseFormSchema));
-
-	if (resPolicy.ok) {
-		let relatedCases = new Map();
-		for (const c of policy.cases) {
-			const resCase = await fetch(`/api/cases/${c.caseId}`);
-			if (resCase.ok) {
-				const cc = await resCase.json();
-				cc.label = c.label;
-
-				let reasons = [];
-				for (const reasonId of cc.reasons) {
-					const resReason = await fetch(`/api/reasons/${reasonId}`);
-					if (resReason.ok) {
-						const rr = await resReason.json();
-						rr.id = reasonId;
-						reasons.push(rr);
-					}
-				}
-				cc.reasons = reasons;
-				relatedCases.set(cc.id, cc);
-			}
-		}
+		const form = await superValidate(zod(policyEditCaseFormSchema));
 
 		form.data.cases = policy.cases;
-		return { policy, form, relatedCases, allCases };
+		return { policy, form, allCases };
+	} catch {
+		throw error(404, 'Fail to load this page.');
 	}
-
-	throw error(404, 'Fail to load this page.');
 
 	// throw redirect(307, '/policy');
 };
 
 export const actions: Actions = {
-	default: async (event) => {
+	editRelatedCases: async (event) => {
 		const form = await superValidate(event, zod(policyEditCaseFormSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });
 		} else {
-			console.log(form.data);
+			await event.fetch(`/api/policies/${event.params.policyId}`, {
+				method: 'PATCH',
+				body: JSON.stringify({ form, action: 'editRelatedCases' }),
+				headers: {
+					'Content-Type': 'appplication/json'
+				}
+			});
+			redirect(303, `/policies/${event.params.policyId}`);
 		}
 	}
 };

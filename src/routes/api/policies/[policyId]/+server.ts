@@ -53,7 +53,7 @@ export const PATCH = async ({ request, params }) => {
 		} else if (action == 'editPolicy') {
 			const docSnap = await getDoc(doc(db, 'policies', params.policyId));
 			const originalPolicy = docSnap.data();
-			let originalCases = new Map();
+			const originalCases = new Map();
 			if (originalPolicy) {
 				originalPolicy.cases.forEach((c: { caseId: string; label: string }) => {
 					originalCases.set(c.caseId, c.label);
@@ -98,9 +98,67 @@ export const PATCH = async ({ request, params }) => {
 			}
 
 			return json({ status: 201 });
+		} else if (action == 'editRelatedCases') {
+			const docSnap = await getDoc(doc(db, 'policies', params.policyId));
+			const originalPolicy = docSnap.data();
+			const originalCases = new Map();
+			if (originalPolicy) {
+				originalPolicy.cases.forEach((c: { caseId: string; label: string }) => {
+					originalCases.set(c.caseId, c.label);
+				});
+			}
+			const editedCaseId = form.data.cases.map((c: { caseId: string; label: string }) => c.caseId);
+
+			await updateDoc(doc(db, 'policies', params.policyId), {
+				cases: form.data.cases
+			});
+
+			for (const c of form.data.cases) {
+				let actionName = '';
+				if (originalCases.get(c.caseId) == undefined) {
+					actionName = 'addRelatedCase';
+				} else if (originalCases.get(c.caseId) !== c.label) {
+					actionName = 'editRelatedCaseLabel';
+				}
+				if (actionName !== '') {
+					await addDoc(collection(db, 'actionLogs'), {
+						action: actionName,
+						createAt: serverTimestamp(),
+						input: {
+							title: c.caseId,
+							description: c.label
+						},
+						targetCollection: 'policies',
+						targetDocumentId: params.policyId,
+						targetSubCollection: '',
+						targetSubDocumentId: '',
+						userId: 'user1'
+					});
+				}
+			}
+
+			for (const caseId of originalCases.keys()) {
+				if (!editedCaseId.includes(caseId)) {
+					await addDoc(collection(db, 'actionLogs'), {
+						action: 'removeRelatedCases',
+						createAt: serverTimestamp(),
+						input: {
+							title: caseId,
+							description: ''
+						},
+						targetCollection: 'policies',
+						targetDocumentId: params.policyId,
+						targetSubCollection: '',
+						targetSubDocumentId: '',
+						userId: 'user1'
+					});
+				}
+			}
+
+			return json({ status: 201 });
 		}
 		throw error(400, 'Sorry, something went wrong.');
-	} catch (e) {
+	} catch {
 		throw error(400, 'Sorry, something went wrong.');
 	}
 };

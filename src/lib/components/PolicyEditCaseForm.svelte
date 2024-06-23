@@ -5,6 +5,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import CaseCard from '$lib/components/CaseCard.svelte';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
+	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { policyEditCaseFormSchema, type PolicyEditCaseFormSchema } from '$lib/schema';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
@@ -15,7 +16,6 @@
 	import { X, Plus, Search } from 'lucide-svelte';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
-	export let relatedCases;
 	export let allCases;
 
 	const form = superForm(data, {
@@ -30,28 +30,29 @@
 	let searchResultText = 'Search results will appear here.';
 </script>
 
-<form method="POST" use:enhance>
+<form method="POST" use:enhance action="?/editRelatedCases">
 	<Form.Fieldset {form} name="cases" class="mt-4">
 		<Form.Legend>Related cases</Form.Legend>
-		<!-- <Form.Description></Form.Description> -->
 		<div class="flex flex-wrap">
 			{#each $formData.cases as _, i}
 				<div
 					class="w-1/4 flex items-center justify-between rounded-md pl-3 my-1 mr-2
-                {relatedCases.get($formData.cases[i].caseId).label == 'allow'
+                	{$formData.cases[i].label == 'allow'
 						? 'bg-green-200'
-						: relatedCases.get($formData.cases[i].caseId).label == 'disallow'
+						: $formData.cases[i].label == 'disallow'
 							? 'bg-red-200'
 							: 'bg-gray-200'}"
 				>
-					<p class="text-sm truncate ...">{relatedCases.get($formData.cases[i].caseId).title}</p>
+					<p class="text-sm truncate ...">
+						{allCases.find((c) => $formData.cases[i].caseId == c.id).title}
+					</p>
 					<Button
 						variant="ghost"
 						size="sm"
 						class="h-6 px-2 ml-1
-                    {relatedCases.get($formData.cases[i].caseId).label == 'allow'
+						{$formData.cases[i].label == 'allow'
 							? 'hover:bg-green-100'
-							: relatedCases.get($formData.cases[i].caseId).label == 'disallow'
+							: $formData.cases[i].label == 'disallow'
 								? 'hover:bg-red-100'
 								: 'hover:bg-gray-100'}"
 						on:click={() => {
@@ -108,13 +109,13 @@
 			</div>
 			<div class="flex justify-center my-2 w-full">
 				{#if searchCases.length !== 0}
-					<Carousel.Root opts={{ align: 'start' }} class="w-11/12">
-						<Carousel.Content>
-							{#each searchCases as c (c.id)}
-								<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-									<div class="relative">
-										<CaseCard {...c} />
-										<!-- <div class="absolute top-0 right-0 m-3">
+					<ScrollArea orientation="horizontal" class="w-full border rounded-lg">
+						<div class="flex space-x-2 pb-4">
+							{#each searchCases as searchCase (searchCase.id)}
+								<div class="basis-1/3 flex-none">
+									<div class="relative h-full">
+										<CaseCard {...searchCase} />
+										<div class="absolute top-0 right-0 m-3">
 											<DropdownMenu.Root>
 												<DropdownMenu.Trigger asChild let:builder>
 													<Button variant="ghost" builders={[builder]}
@@ -123,22 +124,24 @@
 												</DropdownMenu.Trigger>
 												<DropdownMenu.Content>
 													<DropdownMenu.RadioGroup
-														value="allow"
 														onValueChange={(value) => {
-															console.log(value);
-															if (
-																$formData.cases.some(
-																	(formCase) => formCase.caseId == c.id && formCase.label == value
-																)
-															) {
-																console.log(c.id, ' is already addded');
-															} else {
-																$formData.cases.filter((formCase) => formCase.caseId !== c.id);
-
-																$formData.cases = [
-																	...$formData.cases,
-																	{ caseId: c.id, label: value }
-																];
+															if (value !== undefined) {
+																const existedCaseIndex = $formData.cases.findIndex(
+																	(formCase) => formCase.caseId == searchCase.id
+																);
+																if (existedCaseIndex == -1) {
+																	$formData.cases = [
+																		...$formData.cases,
+																		{ caseId: searchCase.id, label: value }
+																	];
+																} else {
+																	let newFormData = $formData.cases;
+																	newFormData[existedCaseIndex] = {
+																		caseId: searchCase.id,
+																		label: value
+																	};
+																	$formData.cases = newFormData;
+																}
 															}
 														}}
 													>
@@ -154,14 +157,12 @@
 													</DropdownMenu.RadioGroup>
 												</DropdownMenu.Content>
 											</DropdownMenu.Root>
-										</div> -->
+										</div>
 									</div>
-								</Carousel.Item>
+								</div>
 							{/each}
-						</Carousel.Content>
-						<Carousel.Previous />
-						<Carousel.Next />
-					</Carousel.Root>
+						</div>
+					</ScrollArea>
 				{:else}
 					<Card.Root class="w-full h-80 flex  items-center justify-center">
 						<p class="text-muted-foreground text-sm">{searchResultText}</p>
