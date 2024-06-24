@@ -60,8 +60,8 @@
 	let searchResultText = 'Search results will appear here.';
 </script>
 
-<form method="POST" use:enhance action="?/editRelatedCases">
-	<Form.Fieldset {form} name="cases" class="mt-4">
+<form method="POST" use:enhance action="?/editRelatedCases" class="mt-6">
+	<Form.Fieldset {form} name="cases">
 		<Form.Legend>Related cases</Form.Legend>
 		<div class="flex flex-wrap">
 			{#each $formData.cases as _, i}
@@ -96,8 +96,8 @@
 				</div>
 			{/each}
 		</div>
-		<div class="my-4">
-			<h3 class="text-sm font-medium my-2">Add more cases</h3>
+		<div>
+			<h3 class="text-sm font-medium mt-4 mb-2">Add more cases</h3>
 			<div class="flex items-center space-x-2">
 				<form
 					class="grow"
@@ -168,13 +168,17 @@
 									<div class="flex items-center space-x-3 space-y-0">
 										<Form.Control let:attrs>
 											<RadioGroup.Item value="allow" {...attrs} />
-											<Form.Label class="font-normal">This case should be allowed</Form.Label>
+											<Form.Label class="font-normal"
+												>I think this case should be allowed</Form.Label
+											>
 										</Form.Control>
 									</div>
 									<div class="flex items-center space-x-3 space-y-0">
 										<Form.Control let:attrs>
 											<RadioGroup.Item value="disallow" {...attrs} />
-											<Form.Label class="font-normal">This case should be disallowed</Form.Label>
+											<Form.Label class="font-normal"
+												>I think this case should be disallowed</Form.Label
+											>
 										</Form.Control>
 									</div>
 									<div class="flex items-center space-x-3 space-y-0">

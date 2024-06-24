@@ -39,13 +39,13 @@
 			<div class="flex items-center space-x-3 space-y-0">
 				<Form.Control let:attrs>
 					<RadioGroup.Item value="allow" {...attrs} />
-					<Form.Label class="font-normal">This case should be allowed</Form.Label>
+					<Form.Label class="font-normal">I think this case should be allowed</Form.Label>
 				</Form.Control>
 			</div>
 			<div class="flex items-center space-x-3 space-y-0">
 				<Form.Control let:attrs>
 					<RadioGroup.Item value="disallow" {...attrs} />
-					<Form.Label class="font-normal">This case should be disallowed</Form.Label>
+					<Form.Label class="font-normal">I think this case should be disallowed</Form.Label>
 				</Form.Control>
 			</div>
 			<div class="flex items-center space-x-3 space-y-0">
@@ -60,4 +60,4 @@
 	</Form.Fieldset>
 	<Form.Button class="mt-6">Submit</Form.Button>
 </form>
-<SuperDebug data={$formData} />
+<!-- <SuperDebug data={$formData} /> -->

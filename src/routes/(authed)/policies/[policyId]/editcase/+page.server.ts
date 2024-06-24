@@ -44,16 +44,13 @@ export const actions: Actions = {
 		const form = await superValidate(event, zod(relatedCaseCreateFormSchema));
 
 		if (!form.valid) {
-			return fail(400, {
-				form
-			});
+			return fail(400, { form });
 		}
 		const res = await event.fetch('/api/cases', {
 			method: 'POST',
 			body: JSON.stringify({ form })
 		});
 		const data = await res.json();
-
 		const resNewCase = await event.fetch(`/api/cases/${data.id}`);
 		const newCase = await resNewCase.json();
 

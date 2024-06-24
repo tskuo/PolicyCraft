@@ -34,7 +34,7 @@
 		<div class=" hover:bg-gray-100 rounded-lg">
 			<Card.Header>
 				<!-- <Card.Description>#{id}</Card.Description> -->
-				<Card.Title>{title}</Card.Title>
+				<Card.Title class="capitalize">{title}</Card.Title>
 			</Card.Header>
 			<Card.Content>
 				<p>{description}</p>

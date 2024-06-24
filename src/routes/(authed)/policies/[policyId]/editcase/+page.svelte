@@ -14,7 +14,9 @@
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
-					<Breadcrumb.Link href="/policies/{data.policy.id}">{data.policy.title}</Breadcrumb.Link>
+					<Breadcrumb.Link class="capitalize" href="/policies/{data.policy.id}"
+						>{data.policy.title}</Breadcrumb.Link
+					>
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
@@ -22,6 +24,10 @@
 				</Breadcrumb.Item>
 			</Breadcrumb.List>
 		</Breadcrumb.Root>
+		<h1 class="font-bold text-xl mt-4 capitalize">{data.policy.title}</h1>
+		<p class="leading-relaxed my-2">
+			{data.policy.description}
+		</p>
 		<PolicyEditCaseForm data={data.form} allCases={data.allCases} dataNewCase={data.formNewCase} />
 	</div>
 </div>

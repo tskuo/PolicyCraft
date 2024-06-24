@@ -14,7 +14,9 @@
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
-					<Breadcrumb.Link href="/policies/{data.policy.id}">{data.policy.title}</Breadcrumb.Link>
+					<Breadcrumb.Link class="capitalize" href="/policies/{data.policy.id}"
+						>{data.policy.title}</Breadcrumb.Link
+					>
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
