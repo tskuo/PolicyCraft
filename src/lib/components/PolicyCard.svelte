@@ -84,9 +84,9 @@
 					</div>
 
 					<div class="flex text-gray-400">
-						<div class="flex mx-2 items-center">
+						<!-- <div class="flex mx-2 items-center">
 							<TriangleAlert class="w-4 h-4 mr-2" />3
-						</div>
+						</div> -->
 						<div class="flex mx-2 items-center">
 							<Folder class="w-4 h-4 mr-2" />{cases.length}
 						</div>

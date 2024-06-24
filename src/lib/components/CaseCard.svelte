@@ -20,7 +20,6 @@
 	};
 
 	export let label = '';
-	let showAlert = false;
 
 	let userId = 'user1';
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
@@ -74,6 +73,27 @@
 
 	$: reasonsAllow = reasons.filter((r) => r.label == 'allow');
 	$: reasonsDisallow = reasons.filter((r) => r.label == 'disallow');
+
+	let showAlert = false;
+	$: if (label !== '') {
+		if (label !== 'allow' && percentAllow > percentDisallow && percentAllow > percentUnsure) {
+			showAlert = true;
+		} else if (
+			label !== 'disallow' &&
+			percentDisallow > percentAllow &&
+			percentDisallow > percentUnsure
+		) {
+			showAlert = true;
+		} else if (
+			label !== 'unsure' &&
+			percentUnsure > percentAllow &&
+			percentUnsure > percentDisallow
+		) {
+			showAlert = true;
+		} else {
+			showAlert = false;
+		}
+	}
 </script>
 
 <Card.Root class="hover:bg-gray-50 h-full">
