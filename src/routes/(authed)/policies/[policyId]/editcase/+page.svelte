@@ -22,6 +22,6 @@
 				</Breadcrumb.Item>
 			</Breadcrumb.List>
 		</Breadcrumb.Root>
-		<PolicyEditCaseForm data={data.form} allCases={data.allCases} />
+		<PolicyEditCaseForm data={data.form} allCases={data.allCases} dataNewCase={data.formNewCase} />
 	</div>
 </div>

@@ -1,4 +1,4 @@
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import {
 	messageCreateFormSchema,
@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 	const c = await res.json();
 
 	if (res.ok) {
-		let discussions = [];
+		const discussions = [];
 		for (const discussionId of c.discussions) {
 			const response = await fetch(`/api/discussions/${discussionId}`);
 			if (response.ok) {
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 			}
 		}
 
-		let reasons = [];
+		const reasons = [];
 		for (const reasonId of c.reasons) {
 			const response = await fetch(`/api/reasons/${reasonId}`);
 			if (response.ok) {

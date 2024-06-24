@@ -69,7 +69,7 @@ export const PATCH = async ({ request, params }) => {
 		});
 
 		return json({ status: 201 });
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to update user vote.');
 	}
 };

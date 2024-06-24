@@ -50,8 +50,5 @@ export const actions: Actions = {
 		});
 		const data = await res.json();
 		throw redirect(303, `/cases/${data.id}`);
-		// return {
-		// 	form
-		// };
 	}
 };

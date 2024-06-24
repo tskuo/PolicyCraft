@@ -1,13 +1,11 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
-	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { caseCreateFormSchema, type CaseCreateFormSchema } from '$lib/schema';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import SuperDebug, { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { Check, Ban, CircleHelp } from 'lucide-svelte/icons';
 
 	export let data: SuperValidated<Infer<CaseCreateFormSchema>>;
 
@@ -60,23 +58,6 @@
 		</RadioGroup.Root>
 		<Form.FieldErrors />
 	</Form.Fieldset>
-
-	<!-- <Form.Fieldset {form} name="userVote">
-		<Form.Legend>Toggle A, B, or C</Form.Legend>
-		<ToggleGroup.Root bind:value={$formData.userVote} class="flex">
-			<Form.Control let:attrs>
-				<ToggleGroup.Item value="A" {...attrs}><Form.Label>A</Form.Label></ToggleGroup.Item>
-			</Form.Control>
-			<Form.Control let:attrs>
-				<ToggleGroup.Item value="B" {...attrs}><Form.Label>B</Form.Label></ToggleGroup.Item>
-			</Form.Control>
-			<Form.Control let:attrs>
-				<ToggleGroup.Item value="C" {...attrs}><Form.Label>C</Form.Label></ToggleGroup.Item>
-			</Form.Control>
-		</ToggleGroup.Root>
-		<Form.FieldErrors />
-	</Form.Fieldset> -->
-
 	<Form.Button class="mt-6">Submit</Form.Button>
 </form>
-<!-- <SuperDebug data={$formData} /> -->
+<SuperDebug data={$formData} />

@@ -42,7 +42,7 @@ export const POST = async ({ request }) => {
 		});
 
 		return json({ id: docRef.id }, { status: 201 });
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to create a new reason in the database.');
 	}
 };

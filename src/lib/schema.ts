@@ -33,6 +33,17 @@ export const caseCreateFormSchema = z.object({
 	})
 });
 
+export const relatedCaseCreateFormSchema = z.object({
+	title: z.string().min(1).max(80),
+	description: z.string().min(1),
+	userVote: z.enum(['allow', 'disallow', 'unsure'], {
+		required_error: 'You need to vote on the case.'
+	}),
+	label: z.enum(['allow', 'disallow', 'unsure'], {
+		required_error: 'You need to label the case.'
+	})
+});
+
 export const messageCreateFormSchema = z.object({
 	message: z.string().min(1),
 	id: z.string()
@@ -54,6 +65,7 @@ export const reasonCreateFormSchema = z.object({
 export type PolicyCreateFormSchema = typeof policyCreateFormSchema;
 export type PolicyEditFormSchema = typeof policyEditFormSchema;
 export type CaseCreateFormSchema = typeof caseCreateFormSchema;
+export type RelatedCaseCreateFormSchema = typeof relatedCaseCreateFormSchema;
 export type MessageCreateFormSchema = typeof messageCreateFormSchema;
 export type DiscussionCreateFormSchema = typeof discussionCreateFormSchema;
 export type ReasonCreateFormSchema = typeof reasonCreateFormSchema;

@@ -1,22 +1,35 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import * as Dialog from '$lib/components/ui/dialog';
 	import CaseCard from '$lib/components/CaseCard.svelte';
-	import * as Carousel from '$lib/components/ui/carousel/index.js';
+	import { Textarea } from '$lib/components/ui/textarea';
+	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { policyEditCaseFormSchema, type PolicyEditCaseFormSchema } from '$lib/schema';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import {
+		relatedCaseCreateFormSchema,
+		policyEditCaseFormSchema,
+		type RelatedCaseCreateFormSchema,
+		type PolicyEditCaseFormSchema
+	} from '$lib/schema';
+	import {
+		type SuperValidated,
+		type Infer,
+		superForm,
+		type FormResult
+	} from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import SuperDebug from 'sveltekit-superforms';
-
 	import { browser } from '$app/environment';
 	import { X, Plus, Search } from 'lucide-svelte';
+	import type { ActionData } from '../../routes/(authed)/policies/[policyId]/editcase/$types';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
-	export let allCases;
+	export let allCases: any[];
+	export let dataNewCase: SuperValidated<Infer<RelatedCaseCreateFormSchema>>;
 
 	const form = superForm(data, {
 		dataType: 'json',
@@ -24,6 +37,23 @@
 	});
 
 	const { form: formData, enhance } = form;
+
+	let dialogOpen = false;
+
+	const formNewCase = superForm(dataNewCase, {
+		validators: zodClient(relatedCaseCreateFormSchema),
+		invalidateAll: false,
+		async onUpdate({ form, result }) {
+			const action = result.data as FormResult<ActionData>;
+			if (form.valid && action.caseId && action.label) {
+				dialogOpen = false;
+				$formData.cases = [...$formData.cases, { caseId: action.caseId, label: action.label }];
+				allCases = [...allCases, action.newCase];
+			}
+		}
+	});
+
+	const { form: formNewCaseData, enhance: enhance2 } = formNewCase;
 
 	let searchText = '';
 	let searchCases: any[] = [];
@@ -66,7 +96,6 @@
 				</div>
 			{/each}
 		</div>
-
 		<div class="my-4">
 			<h3 class="text-sm font-medium my-2">Add more cases</h3>
 			<div class="flex items-center space-x-2">
@@ -103,9 +132,101 @@
 						/>
 					</div>
 				</form>
-
 				<p>OR</p>
-				<Button variant="secondary">Create new case</Button>
+				<Dialog.Root bind:open={dialogOpen}>
+					<Dialog.Trigger class={buttonVariants({ variant: 'secondary' })}>
+						Create new case
+					</Dialog.Trigger>
+					<Dialog.Content class="sm:max-w-lg max-h-screen">
+						<Dialog.Header>
+							<Dialog.Title>Create a new case</Dialog.Title>
+							<Dialog.Description>Case creation guidelines ...</Dialog.Description>
+						</Dialog.Header>
+						<form method="POST" use:enhance2 action="?/createCase">
+							<Form.Field form={formNewCase} name="title">
+								<Form.Control let:attrs>
+									<Form.Label>Title</Form.Label>
+									<Input {...attrs} bind:value={$formNewCaseData.title} />
+								</Form.Control>
+								<!-- <Form.Description>This is your public display name.</Form.Description> -->
+								<Form.FieldErrors />
+							</Form.Field>
+							<Form.Field form={formNewCase} name="description">
+								<Form.Control let:attrs>
+									<Form.Label>Description</Form.Label>
+									<Textarea {...attrs} bind:value={$formNewCaseData.description} />
+								</Form.Control>
+								<!-- <Form.Description>This is your public display name.</Form.Description> -->
+								<Form.FieldErrors />
+							</Form.Field>
+							<Form.Fieldset form={formNewCase} name="userVote" class="space-y-5 mt-4">
+								<Form.Legend>Your vote on the case</Form.Legend>
+								<RadioGroup.Root
+									bind:value={$formNewCaseData.userVote}
+									class="flex flex-col space-y-1"
+								>
+									<div class="flex items-center space-x-3 space-y-0">
+										<Form.Control let:attrs>
+											<RadioGroup.Item value="allow" {...attrs} />
+											<Form.Label class="font-normal">This case should be allowed</Form.Label>
+										</Form.Control>
+									</div>
+									<div class="flex items-center space-x-3 space-y-0">
+										<Form.Control let:attrs>
+											<RadioGroup.Item value="disallow" {...attrs} />
+											<Form.Label class="font-normal">This case should be disallowed</Form.Label>
+										</Form.Control>
+									</div>
+									<div class="flex items-center space-x-3 space-y-0">
+										<Form.Control let:attrs>
+											<RadioGroup.Item value="unsure" {...attrs} />
+											<Form.Label class="font-normal">I am unsure about this case</Form.Label>
+										</Form.Control>
+									</div>
+									<RadioGroup.Input name="userVote" />
+								</RadioGroup.Root>
+								<Form.FieldErrors />
+							</Form.Fieldset>
+							<Form.Fieldset form={formNewCase} name="label" class="space-y-5 mt-4">
+								<Form.Legend>Label the case based on this policy</Form.Legend>
+								<RadioGroup.Root
+									bind:value={$formNewCaseData.label}
+									class="flex flex-col space-y-1"
+								>
+									<div class="flex items-center space-x-3 space-y-0">
+										<Form.Control let:attrs>
+											<RadioGroup.Item value="allow" {...attrs} />
+											<Form.Label class="font-normal"
+												>This case is allowed by this policy</Form.Label
+											>
+										</Form.Control>
+									</div>
+									<div class="flex items-center space-x-3 space-y-0">
+										<Form.Control let:attrs>
+											<RadioGroup.Item value="disallow" {...attrs} />
+											<Form.Label class="font-normal"
+												>This case is disallowed by this policy</Form.Label
+											>
+										</Form.Control>
+									</div>
+									<div class="flex items-center space-x-3 space-y-0">
+										<Form.Control let:attrs>
+											<RadioGroup.Item value="unsure" {...attrs} />
+											<Form.Label class="font-normal"
+												>This case is unsure under this policy</Form.Label
+											>
+										</Form.Control>
+									</div>
+									<RadioGroup.Input name="label" />
+								</RadioGroup.Root>
+								<Form.FieldErrors />
+							</Form.Fieldset>
+							<Form.Button class="mt-6">Submit</Form.Button>
+						</form>
+
+						<Dialog.Footer></Dialog.Footer>
+					</Dialog.Content>
+				</Dialog.Root>
 			</div>
 			<div class="flex justify-center my-2 w-full">
 				{#if searchCases.length !== 0}
@@ -173,7 +294,7 @@
 	</Form.Fieldset>
 	<Form.Button>Submit</Form.Button>
 </form>
-
+<!-- 
 {#if browser}
 	<SuperDebug data={$formData} />
-{/if}
+{/if} -->

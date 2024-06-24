@@ -23,7 +23,7 @@ export const POST = async ({ request }) => {
 		const { form } = await request.json();
 
 		const userId = 'user1';
-		let votes = { allow: [] as string[], disallow: [] as string[], unsure: [] as string[] };
+		const votes = { allow: [] as string[], disallow: [] as string[], unsure: [] as string[] };
 		if (form.data.userVote == 'allow') {
 			votes.allow = [userId];
 		} else if (form.data.userVote == 'disallow') {
@@ -41,7 +41,7 @@ export const POST = async ({ request }) => {
 			votes: votes
 		});
 
-		const logRef = await addDoc(collection(db, 'actionLogs'), {
+		await addDoc(collection(db, 'actionLogs'), {
 			action: 'createCase',
 			createAt: serverTimestamp(),
 			input: {
@@ -55,7 +55,7 @@ export const POST = async ({ request }) => {
 			userId: 'user1'
 		});
 		return json({ id: docRef.id }, { status: 201 });
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to create a new case in the database.');
 	}
 };
