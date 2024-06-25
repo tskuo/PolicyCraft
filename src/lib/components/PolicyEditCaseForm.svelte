@@ -60,7 +60,7 @@
 	let searchResultText = 'Search results will appear here.';
 </script>
 
-<form method="POST" use:enhance action="?/editRelatedCases" class="mt-6">
+<form method="POST" use:enhance action="?/editRelatedCases">
 	<Form.Fieldset {form} name="cases">
 		<Form.Legend>Related cases</Form.Legend>
 		<div class="flex flex-wrap">
@@ -232,14 +232,16 @@
 					</Dialog.Content>
 				</Dialog.Root>
 			</div>
-			<div class="flex justify-center my-2 w-full">
+			<div class="my-2 w-full">
 				{#if searchCases.length !== 0}
-					<ScrollArea orientation="horizontal" class="w-full border rounded-lg">
-						<div class="flex space-x-2 pb-4">
+					<ScrollArea orientation="horizontal" class=" rounded-lg w-[61vw]">
+						<div class="flex space-x-2 pb-4 w-[61vw]">
 							{#each searchCases as searchCase (searchCase.id)}
 								<div class="basis-1/3 flex-none">
 									<div class="relative h-full">
+										<!-- <div class="w-1/3 shrink-0"> -->
 										<CaseCard {...searchCase} />
+										<!-- </div> -->
 										<div class="absolute top-0 right-0 m-3">
 											<DropdownMenu.Root>
 												<DropdownMenu.Trigger asChild let:builder>
@@ -289,7 +291,7 @@
 						</div>
 					</ScrollArea>
 				{:else}
-					<Card.Root class="w-full h-80 flex  items-center justify-center">
+					<Card.Root class="w-full h-80 flex items-center justify-center">
 						<p class="text-muted-foreground text-sm">{searchResultText}</p>
 					</Card.Root>
 				{/if}

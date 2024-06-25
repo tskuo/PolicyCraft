@@ -28,6 +28,12 @@
 		<p class="leading-relaxed my-2">
 			{data.policy.description}
 		</p>
-		<PolicyEditCaseForm data={data.form} allCases={data.allCases} dataNewCase={data.formNewCase} />
+		<div class="mt-6">
+			<PolicyEditCaseForm
+				data={data.form}
+				allCases={data.allCases}
+				dataNewCase={data.formNewCase}
+			/>
+		</div>
 	</div>
 </div>
