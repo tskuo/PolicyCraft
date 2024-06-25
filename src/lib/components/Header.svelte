@@ -28,10 +28,12 @@
 					<DropdownMenu.Group>
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator />
-						<DropdownMenu.Item>Profile</DropdownMenu.Item>
-						<DropdownMenu.Item>Billing</DropdownMenu.Item>
-						<DropdownMenu.Item>Team</DropdownMenu.Item>
-						<DropdownMenu.Item>Subscription</DropdownMenu.Item>
+						<DropdownMenu.Item class="w-full">
+							<form action="/logout" method="POST" class="w-full">
+								<button class="w-full flex justify-start">Logout</button>
+							</form>
+						</DropdownMenu.Item>
+						<!-- <DropdownMenu.Item>Text</DropdownMenu.Item> -->
 					</DropdownMenu.Group>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>

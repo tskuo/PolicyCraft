@@ -62,6 +62,18 @@ export const reasonCreateFormSchema = z.object({
 	})
 });
 
+export const userLoginFormSchema = z.object({
+	email: z.string().email(),
+	password: z.string()
+});
+
+export const userSignUpFormSchema = z.object({
+	email: z.string().email(),
+	password: z.string(),
+	displayName: z.string(),
+	code: z.string()
+});
+
 export type PolicyCreateFormSchema = typeof policyCreateFormSchema;
 export type PolicyEditFormSchema = typeof policyEditFormSchema;
 export type CaseCreateFormSchema = typeof caseCreateFormSchema;
@@ -70,3 +82,5 @@ export type MessageCreateFormSchema = typeof messageCreateFormSchema;
 export type DiscussionCreateFormSchema = typeof discussionCreateFormSchema;
 export type ReasonCreateFormSchema = typeof reasonCreateFormSchema;
 export type PolicyEditCaseFormSchema = typeof policyEditCaseFormSchema;
+export type UserLoginFormSchema = typeof userLoginFormSchema;
+export type UserSignUpFormSchema = typeof userSignUpFormSchema;
