@@ -10,7 +10,7 @@
 	export let data;
 	// export let form;
 
-	let userId = 'user1';
+	const userId = data.user?.userId;
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {
@@ -164,6 +164,7 @@
 				dataReason={data.formReason}
 				label1="allow"
 				label2="disallow"
+				{userId}
 			/>
 
 			<h3 class="font-bold mt-6 text-lg">Related Policies</h3>
@@ -175,6 +176,7 @@
 				discussions={data.discussions}
 				dataMessage={data.formMessage}
 				dataDiscussion={data.formDiscussion}
+				{userId}
 			/>
 		</div>
 	</div>

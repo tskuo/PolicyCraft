@@ -14,6 +14,7 @@
 	export let label1, label2;
 	export let reasons: any[] = [];
 	export let dataReason: SuperValidated<Infer<ReasonCreateFormSchema>>;
+	export let userId;
 
 	const form = superForm(dataReason, {
 		validators: zodClient(reasonCreateFormSchema),
@@ -103,13 +104,13 @@
 					<Toggle
 						aria-label="Toggle like"
 						class="data-[state=on]:bg-sky-100"
-						pressed={reason.likeList.includes('user1')}
+						pressed={reason.likeList.includes(userId)}
 						onPressedChange={async (pressed) => {
 							let newLikeList;
-							if (reason.likeList.includes('user1')) {
-								newLikeList = reason.likeList.filter((u) => u !== 'user1');
+							if (reason.likeList.includes(userId)) {
+								newLikeList = reason.likeList.filter((u) => u !== userId);
 							} else {
-								newLikeList = [...reason.likeList, 'user1'];
+								newLikeList = [...reason.likeList, userId];
 							}
 							reason.likeList = newLikeList;
 							await fetch(`/api/reasons/${reason.id}`, {
@@ -142,13 +143,13 @@
 					<Toggle
 						aria-label="Toggle like"
 						class="data-[state=on]:bg-sky-100"
-						pressed={reason.likeList.includes('user1')}
+						pressed={reason.likeList.includes(userId)}
 						onPressedChange={async (pressed) => {
 							let newLikeList;
-							if (reason.likeList.includes('user1')) {
-								newLikeList = reason.likeList.filter((u) => u !== 'user1');
+							if (reason.likeList.includes(userId)) {
+								newLikeList = reason.likeList.filter((u) => u !== userId);
 							} else {
-								newLikeList = [...reason.likeList, 'user1'];
+								newLikeList = [...reason.likeList, userId];
 							}
 							reason.likeList = newLikeList;
 							await fetch(`/api/reasons/${reason.id}`, {

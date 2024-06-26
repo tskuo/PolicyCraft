@@ -21,7 +21,7 @@
 
 	export let label = '';
 
-	let userId = 'user1';
+	export let userId: string;
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {

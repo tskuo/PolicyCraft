@@ -39,7 +39,7 @@
 		<div>
 			{#if data.policies.length > 0}
 				{#each data.policies as policy (policy.id)}
-					<PolicyCard {...policy} />
+					<PolicyCard {...policy} userId={data.user?.userId} />
 				{/each}
 			{:else}
 				<p>The policy repository is empty.</p>

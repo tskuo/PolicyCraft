@@ -38,7 +38,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-1">
 			{#if data.cases.length > 0}
 				{#each data.cases as c (c.id)}
-					<CaseCard {...c} />
+					<CaseCard {...c} userId={data.user?.userId} />
 				{/each}
 			{:else}
 				<p>The case repository is empty.</p>

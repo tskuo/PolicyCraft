@@ -11,7 +11,7 @@
 	export let data;
 
 	let showAlert = false;
-	let userId = 'user1';
+	const userId = data.user?.userId;
 </script>
 
 <div class="grid grid-cols-4">
@@ -38,7 +38,7 @@
 						if (data.policy.watchList.includes(userId)) {
 							newWatchList = data.policy.watchList.filter((u) => u !== userId);
 						} else {
-							newWatchList = [...data.policy.watchList, 'user1'];
+							newWatchList = [...data.policy.watchList, userId];
 						}
 						data.policy.watchList = newWatchList;
 						await fetch(`/api/policies/${data.policy.id}`, {
@@ -62,8 +62,8 @@
 				<TriangleAlert class="h-4 w-4" />
 				<Alert.Title>Heads up!</Alert.Title>
 				<Alert.Description>
-					Two cases are flagged with warnings either because their majority votes conflict with this
-					policy or are unclear under this policy. If there is no agreement on a case's vote,
+					Some cases are flagged with warnings either because their majority votes conflict with
+					this policy or are unclear under this policy. If there is no agreement on a case's vote,
 					discuss it on the case page. If there is agreement on a case, discuss it on this policy
 					page and edit the policy as needed.
 				</Alert.Description>
@@ -111,7 +111,7 @@
 		{#if data.cases.length > 0}
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1">
 				{#each data.cases as c}
-					<CaseCard {...c} />
+					<CaseCard {...c} {userId} />
 				{/each}
 			</div>
 		{:else}
@@ -125,6 +125,7 @@
 			discussions={data.discussions}
 			dataMessage={data.formMessage}
 			dataDiscussion={data.formDiscussion}
+			{userId}
 		/>
 	</div>
 </div>

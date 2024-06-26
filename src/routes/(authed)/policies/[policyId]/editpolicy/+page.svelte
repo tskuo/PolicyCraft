@@ -24,6 +24,6 @@
 				</Breadcrumb.Item>
 			</Breadcrumb.List>
 		</Breadcrumb.Root>
-		<PolicyEditForm data={data.form} cases={data.cases} />
+		<PolicyEditForm data={data.form} cases={data.cases} userId={data.user?.userId} />
 	</div>
 </div>

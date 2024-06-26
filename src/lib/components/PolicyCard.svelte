@@ -3,14 +3,7 @@
 	import { Toggle } from '$lib/components/ui/toggle';
 	import * as Table from '$lib/components/ui/table';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
-	import {
-		ChevronsUpDown,
-		Eye,
-		TriangleAlert,
-		MessageSquare,
-		Folder,
-		ChevronsDownUp
-	} from 'lucide-svelte/icons';
+	import { ChevronsUpDown, Eye, MessageSquare, Folder, ChevronsDownUp } from 'lucide-svelte/icons';
 	import CaseCard from './CaseCard.svelte';
 	import type { Timestamp } from 'firebase/firestore';
 
@@ -23,7 +16,7 @@
 	export let title = '';
 	export let watchList: string[] = [];
 
-	let userId = 'user1';
+	export let userId: string;
 
 	let compactView = true;
 </script>
@@ -107,7 +100,7 @@
 						<Carousel.Content>
 							{#each cases as c}
 								<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-									<CaseCard {...c}></CaseCard>
+									<CaseCard {...c} {userId}></CaseCard>
 								</Carousel.Item>
 							{/each}
 						</Carousel.Content>

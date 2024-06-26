@@ -18,6 +18,7 @@
 	export let discussions: any[] = [];
 	export let dataMessage: SuperValidated<Infer<MessageCreateFormSchema>>;
 	export let dataDiscussion: SuperValidated<Infer<DiscussionCreateFormSchema>>;
+	export let userId;
 
 	let showNewDiscussionPanel = false;
 

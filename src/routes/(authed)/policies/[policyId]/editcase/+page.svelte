@@ -33,6 +33,7 @@
 				data={data.form}
 				allCases={data.allCases}
 				dataNewCase={data.formNewCase}
+				userId={data.user?.userId}
 			/>
 		</div>
 	</div>
