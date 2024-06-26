@@ -4,10 +4,10 @@ import { auth } from '$lib/firebase';
 import { signOut } from 'firebase/auth';
 
 export const POST: RequestHandler = async ({ cookies }) => {
-	await signOut(auth);
-	cookies.set('auth', '', {
+	cookies.set('userAuthToken', '', {
 		path: '/',
 		expires: new Date(0)
 	});
+	await signOut(auth);
 	throw redirect(303, '/login');
 };

@@ -69,9 +69,9 @@ export const userLoginFormSchema = z.object({
 
 export const userSignUpFormSchema = z.object({
 	email: z.string().email(),
-	password: z.string(),
-	displayName: z.string(),
-	code: z.string()
+	password: z.string().min(6),
+	displayName: z.string().min(6),
+	code: z.string().min(1)
 });
 
 export type PolicyCreateFormSchema = typeof policyCreateFormSchema;

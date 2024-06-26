@@ -4,6 +4,8 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { PencilRuler } from 'lucide-svelte/icons';
+
+	export let displayName = '';
 </script>
 
 <div class="bg-sky-100 flex justify-between items-center py-2 px-6">
@@ -21,7 +23,7 @@
 				<DropdownMenu.Trigger>
 					<Avatar.Root>
 						<!-- <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" /> -->
-						<Avatar.Fallback>TK</Avatar.Fallback>
+						<Avatar.Fallback>{displayName.charAt(0).toUpperCase()}</Avatar.Fallback>
 					</Avatar.Root>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>

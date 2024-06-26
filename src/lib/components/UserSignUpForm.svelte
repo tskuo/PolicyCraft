@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import Button from '$lib/components/ui/button/button.svelte';
 	import { userSignUpFormSchema, type UserSignUpFormSchema } from '$lib/schema';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -12,7 +11,7 @@
 		validators: zodClient(userSignUpFormSchema)
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, message } = form;
 </script>
 
 <form method="POST" use:enhance action="?/userSignUp">
@@ -47,4 +46,7 @@
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button class="w-full mt-2">Sign Up</Form.Button>
+	{#if $message}
+		<div class="text-sm text-red-500 mt-2">{$message}</div>
+	{/if}
 </form>

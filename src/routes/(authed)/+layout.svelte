@@ -3,10 +3,12 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { navigating } from '$app/stores';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+
+	export let data;
 </script>
 
 <div class="sticky top-0 z-50">
-	<Header></Header>
+	<Header displayName={data.user?.displayName}></Header>
 </div>
 <div class="grid grid-cols-6">
 	<aside class="sm:col-span-1 p-4 self-start sticky top-14">

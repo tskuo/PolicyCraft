@@ -3,13 +3,13 @@ import { fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { userLoginFormSchema } from '$lib/schema.js';
-import { auth } from '$lib/firebase.js';
+import { auth, db } from '$lib/firebase.js';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, updateDoc } from 'firebase/firestore';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(zod(userLoginFormSchema)),
-		errorMessage: ''
+		form: await superValidate(zod(userLoginFormSchema))
 	};
 };
 
@@ -27,9 +27,14 @@ export const actions: Actions = {
 				form.data.email,
 				form.data.password
 			);
-			console.log('login success');
-			console.log(userCredential.user.email);
-			event.cookies.set('auth', 'regularusertoken', {
+
+			const updateduserAuthToken = crypto.randomUUID();
+
+			await updateDoc(doc(db, 'users', userCredential.user.uid), {
+				userAuthToken: updateduserAuthToken
+			});
+
+			event.cookies.set('userAuthToken', updateduserAuthToken, {
 				path: '/',
 				httpOnly: true,
 				sameSite: 'strict',
@@ -37,7 +42,7 @@ export const actions: Actions = {
 				maxAge: 60 * 60 * 24 * 7 // 1 week
 			});
 		} catch {
-			return message(form, 'Invalid email or password.', {
+			return message(form, 'Invalid email or password. Please try again.', {
 				status: 403
 			});
 		}
