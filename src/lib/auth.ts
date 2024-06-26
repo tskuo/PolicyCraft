@@ -18,7 +18,7 @@ export const authenticateUser = async (event: RequestEvent) => {
 		if (querySnapshot.docs.length == 1) {
 			const doc = querySnapshot.docs[0];
 			const user = {
-				id: doc.id,
+				userId: doc.id,
 				displayName: doc.data().displayName,
 				email: doc.data().email,
 				role: doc.data().role
@@ -28,23 +28,6 @@ export const authenticateUser = async (event: RequestEvent) => {
 			return null;
 		}
 	}
-
-	// if (userAuthToken === 'regularusertoken') {
-	// 	const user = {
-	// 		id: 1,
-	// 		email: 'user@example.com',
-	// 		role: 'USER'
-	// 	};
-	// 	return user;
-	// }
-	// if (userAuthToken === 'adminusertoken') {
-	// 	const user = {
-	// 		id: 2,
-	// 		email: 'admin@example.com',
-	// 		role: 'ADMIN'
-	// 	};
-	// 	return user;
-	// }
 
 	return null;
 };

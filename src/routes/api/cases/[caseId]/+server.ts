@@ -17,38 +17,42 @@ export const GET = async ({ params }) => {
 	if (docSnap.exists()) {
 		return json({ ...docSnap.data(), id: docSnap.id });
 	}
-	throw error(404, `Policy #${params.caseId} not found.`);
+	throw error(404, `Case #${params.caseId} not found.`);
 };
 
-export const PATCH = async ({ request, params }) => {
+export const PATCH = async ({ request, params, locals }) => {
+	if (!locals.user) {
+		throw error(400, 'User authentication error.');
+	}
 	try {
 		const { value } = await request.json();
 		let actionName = 'voteCase';
 		let actionInput = value;
+		const userId = locals.user.userId;
 
 		if (value == 'allow') {
 			await updateDoc(doc(db, 'cases', params.caseId), {
-				'votes.allow': arrayUnion('user1'),
-				'votes.disallow': arrayRemove('user1'),
-				'votes.unsure': arrayRemove('user1')
+				'votes.allow': arrayUnion(userId),
+				'votes.disallow': arrayRemove(userId),
+				'votes.unsure': arrayRemove(userId)
 			});
 		} else if (value == 'disallow') {
 			await updateDoc(doc(db, 'cases', params.caseId), {
-				'votes.disallow': arrayUnion('user1'),
-				'votes.allow': arrayRemove('user1'),
-				'votes.unsure': arrayRemove('user1')
+				'votes.disallow': arrayUnion(userId),
+				'votes.allow': arrayRemove(userId),
+				'votes.unsure': arrayRemove(userId)
 			});
 		} else if (value == 'unsure') {
 			await updateDoc(doc(db, 'cases', params.caseId), {
-				'votes.unsure': arrayUnion('user1'),
-				'votes.allow': arrayRemove('user1'),
-				'votes.disallow': arrayRemove('user1')
+				'votes.unsure': arrayUnion(userId),
+				'votes.allow': arrayRemove(userId),
+				'votes.disallow': arrayRemove(userId)
 			});
 		} else {
 			await updateDoc(doc(db, 'cases', params.caseId), {
-				'votes.allow': arrayRemove('user1'),
-				'votes.disallow': arrayRemove('user1'),
-				'votes.unsure': arrayRemove('user1')
+				'votes.allow': arrayRemove(userId),
+				'votes.disallow': arrayRemove(userId),
+				'votes.unsure': arrayRemove(userId)
 			});
 			actionName = 'unvoteCase';
 			actionInput = '';
@@ -65,7 +69,7 @@ export const PATCH = async ({ request, params }) => {
 			targetDocumentId: params.caseId,
 			targetSubCollection: '',
 			targetSubDocumentId: '',
-			userId: 'user1'
+			userId: userId
 		});
 
 		return json({ status: 201 });

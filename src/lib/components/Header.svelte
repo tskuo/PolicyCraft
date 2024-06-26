@@ -5,7 +5,7 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { PencilRuler } from 'lucide-svelte/icons';
 
-	export let displayName = '';
+	export let user;
 </script>
 
 <div class="bg-sky-100 flex justify-between items-center py-2 px-6">
@@ -23,12 +23,14 @@
 				<DropdownMenu.Trigger>
 					<Avatar.Root>
 						<!-- <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" /> -->
-						<Avatar.Fallback>{displayName.charAt(0).toUpperCase()}</Avatar.Fallback>
+						<Avatar.Fallback>
+							{user.displayName.charAt(0).toUpperCase()}
+						</Avatar.Fallback>
 					</Avatar.Root>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
 					<DropdownMenu.Group>
-						<DropdownMenu.Label>My Account</DropdownMenu.Label>
+						<DropdownMenu.Label>{user.displayName}</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item class="w-full">
 							<form action="/logout" method="POST" class="w-full">

@@ -9,18 +9,21 @@ import {
 } from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
-export const POST = async ({ request }) => {
+export const POST = async ({ request, locals }) => {
+	if (!locals.user) {
+		throw error(400, 'User authentication error.');
+	}
 	try {
 		const { form, entity, entityId } = await request.json();
 		const docRef = await addDoc(collection(db, 'reasons'), {
 			createAt: serverTimestamp(),
 			description: form.data.description,
 			label: form.data.label,
-			likeList: ['user1'],
+			likeList: [locals.user.userId],
 			targetEntity: entity,
 			targetEntityId: entityId,
 			title: form.data.title,
-			userId: 'user1'
+			userId: locals.user.userId
 		});
 
 		await updateDoc(doc(db, entity, entityId), {
@@ -38,7 +41,7 @@ export const POST = async ({ request }) => {
 			targetDocumentId: docRef.id,
 			targetSubCollection: '',
 			targetSubDocumentId: '',
-			userId: 'user1'
+			userId: locals.user.userId
 		});
 
 		return json({ id: docRef.id }, { status: 201 });

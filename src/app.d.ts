@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 type User = {
-	id: string;
+	userId: string;
 	displayName: string;
 	email: string;
 	role: string;

@@ -28,14 +28,17 @@ export const GET = async ({ params }) => {
 	throw error(404, `Discussion #${params.discussionId} not found.`);
 };
 
-export const PATCH = async ({ request }) => {
+export const PATCH = async ({ request, locals }) => {
+	if (!locals.user) {
+		throw error(400, 'User authentication error.');
+	}
 	try {
 		const { form } = await request.json();
 
 		const docRef = await addDoc(collection(db, 'discussions', form.data.id, 'comments'), {
 			createAt: serverTimestamp(),
 			message: form.data.message,
-			userId: 'user1'
+			userId: locals.user.userId
 		});
 
 		await addDoc(collection(db, 'actionLogs'), {
@@ -49,11 +52,11 @@ export const PATCH = async ({ request }) => {
 			targetDocumentId: form.data.id,
 			targetSubCollection: 'comments',
 			targetSubDocumentId: docRef.id,
-			userId: 'user1'
+			userId: locals.user.userId
 		});
 
 		return json({ status: 201 });
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to add a message to the discussion');
 	}
 };

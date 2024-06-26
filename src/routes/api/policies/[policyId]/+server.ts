@@ -20,7 +20,10 @@ export const GET = async ({ params }) => {
 	throw error(404, `Policy #${params.policyId} not found.`);
 };
 
-export const PATCH = async ({ request, params }) => {
+export const PATCH = async ({ request, params, locals }) => {
+	if (!locals.user) {
+		throw error(400, 'User authentication error.');
+	}
 	try {
 		const { pressed, form, action } = await request.json();
 		if (action == 'updateWatchList') {
@@ -28,12 +31,12 @@ export const PATCH = async ({ request, params }) => {
 			if (pressed) {
 				actionName = 'watchPolicy';
 				await updateDoc(doc(db, 'policies', params.policyId), {
-					watchList: arrayUnion('user1')
+					watchList: arrayUnion(locals.user.userId)
 				});
 			} else {
 				actionName = 'unwatchPolicy';
 				await updateDoc(doc(db, 'policies', params.policyId), {
-					watchList: arrayRemove('user1')
+					watchList: arrayRemove(locals.user.userId)
 				});
 			}
 			await addDoc(collection(db, 'actionLogs'), {
@@ -47,7 +50,7 @@ export const PATCH = async ({ request, params }) => {
 				targetDocumentId: params.policyId,
 				targetSubCollection: '',
 				targetSubDocumentId: '',
-				userId: 'user1'
+				userId: locals.user.userId
 			});
 			return json({ status: 201 });
 		} else if (action == 'editPolicy') {
@@ -76,13 +79,13 @@ export const PATCH = async ({ request, params }) => {
 				targetDocumentId: params.policyId,
 				targetSubCollection: '',
 				targetSubDocumentId: '',
-				userId: 'user1'
+				userId: locals.user.userId
 			});
 
 			for (const c of form.data.cases) {
 				if (c.label !== originalCases.get(c.caseId)) {
 					await addDoc(collection(db, 'actionLogs'), {
-						action: 'editCaseWhileEditingPolicy',
+						action: 'editRelatedCaseLabelWhileEditingPolicy',
 						createAt: serverTimestamp(),
 						input: {
 							title: c.caseId,
@@ -92,7 +95,7 @@ export const PATCH = async ({ request, params }) => {
 						targetDocumentId: params.policyId,
 						targetSubCollection: '',
 						targetSubDocumentId: '',
-						userId: 'user1'
+						userId: locals.user.userId
 					});
 				}
 			}
@@ -132,7 +135,7 @@ export const PATCH = async ({ request, params }) => {
 						targetDocumentId: params.policyId,
 						targetSubCollection: '',
 						targetSubDocumentId: '',
-						userId: 'user1'
+						userId: locals.user.userId
 					});
 				}
 			}
@@ -150,7 +153,7 @@ export const PATCH = async ({ request, params }) => {
 						targetDocumentId: params.policyId,
 						targetSubCollection: '',
 						targetSubDocumentId: '',
-						userId: 'user1'
+						userId: locals.user.userId
 					});
 				}
 			}

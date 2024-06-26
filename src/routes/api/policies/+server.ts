@@ -1,13 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import {
-	serverTimestamp,
-	addDoc,
-	collection,
-	getDocs,
-	doc,
-	Timestamp,
-	runTransaction
-} from 'firebase/firestore';
+import { serverTimestamp, addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
 // Get all policies from the database
@@ -20,14 +12,18 @@ export const GET = async () => {
 			res.push(policy);
 		});
 		return json(res);
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to fetch data from Firestore.');
 	}
 };
 
 // Create a new policy
-export const POST = async ({ request }) => {
+export const POST = async ({ request, locals }) => {
 	try {
+		if (!locals.user) {
+			throw error(400, 'User authentication error.');
+		}
+
 		const { form } = await request.json();
 		const docRef = await addDoc(collection(db, 'policies'), {
 			cases: [],
@@ -35,9 +31,9 @@ export const POST = async ({ request }) => {
 			description: form.data.description,
 			discussions: [],
 			title: form.data.title,
-			watchList: ['user1']
+			watchList: [locals.user?.userId]
 		});
-		const logRef = await addDoc(collection(db, 'actionLogs'), {
+		await addDoc(collection(db, 'actionLogs'), {
 			action: 'createPolicy',
 			createAt: serverTimestamp(),
 			input: {
@@ -48,10 +44,10 @@ export const POST = async ({ request }) => {
 			targetDocumentId: docRef.id,
 			targetSubCollection: '',
 			targetSubDocumentId: '',
-			userId: 'user1'
+			userId: locals.user?.userId
 		});
 		return json({ id: docRef.id }, { status: 201 });
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to create a new policy in the database.');
 	}
 };

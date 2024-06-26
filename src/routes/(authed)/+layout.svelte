@@ -8,14 +8,14 @@
 </script>
 
 <div class="sticky top-0 z-50">
-	<Header displayName={data.user?.displayName}></Header>
+	<Header user={data.user}></Header>
 </div>
 <div class="grid grid-cols-6">
 	<aside class="sm:col-span-1 p-4 self-start sticky top-14">
 		<Sidebar></Sidebar>
 	</aside>
 	<main class="sm:col-span-5 m-2">
-		{#if $navigating}
+		{#if $navigating?.to}
 			{#if $navigating.to.url.pathname == '/policies'}
 				<div
 					class="sm:w-4/5 h-full flex flex-col space-y-2 justify-center items-center text-muted-foreground"

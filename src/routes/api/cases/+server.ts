@@ -12,24 +12,27 @@ export const GET = async () => {
 			res.push(c);
 		});
 		return json(res);
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to fetch data from Firestore.');
 	}
 };
 
 // Create a new case
-export const POST = async ({ request }) => {
+export const POST = async ({ request, locals }) => {
 	try {
 		const { form } = await request.json();
 
-		const userId = 'user1';
+		if (!locals.user) {
+			throw error(400, 'User authentication error.');
+		}
+
 		const votes = { allow: [] as string[], disallow: [] as string[], unsure: [] as string[] };
 		if (form.data.userVote == 'allow') {
-			votes.allow = [userId];
+			votes.allow = [locals.user.userId];
 		} else if (form.data.userVote == 'disallow') {
-			votes.disallow = [userId];
+			votes.disallow = [locals.user.userId];
 		} else if (form.data.userVote == 'unsure') {
-			votes.unsure = [userId];
+			votes.unsure = [locals.user.userId];
 		}
 
 		const docRef = await addDoc(collection(db, 'cases'), {
@@ -52,7 +55,7 @@ export const POST = async ({ request }) => {
 			targetDocumentId: docRef.id,
 			targetSubCollection: '',
 			targetSubDocumentId: '',
-			userId: 'user1'
+			userId: locals.user.userId
 		});
 		return json({ id: docRef.id }, { status: 201 });
 	} catch {

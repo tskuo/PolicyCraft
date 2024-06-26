@@ -21,19 +21,22 @@ export const GET = async ({ params }) => {
 	throw error(404, `Reason #${params.reasonId} not found.`);
 };
 
-export const PATCH = async ({ request, params }) => {
+export const PATCH = async ({ request, params, locals }) => {
+	if (!locals.user) {
+		throw error(400, 'User authentication error.');
+	}
 	try {
 		const { pressed } = await request.json();
 		let actionName = '';
 		if (pressed) {
 			actionName = 'likeReason';
 			await updateDoc(doc(db, 'reasons', params.reasonId), {
-				likeList: arrayUnion('user1')
+				likeList: arrayUnion(locals.user.userId)
 			});
 		} else {
 			actionName = 'unlikeReason';
 			await updateDoc(doc(db, 'reasons', params.reasonId), {
-				likeList: arrayRemove('user1')
+				likeList: arrayRemove(locals.user.userId)
 			});
 		}
 		await addDoc(collection(db, 'actionLogs'), {
@@ -47,11 +50,11 @@ export const PATCH = async ({ request, params }) => {
 			targetDocumentId: params.reasonId,
 			targetSubCollection: '',
 			targetSubDocumentId: '',
-			userId: 'user1'
+			userId: locals.user.userId
 		});
 
 		return json({ status: 201 });
-	} catch (e) {
+	} catch {
 		throw error(400, 'Fail to add a message to the discussion');
 	}
 };
