@@ -19,6 +19,7 @@
 	export let dataMessage: SuperValidated<Infer<MessageCreateFormSchema>>;
 	export let dataDiscussion: SuperValidated<Infer<DiscussionCreateFormSchema>>;
 	export let userId;
+	export let userDisplayNames;
 
 	let showNewDiscussionPanel = false;
 
@@ -56,7 +57,7 @@
 						<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
 						<Accordion.Content>
 							{#each discussion.comments as comment}
-								<p class="font-bold py-2">{comment.userId}</p>
+								<p class="font-bold py-2">{userDisplayNames.get(comment.userId)}</p>
 								<p class="bg-gray-100 rounded p-2 mb-2">
 									{comment.message}
 								</p>
@@ -136,7 +137,7 @@
 						<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
 						<Accordion.Content>
 							{#each discussion.comments as comment}
-								<p class="font-bold py-2">{comment.userId}</p>
+								<p class="font-bold py-2">{userDisplayNames.get(comment.userId)}</p>
 								<p class="bg-gray-100 rounded p-2 mb-2">
 									{comment.message}
 								</p>

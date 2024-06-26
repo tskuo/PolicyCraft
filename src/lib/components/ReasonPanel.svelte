@@ -15,6 +15,7 @@
 	export let reasons: any[] = [];
 	export let dataReason: SuperValidated<Infer<ReasonCreateFormSchema>>;
 	export let userId;
+	export let userDisplayNames;
 
 	const form = superForm(dataReason, {
 		validators: zodClient(reasonCreateFormSchema),
@@ -95,7 +96,7 @@
 			<Card.Root class="mt-2">
 				<Card.Header>
 					<Card.Title>{reason.title}</Card.Title>
-					<Card.Description>{reason.userId}</Card.Description>
+					<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
 				</Card.Header>
 				<Card.Content>
 					<p>{reason.description}</p>
@@ -134,7 +135,7 @@
 			<Card.Root class="mt-2">
 				<Card.Header>
 					<Card.Title>{reason.title}</Card.Title>
-					<Card.Description>{reason.userId}</Card.Description>
+					<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
 				</Card.Header>
 				<Card.Content>
 					<p>{reason.description}</p>

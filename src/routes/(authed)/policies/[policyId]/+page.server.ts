@@ -1,22 +1,23 @@
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { messageCreateFormSchema, discussionCreateFormSchema } from '$lib/schema';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
+	// fetch policy
 	const res = await fetch(`/api/policies/${params.policyId}`);
 	const policy = await res.json();
 
 	if (res.ok) {
-		let cases = [];
+		const cases = [];
 		for (const c of policy.cases) {
 			const response = await fetch(`/api/cases/${c.caseId}`);
 			if (response.ok) {
 				const cc = await response.json();
 				cc.label = c.label;
 
-				let reasons = [];
+				const reasons = [];
 				for (const reasonId of cc.reasons) {
 					const resReason = await fetch(`/api/reasons/${reasonId}`);
 					if (resReason.ok) {
@@ -33,7 +34,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 			}
 		}
 
-		let discussions = [];
+		const discussions = [];
 		for (const discussionId of policy.discussions) {
 			const response = await fetch(`/api/discussions/${discussionId}`);
 			if (response.ok) {
@@ -56,7 +57,6 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 	}
 
 	throw error(404, `Policy #${params.policyId} doesn't exist.`);
-	// throw redirect(307, '/policy');
 };
 
 export const actions: Actions = {
@@ -64,22 +64,15 @@ export const actions: Actions = {
 		const form = await superValidate(event, zod(messageCreateFormSchema));
 
 		if (!form.valid) {
-			return fail(400, {
-				form
-			});
+			return fail(400, { form });
 		}
 		const res = await event.fetch(`/api/discussions/${form.data.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify({ form })
-			// headers: {
-			// 	'Content-Type': 'appplication/json'
-			// }
 		});
 		const data = await res.json();
 
-		return {
-			form
-		};
+		return { form };
 	},
 	createDiscussion: async (event) => {
 		const form = await superValidate(event, zod(discussionCreateFormSchema));
@@ -96,8 +89,6 @@ export const actions: Actions = {
 
 		const data = await res.json();
 
-		return {
-			form
-		};
+		return { form };
 	}
 };

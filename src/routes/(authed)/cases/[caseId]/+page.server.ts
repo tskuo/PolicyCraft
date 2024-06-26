@@ -9,6 +9,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
+	// fetch case
 	const res = await fetch(`/api/cases/${params.caseId}`);
 	const c = await res.json();
 
@@ -49,7 +50,6 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 		};
 	}
 	throw error(404, `Case #${params.caseId} doesn't exist.`);
-	// throw redirect(307, '/case');
 };
 
 export const actions: Actions = {

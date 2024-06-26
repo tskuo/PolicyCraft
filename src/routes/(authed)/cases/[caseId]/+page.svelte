@@ -8,7 +8,6 @@
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 
 	export let data;
-	// export let form;
 
 	const userId = data.user?.userId;
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
@@ -165,6 +164,7 @@
 				label1="allow"
 				label2="disallow"
 				{userId}
+				userDisplayNames={data.userDisplayNames}
 			/>
 
 			<h3 class="font-bold mt-6 text-lg">Related Policies</h3>
@@ -177,6 +177,7 @@
 				dataMessage={data.formMessage}
 				dataDiscussion={data.formDiscussion}
 				{userId}
+				userDisplayNames={data.userDisplayNames}
 			/>
 		</div>
 	</div>

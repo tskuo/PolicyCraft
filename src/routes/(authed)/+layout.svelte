@@ -16,7 +16,7 @@
 	</aside>
 	<main class="sm:col-span-5 m-2">
 		{#if $navigating?.to}
-			{#if $navigating.to.url.pathname == '/policies'}
+			<!-- {#if $navigating.to.url.pathname == '/policies'}
 				<div
 					class="sm:w-4/5 h-full flex flex-col space-y-2 justify-center items-center text-muted-foreground"
 				>
@@ -30,7 +30,13 @@
 					<p>Loading cases...</p>
 					<LoaderCircle class="w-1/5 h-1/4 animate-spin " />
 				</div>
-			{/if}
+			{/if} -->
+			<div
+				class="sm:w-4/5 h-full flex flex-col space-y-2 justify-center items-center text-muted-foreground"
+			>
+				<p>Loading ...</p>
+				<LoaderCircle class="w-1/5 h-1/4 animate-spin " />
+			</div>
 		{:else}
 			<slot></slot>
 		{/if}

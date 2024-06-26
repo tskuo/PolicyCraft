@@ -126,6 +126,7 @@
 			dataMessage={data.formMessage}
 			dataDiscussion={data.formDiscussion}
 			{userId}
+			userDisplayNames={data.userDisplayNames}
 		/>
 	</div>
 </div>
