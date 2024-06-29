@@ -1,16 +1,29 @@
 <script lang="ts">
+	import * as Alert from '$lib/components/ui/alert';
+
+	export let data;
 </script>
 
 <div class="grid grid-cols-4">
 	<div class="col-span-3 p-2 mt-2">
-		<h1 class="font-bold text-xl">This is the about page</h1>
-		<p class="leading-relaxed my-2">
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur quo eos exercitationem nulla
-			incidunt culpa tempore maiores asperiores eligendi quia doloribus, totam quod beatae
-			repudiandae voluptates vitae aperiam ut dolorum? Lorem, ipsum dolor sit amet consectetur
-			adipisicing elit. Vitae impedit excepturi consequatur voluptatem maxime deserunt, reiciendis
-			nisi praesentium, officiis ipsum libero alias provident, odio repellat nostrum nihil explicabo
-			sequi earum!
-		</p>
+		<h1 class="font-bold text-xl">{data.about.title}</h1>
+		{#each data.about.announcements as announcement}
+			<Alert.Root class="my-4">
+				<Alert.Title>Announcement</Alert.Title>
+				<Alert.Description>{announcement}</Alert.Description>
+			</Alert.Root>
+		{/each}
+		<h3 class="font-bold mt-4 text-lg">Goal</h3>
+		<p class="leading-relaxed my-2">{data.about.goal}</p>
+		<h3 class="font-bold mt-4 text-lg">Timeline</h3>
+		<p class="leading-relaxed my-2">{data.about.timeline}</p>
+		<h3 class="font-bold mt-4 text-lg">Norms</h3>
+		<ul class="list-disc pl-6">
+			{#each data.about.norms as norm}
+				<li class="leading-relaxed my-2">{norm}</li>
+			{/each}
+		</ul>
+		<h3 class="font-bold mt-4 text-lg">Expectation</h3>
+		<p class="leading-relaxed my-2">{data.about.expectation}</p>
 	</div>
 </div>
