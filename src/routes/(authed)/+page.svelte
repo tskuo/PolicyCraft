@@ -1,7 +1,9 @@
 <script lang="ts">
 	import * as Alert from '$lib/components/ui/alert';
+	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 
 	export let data;
+	const userId = data.user?.userId;
 </script>
 
 <div class="grid grid-cols-4">
@@ -25,5 +27,14 @@
 		</ul>
 		<h3 class="font-bold mt-4 text-lg">Expectation</h3>
 		<p class="leading-relaxed my-2">{data.about.expectation}</p>
+	</div>
+	<div class="col-span-1 p-2">
+		<DiscussionPanel
+			discussions={data.discussions}
+			dataMessage={data.formMessage}
+			dataDiscussion={data.formDiscussion}
+			{userId}
+			userDisplayNames={data.userDisplayNames}
+		/>
 	</div>
 </div>
