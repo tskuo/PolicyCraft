@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const load: PageServerLoad = async ({ fetch, locals }) => {
 	try {
 		const resPolicies = await fetch('/api/policies');
 		const policies = await resPolicies.json();
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			}
 			policy.cases = cases;
 
-			let openDiscussions = [];
+			const openDiscussions = [];
 			for (const discussionId of policy.discussions) {
 				const resDiscussion = await fetch(`/api/discussions/${discussionId}`);
 				if (resDiscussion.ok) {
@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			policy.openDiscussions = openDiscussions;
 		}
 
-		return { policies };
+		return { policies, stage: locals.stage };
 	} catch {
 		throw error(404, 'Fail to load policies.');
 		// throw redirect(307, '/policy');

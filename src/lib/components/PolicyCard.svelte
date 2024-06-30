@@ -3,7 +3,16 @@
 	import { Toggle } from '$lib/components/ui/toggle';
 	import * as Table from '$lib/components/ui/table';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
-	import { ChevronsUpDown, Eye, MessageSquare, Folder, ChevronsDownUp } from 'lucide-svelte/icons';
+	import * as ToggleGroup from '$lib/components/ui/toggle-group';
+	import {
+		ChevronsUpDown,
+		Eye,
+		MessageSquare,
+		Folder,
+		ChevronsDownUp,
+		ArrowBigUp,
+		ArrowBigDown
+	} from 'lucide-svelte/icons';
 	import CaseCard from './CaseCard.svelte';
 	import type { Timestamp } from 'firebase/firestore';
 
@@ -14,17 +23,57 @@
 	export let discussions: any[];
 	export let openDiscussions: any[] = [];
 	export let title = '';
+	export let votes = {
+		upvote: [] as string[],
+		downvote: [] as string[]
+	};
 	export let watchList: string[] = [];
 
 	export let userId: string;
+	export let stage: string;
 
 	let compactView = true;
+	let userVote: 'upvote' | 'downvote' | undefined;
+
+	const handleVote = async (value: string | undefined) => {
+		if (stage == 'vote') {
+			let upvoteList, downvoteList;
+			if (value == 'upvote') {
+				upvoteList = [...votes.upvote, userId];
+				downvoteList = votes.downvote.filter((u: string) => u !== userId);
+			} else if (value == 'downvote') {
+				upvoteList = votes.upvote.filter((u: string) => u !== userId);
+				downvoteList = [...votes.downvote, userId];
+			} else {
+				upvoteList = votes.upvote.filter((u: string) => u !== userId);
+				downvoteList = votes.downvote.filter((u: string) => u !== userId);
+			}
+			votes.upvote = upvoteList;
+			votes.downvote = downvoteList;
+
+			await fetch(`/api/policies/${id}`, {
+				method: 'PATCH',
+				body: JSON.stringify({ action: 'votePolicy', vote: value }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		}
+	};
+
+	$: if (votes.upvote.includes(userId)) {
+		userVote = 'upvote';
+	} else if (votes.downvote.includes(userId)) {
+		userVote = 'downvote';
+	} else {
+		userVote = undefined;
+	}
 </script>
 
 <!-- <a href="/policy/1"> -->
 <Card.Root class="my-2">
 	<a href="/policies/{id} ">
-		<div class=" hover:bg-gray-100 rounded-lg">
+		<div class=" hover:bg-gray-50 rounded-lg">
 			<Card.Header>
 				<!-- <Card.Description>#{id}</Card.Description> -->
 				<Card.Title class="capitalize">{title}</Card.Title>
@@ -32,48 +81,78 @@
 			<Card.Content>
 				<p>{description}</p>
 			</Card.Content>
-
 			<Card.Footer>
 				<div class="flex items-center justify-between w-full">
 					<div>
-						<button on:click|preventDefault>
-							<Toggle
-								on:click={() => {
-									compactView = !compactView;
-								}}
-							>
-								{#if compactView === true}
-									<ChevronsUpDown class="h-4 w-4" />
-								{:else}
-									<ChevronsDownUp class="h-4 w-4" />
-								{/if}
-							</Toggle>
-						</button>
-						<button on:click|preventDefault>
-							<Toggle
-								aria-label="Toggle watch"
-								class="ml-1 data-[state=on]:bg-sky-100"
-								pressed={watchList.includes(userId)}
-								onPressedChange={async (pressed) => {
-									let newWatchList;
-									if (watchList.includes(userId)) {
-										newWatchList = watchList.filter((u) => u !== userId);
-									} else {
-										newWatchList = [...watchList, userId];
-									}
-									watchList = newWatchList;
-									await fetch(`/api/policies/${id}`, {
-										method: 'PATCH',
-										body: JSON.stringify({ pressed, action: 'updateWatchList' }),
-										headers: {
-											'Content-Type': 'application/json'
+						<div class="flex items-center">
+							<button on:click|preventDefault>
+								<Toggle
+									on:click={() => {
+										compactView = !compactView;
+									}}
+								>
+									{#if compactView === true}
+										<ChevronsUpDown class="h-4 w-4" />
+									{:else}
+										<ChevronsDownUp class="h-4 w-4" />
+									{/if}
+								</Toggle>
+							</button>
+							<button on:click|preventDefault>
+								<Toggle
+									aria-label="Toggle watch"
+									class="ml-1 data-[state=on]:bg-sky-100"
+									pressed={watchList.includes(userId)}
+									onPressedChange={async (pressed) => {
+										let newWatchList;
+										if (watchList.includes(userId)) {
+											newWatchList = watchList.filter((u) => u !== userId);
+										} else {
+											newWatchList = [...watchList, userId];
 										}
-									});
-								}}
-							>
-								<Eye class="h-4 w-4 mr-2" />{watchList.length}
-							</Toggle>
-						</button>
+										watchList = newWatchList;
+										await fetch(`/api/policies/${id}`, {
+											method: 'PATCH',
+											body: JSON.stringify({ pressed, action: 'updateWatchList' }),
+											headers: {
+												'Content-Type': 'application/json'
+											}
+										});
+									}}
+								>
+									<Eye class="h-4 w-4 mr-2" />{watchList.length}
+								</Toggle>
+							</button>
+							<button on:click|preventDefault hidden={stage !== 'vote'}>
+								<ToggleGroup.Root
+									type="single"
+									class="ml-1"
+									value={userVote}
+									onValueChange={(value) => handleVote(value)}
+								>
+									<ToggleGroup.Item
+										value="upvote"
+										aria-label="Toggle upvote"
+										class="data-[state=on]:bg-green-200"
+									>
+										<ArrowBigUp class="h-4 w-4" />
+										{#if userVote !== undefined}
+											<div class="ml-2">{votes.upvote.length}</div>
+										{/if}
+									</ToggleGroup.Item>
+									<ToggleGroup.Item
+										value="downvote"
+										aria-label="Toggle downvote"
+										class="data-[state=on]:bg-red-200 "
+									>
+										<ArrowBigDown class="h-4 w-4" />
+										{#if userVote !== undefined}
+											<div class="ml-2">{votes.downvote.length}</div>
+										{/if}
+									</ToggleGroup.Item>
+								</ToggleGroup.Root>
+							</button>
+						</div>
 					</div>
 
 					<div class="flex text-gray-400">

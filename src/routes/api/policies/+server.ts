@@ -31,6 +31,10 @@ export const POST = async ({ request, locals }) => {
 			description: form.data.description,
 			discussions: [],
 			title: form.data.title,
+			votes: {
+				upvote: [],
+				downvote: []
+			},
 			watchList: [locals.user?.userId]
 		});
 		await addDoc(collection(db, 'actionLogs'), {

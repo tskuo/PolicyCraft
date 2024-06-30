@@ -25,7 +25,7 @@ export const PATCH = async ({ request, params, locals }) => {
 		throw error(400, 'User authentication error.');
 	}
 	try {
-		const { pressed, form, action } = await request.json();
+		const { pressed, form, action, vote } = await request.json();
 		if (action == 'updateWatchList') {
 			let actionName = '';
 			if (pressed) {
@@ -157,6 +157,45 @@ export const PATCH = async ({ request, params, locals }) => {
 					});
 				}
 			}
+
+			return json({ status: 201 });
+		} else if (action == 'votePolicy') {
+			let actionName = 'votePolicy';
+			let actionInput = vote;
+			const userId = locals.user.userId;
+
+			if (vote == 'upvote') {
+				await updateDoc(doc(db, 'policies', params.policyId), {
+					'votes.upvote': arrayUnion(userId),
+					'votes.downvote': arrayRemove(userId)
+				});
+			} else if (vote == 'downvote') {
+				await updateDoc(doc(db, 'policies', params.policyId), {
+					'votes.upvote': arrayRemove(userId),
+					'votes.downvote': arrayUnion(userId)
+				});
+			} else {
+				await updateDoc(doc(db, 'policies', params.policyId), {
+					'votes.upvote': arrayRemove(userId),
+					'votes.downvote': arrayRemove(userId)
+				});
+				actionName = 'unvotePolicy';
+				actionInput = '';
+			}
+
+			await addDoc(collection(db, 'actionLogs'), {
+				action: actionName,
+				createAt: serverTimestamp(),
+				input: {
+					title: actionInput,
+					description: ''
+				},
+				targetCollection: 'policies',
+				targetDocumentId: params.policyId,
+				targetSubCollection: '',
+				targetSubDocumentId: '',
+				userId: userId
+			});
 
 			return json({ status: 201 });
 		}
