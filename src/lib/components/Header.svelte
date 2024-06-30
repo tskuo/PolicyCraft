@@ -6,6 +6,7 @@
 	import { PencilRuler } from 'lucide-svelte/icons';
 
 	export let user;
+	export let stage;
 </script>
 
 <div class="bg-sky-100 flex justify-between items-center py-2 px-6">
@@ -15,10 +16,12 @@
 	</div>
 	<div>
 		<div class="flex items-center">
-			<Button href="/create" class="mr-2">
-				<Plus class="w-4 h-4" />
-				<span class="ml-1">Create</span>
-			</Button>
+			{#if stage !== 'vote'}
+				<Button href="/create" class="mr-2">
+					<Plus class="w-4 h-4" />
+					<span class="ml-1">Create</span>
+				</Button>
+			{/if}
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Avatar.Root>

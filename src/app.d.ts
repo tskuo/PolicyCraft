@@ -12,6 +12,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			user: User | null;
+			stage: string | null;
 		}
 		// interface PageData {}
 		// interface PageState {}

@@ -4,7 +4,11 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { policyCreateFormSchema, caseCreateFormSchema } from '$lib/schema.js';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.stage == 'vote') {
+		throw redirect(303, '/');
+	}
+
 	return {
 		form1: await superValidate(zod(policyCreateFormSchema)),
 		form2: await superValidate(zod(caseCreateFormSchema))
@@ -16,10 +20,13 @@ export const actions: Actions = {
 		const form = await superValidate(event, zod(policyCreateFormSchema));
 
 		if (!form.valid) {
-			return fail(400, {
-				form
-			});
+			return fail(400, { form });
 		}
+
+		if (event.locals.stage == 'vote') {
+			return fail(400, { form });
+		}
+
 		const res = await event.fetch('/api/policies', {
 			method: 'POST',
 			body: JSON.stringify({ form })
@@ -37,10 +44,13 @@ export const actions: Actions = {
 		const form = await superValidate(event, zod(caseCreateFormSchema));
 
 		if (!form.valid) {
-			return fail(400, {
-				form
-			});
+			return fail(400, { form });
 		}
+
+		if (event.locals.stage == 'vote') {
+			return fail(400, { form });
+		}
+
 		const res = await event.fetch('/api/cases', {
 			method: 'POST',
 			body: JSON.stringify({ form })

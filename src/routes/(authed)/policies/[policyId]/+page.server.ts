@@ -4,7 +4,7 @@ import { messageCreateFormSchema, discussionCreateFormSchema } from '$lib/schema
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-export const load: PageServerLoad = async ({ params, fetch }) => {
+export const load: PageServerLoad = async ({ params, fetch, locals }) => {
 	// fetch policy
 	const res = await fetch(`/api/policies/${params.policyId}`);
 	const policy = await res.json();
@@ -48,6 +48,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 		}
 
 		return {
+			stage: locals.stage,
 			policy,
 			cases,
 			discussions,

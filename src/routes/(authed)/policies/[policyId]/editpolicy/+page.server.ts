@@ -4,21 +4,25 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { policyEditFormSchema } from '$lib/schema';
 
-export const load: PageServerLoad = async ({ fetch, params }) => {
+export const load: PageServerLoad = async ({ fetch, params, locals }) => {
+	if (locals.stage == 'vote') {
+		throw redirect(303, `/policies/${params.policyId}`);
+	}
+
 	const res = await fetch(`/api/policies/${params.policyId}`);
 	const policy = await res.json();
 
 	const form = await superValidate(zod(policyEditFormSchema));
 
 	if (res.ok) {
-		let cases = new Map();
+		const cases = new Map();
 		for (const c of policy.cases) {
 			const resCase = await fetch(`/api/cases/${c.caseId}`);
 			if (resCase.ok) {
 				const cc = await resCase.json();
 				cc.label = c.label;
 
-				let reasons = [];
+				const reasons = [];
 				for (const reasonId of cc.reasons) {
 					const resReason = await fetch(`/api/reasons/${reasonId}`);
 					if (resReason.ok) {
@@ -49,15 +53,20 @@ export const actions: Actions = {
 
 		if (!form.valid) {
 			return fail(400, { form });
-		} else {
-			const res = await event.fetch(`/api/policies/${event.params.policyId}`, {
-				method: 'PATCH',
-				body: JSON.stringify({ form, action: 'editPolicy' }),
-				headers: {
-					'Content-Type': 'appplication/json'
-				}
-			});
-			redirect(303, `/policies/${event.params.policyId}`);
 		}
+
+		if (event.locals.stage == 'vote') {
+			return fail(400, { form });
+		}
+
+		await event.fetch(`/api/policies/${event.params.policyId}`, {
+			method: 'PATCH',
+			body: JSON.stringify({ form, action: 'editPolicy' }),
+			headers: {
+				'Content-Type': 'appplication/json'
+			}
+		});
+
+		redirect(303, `/policies/${event.params.policyId}`);
 	}
 };

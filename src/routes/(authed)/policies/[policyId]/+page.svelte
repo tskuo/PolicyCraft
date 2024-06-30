@@ -52,9 +52,11 @@
 				>
 					<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
 				</Toggle>
-				<Button href="/policies/{data.policy.id}/editpolicy">
-					<Pencil class="h-4 w-4 mr-2" />Edit policy
-				</Button>
+				{#if data.stage !== 'vote'}
+					<Button href="/policies/{data.policy.id}/editpolicy">
+						<Pencil class="h-4 w-4 mr-2" />Edit policy
+					</Button>
+				{/if}
 			</div>
 		</div>
 		{#if showAlert}
@@ -103,9 +105,11 @@
 				</div>
 			</div>
 			<div class="flex">
-				<Button href="/policies/{data.policy.id}/editcase">
-					<Pencil class="h-4 w-4 mr-2" />Edit cases
-				</Button>
+				{#if data.stage !== 'vote'}
+					<Button href="/policies/{data.policy.id}/editcase">
+						<Pencil class="h-4 w-4 mr-2" />Edit cases
+					</Button>
+				{/if}
 			</div>
 		</div>
 		{#if data.cases.length > 0}
