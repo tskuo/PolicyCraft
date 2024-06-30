@@ -6,12 +6,51 @@
 	import * as Select from '$lib/components/ui/select';
 	import CaseCard from '$lib/components/CaseCard.svelte';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
-	import { Eye, Pencil, TriangleAlert } from 'lucide-svelte/icons';
+	import * as ToggleGroup from '$lib/components/ui/toggle-group';
+	import { ArrowBigDown, ArrowBigUp, Eye, Pencil, TriangleAlert } from 'lucide-svelte/icons';
 
 	export let data;
 
 	let showAlert = false;
+	let userVote: 'upvote' | 'downvote' | undefined;
 	const userId = data.user?.userId;
+
+	const handleVote = async (value: string | undefined) => {
+		if (data.stage == 'vote') {
+			let upvoteList, downvoteList;
+			if (value == 'upvote') {
+				upvoteList = [...data.policy.votes.upvote, userId];
+				downvoteList = data.policy.votes.downvote.filter((u: string) => u !== userId);
+			} else if (value == 'downvote') {
+				upvoteList = data.policy.votes.upvote.filter((u: string) => u !== userId);
+				downvoteList = [...data.policy.votes.downvote, userId];
+			} else {
+				upvoteList = data.policy.votes.upvote.filter((u: string) => u !== userId);
+				downvoteList = data.policy.votes.downvote.filter((u: string) => u !== userId);
+			}
+			data.policy.votes.upvote = upvoteList;
+			data.policy.votes.downvote = downvoteList;
+
+			await fetch(`/api/policies/${data.policy.id}`, {
+				method: 'PATCH',
+				body: JSON.stringify({ action: 'votePolicy', vote: value }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		}
+	};
+
+	$: if (data.policy.votes.upvote.includes(userId)) {
+		userVote = 'upvote';
+	} else if (data.policy.votes.downvote.includes(userId)) {
+		userVote = 'downvote';
+	} else {
+		userVote = undefined;
+	}
+	$: totalUsers = data.policy.votes.upvote.length + data.policy.votes.downvote.length;
+	$: percentUpvote = Math.floor((100 / totalUsers) * data.policy.votes.upvote.length);
+	$: percentDownvote = Math.floor((100 / totalUsers) * data.policy.votes.downvote.length);
 </script>
 
 <div class="grid grid-cols-4">
@@ -75,6 +114,59 @@
 		<p class="leading-relaxed my-2">
 			{data.policy.description}
 		</p>
+
+		{#if data.stage == 'vote'}
+			<ToggleGroup.Root
+				type="single"
+				variant="outline"
+				class="flex justify-start my-4"
+				value={userVote}
+				onValueChange={(value) => handleVote(value)}
+			>
+				<ToggleGroup.Item
+					value="upvote"
+					aria-label="Toggle upvote"
+					class="data-[state=on]:bg-green-200"
+				>
+					<ArrowBigUp class="h-4 w-4 mr-2" />upvote
+				</ToggleGroup.Item>
+				<ToggleGroup.Item
+					value="downvote"
+					aria-label="Toggle downvote"
+					class="data-[state=on]:bg-red-200"
+				>
+					<ArrowBigDown class="h-4 w-4 mr-2" />downvote
+				</ToggleGroup.Item>
+			</ToggleGroup.Root>
+
+			<h3 class="font-bold mt-6 text-lg">
+				Vote Distribution ({data.policy.votes.upvote.length + data.policy.votes.downvote.length})
+			</h3>
+			<div class="flex w-full h-4 my-4 rounded">
+				{#if userVote !== undefined}
+					{#if percentUpvote != 0}
+						<div
+							class="bg-green-200 flex justify-center items-center text-sm"
+							style="width: {percentUpvote}%"
+						>
+							{percentUpvote}%
+						</div>
+					{/if}
+					{#if percentDownvote != 0}
+						<div
+							class="bg-red-200 flex justify-center items-center text-sm"
+							style="width: {percentDownvote}%"
+						>
+							{percentDownvote}%
+						</div>
+					{/if}
+				{:else}
+					<div class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500">
+						vote to see distribution
+					</div>
+				{/if}
+			</div>
+		{/if}
 
 		<h3 class="font-bold mt-6 text-lg">Related Cases</h3>
 		<div class="flex justify-between items-center">
