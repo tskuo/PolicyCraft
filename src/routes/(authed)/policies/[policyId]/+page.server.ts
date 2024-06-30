@@ -1,6 +1,10 @@
 import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { messageCreateFormSchema, discussionCreateFormSchema } from '$lib/schema';
+import {
+	messageCreateFormSchema,
+	discussionCreateFormSchema,
+	reasonCreateFormSchema
+} from '$lib/schema';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -47,13 +51,28 @@ export const load: PageServerLoad = async ({ params, fetch, locals }) => {
 			}
 		}
 
+		const reasons = [];
+		for (const reasonId of policy.reasons) {
+			const response = await fetch(`/api/reasons/${reasonId}`);
+			if (response.ok) {
+				const rr = await response.json();
+				rr.id = reasonId;
+				reasons.push(rr);
+			} else {
+				const rr = await response.json();
+				console.log(rr.message);
+			}
+		}
+
 		return {
 			stage: locals.stage,
 			policy,
 			cases,
 			discussions,
+			reasons,
 			formMessage: await superValidate(zod(messageCreateFormSchema)),
-			formDiscussion: await superValidate(zod(discussionCreateFormSchema))
+			formDiscussion: await superValidate(zod(discussionCreateFormSchema)),
+			formReason: await superValidate(zod(reasonCreateFormSchema))
 		};
 	}
 
@@ -89,6 +108,23 @@ export const actions: Actions = {
 		});
 
 		const data = await res.json();
+
+		return { form };
+	},
+	createReason: async (event) => {
+		const form = await superValidate(event, zod(reasonCreateFormSchema));
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		if (event.locals.stage !== 'vote') {
+			return fail(400, form);
+		}
+
+		await event.fetch(`/api/reasons`, {
+			method: 'POST',
+			body: JSON.stringify({ form, entity: 'policies', entityId: event.params.policyId })
+		});
 
 		return { form };
 	}

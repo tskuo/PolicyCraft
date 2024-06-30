@@ -6,6 +6,7 @@
 	import * as Select from '$lib/components/ui/select';
 	import CaseCard from '$lib/components/CaseCard.svelte';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
+	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import { ArrowBigDown, ArrowBigUp, Eye, Pencil, TriangleAlert } from 'lucide-svelte/icons';
 
@@ -166,6 +167,15 @@
 					</div>
 				{/if}
 			</div>
+
+			<ReasonPanel
+				reasons={data.reasons}
+				dataReason={data.formReason}
+				label1="upvote"
+				label2="downvote"
+				{userId}
+				userDisplayNames={data.userDisplayNames}
+			/>
 		{/if}
 
 		<h3 class="font-bold mt-6 text-lg">Related Cases</h3>

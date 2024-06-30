@@ -22,6 +22,7 @@
 	export let description = '';
 	export let discussions: any[];
 	export let openDiscussions: any[] = [];
+	export let reasons: string[];
 	export let title = '';
 	export let votes = {
 		upvote: [] as string[],
