@@ -7,7 +7,7 @@ export const authenticateUser = async (event: RequestEvent) => {
 	const { cookies } = event;
 
 	// get the user token from the cookie
-	const userAuthToken = cookies.get('userAuthToken');
+	const userAuthToken = cookies.get('__session');
 
 	// if the user token is not valid, return null
 	// this is where you would check the user token against your database

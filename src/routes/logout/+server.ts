@@ -4,7 +4,7 @@ import { auth } from '$lib/firebase';
 import { signOut } from 'firebase/auth';
 
 export const POST: RequestHandler = async ({ cookies }) => {
-	cookies.set('userAuthToken', '', {
+	cookies.set('__session', '', {
 		path: '/',
 		expires: new Date(0)
 	});

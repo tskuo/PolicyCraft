@@ -53,7 +53,7 @@ export const actions: Actions = {
 				userAuthToken: newUserAuthToken
 			});
 
-			event.cookies.set('userAuthToken', newUserAuthToken, {
+			event.cookies.set('__session', newUserAuthToken, {
 				path: '/',
 				httpOnly: true,
 				sameSite: 'strict',
