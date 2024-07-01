@@ -3,7 +3,7 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import PolicyCard from '$lib/components/PolicyCard.svelte';
-	import { Ellipsis, Check, Ban, CircleHelp } from 'lucide-svelte/icons';
+	import { Check, Ban, CircleHelp } from 'lucide-svelte/icons';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 

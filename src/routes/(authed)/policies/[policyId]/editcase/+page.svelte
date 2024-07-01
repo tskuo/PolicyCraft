@@ -1,12 +1,13 @@
 <script lang="ts">
 	import PolicyEditCaseForm from '$lib/components/PolicyEditCaseForm.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
+	import AIAssistantPanel from '$lib/components/AIAssistantPanel.svelte';
 
 	export let data;
 </script>
 
-<div class="grid grid-cols-4">
-	<div class="col-span-3 p-2">
+<div class="grid md:grid-cols-4">
+	<div class="md:col-span-3 p-2">
 		<Breadcrumb.Root class="my-2">
 			<Breadcrumb.List>
 				<Breadcrumb.Item>
@@ -36,5 +37,8 @@
 				userId={data.user?.userId}
 			/>
 		</div>
+	</div>
+	<div class="md:col-span-1 p-2">
+		<AIAssistantPanel />
 	</div>
 </div>

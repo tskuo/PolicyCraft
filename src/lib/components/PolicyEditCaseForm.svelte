@@ -235,7 +235,7 @@
 			</div>
 			<div class="my-2 w-full">
 				{#if searchCases.length !== 0}
-					<ScrollArea orientation="horizontal" class=" rounded-lg w-[61vw]">
+					<ScrollArea orientation="horizontal" class="rounded-lg md:w-[61vw]">
 						<div class="flex space-x-2 pb-4 w-[61vw]">
 							{#each searchCases as searchCase (searchCase.id)}
 								<div class="basis-1/3 flex-none">

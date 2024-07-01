@@ -1,6 +1,7 @@
 import { initializeApp, getApps, deleteApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getVertexAI, getGenerativeModel } from 'firebase/vertexai-preview';
 import {
 	VITE_API_KEY,
 	VITE_AUTH_DOMAIN,
@@ -29,6 +30,9 @@ if (!getApps().length) {
 	app = initializeApp(firebaseConfig);
 }
 
+const vertexAI = getVertexAI(app);
+
 export const db = getFirestore(app, 'policycraft');
 export const auth = getAuth(app);
+export const model = getGenerativeModel(vertexAI, { model: 'gemini-1.5-flash' });
 export const googleProvider = new GoogleAuthProvider();

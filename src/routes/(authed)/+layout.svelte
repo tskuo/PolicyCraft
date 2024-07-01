@@ -17,7 +17,7 @@
 	<main class="md:col-span-5 m-2">
 		{#if $navigating?.to}
 			<div
-				class="sm:w-4/5 h-full flex flex-col space-y-2 justify-center items-center text-muted-foreground"
+				class="md:w-4/5 h-full flex flex-col space-y-2 justify-center items-center text-muted-foreground"
 			>
 				<p>Loading ...</p>
 				<LoaderCircle class="w-1/5 h-1/4 animate-spin " />
