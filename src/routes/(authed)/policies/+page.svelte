@@ -6,8 +6,8 @@
 	export let data;
 </script>
 
-<div class="grid grid-cols-4">
-	<div class="col-span-3 p-2">
+<div class="grid md:grid-cols-4">
+	<div class="md:col-span-3 p-2">
 		<div class="flex items-center">
 			<p>Sort to find:</p>
 			<div class="ml-2">

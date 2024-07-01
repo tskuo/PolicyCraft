@@ -7,8 +7,8 @@
 	export let data: PageData;
 </script>
 
-<div class="grid grid-cols-4">
-	<div class="col-span-3 p-2">
+<div class="grid md:grid-cols-4">
+	<div class="md:col-span-3 p-2">
 		<Tabs.Root value="policy" class="w-full">
 			<Tabs.List class="grid w-full grid-cols-2">
 				<Tabs.Trigger value="policy">Policy</Tabs.Trigger>

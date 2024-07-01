@@ -3,16 +3,54 @@
 	import { Plus } from 'lucide-svelte/icons';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { PencilRuler } from 'lucide-svelte/icons';
+	import { Menu, Home, Folders, BookText } from 'lucide-svelte/icons';
+	import * as Sheet from '$lib/components/ui/sheet';
 
 	export let user;
 	export let stage;
 </script>
 
-<div class="bg-sky-100 flex justify-between items-center py-2 px-6">
+<div class="bg-sky-100 flex justify-between items-center py-2 pr-6">
 	<div class="flex items-center">
-		<PencilRuler />
-		<div class="text-3xl ml-2 font-semibold">PolicyCraft</div>
+		<div class="md:hidden pl-2 mr-2">
+			<Sheet.Root>
+				<Sheet.Trigger
+					><Button variant="ghost" size="icon">
+						<Menu class="h-6 w-6" />
+					</Button></Sheet.Trigger
+				>
+				<Sheet.Content side="left">
+					<Sheet.Header>
+						<Sheet.Title>PolicyCraft</Sheet.Title>
+						<Sheet.Description>
+							<nav>
+								<ui class="list-none">
+									<li>
+										<a href="/" class="p-2 flex items-center hover:bg-sky-100 rounded">
+											<Home class="w-4 h-4" />
+											<span class="ml-2">About</span>
+										</a>
+									</li>
+									<li>
+										<a href="/policies" class="p-2 flex items-center hover:bg-sky-100 rounded">
+											<BookText class="w-4 h-4" />
+											<span class="ml-2">Policy Repository</span>
+										</a>
+									</li>
+									<li>
+										<a href="/cases" class="p-2 flex items-center hover:bg-sky-100 rounded">
+											<Folders class="w-4 h-4" />
+											<span class="ml-2">Case Repository</span>
+										</a>
+									</li>
+								</ui>
+							</nav>
+						</Sheet.Description>
+					</Sheet.Header>
+				</Sheet.Content>
+			</Sheet.Root>
+		</div>
+		<div class="text-3xl font-semibold md:pl-6">PolicyCraft</div>
 	</div>
 	<div>
 		<div class="flex items-center">

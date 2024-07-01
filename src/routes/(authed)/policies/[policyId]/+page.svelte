@@ -54,8 +54,8 @@
 	$: percentDownvote = Math.floor((100 / totalUsers) * data.policy.votes.downvote.length);
 </script>
 
-<div class="grid grid-cols-4">
-	<div class="col-span-3 p-2">
+<div class="grid md:grid-cols-4">
+	<div class="md:col-span-3 p-2">
 		<div class="flex justify-between items-center">
 			<Breadcrumb.Root class="my-2">
 				<Breadcrumb.List>
@@ -178,9 +178,9 @@
 			/>
 		{/if}
 
-		<h3 class="font-bold mt-6 text-lg">Related Cases</h3>
-		<div class="flex justify-between items-center">
-			<div class="flex my-2">
+		<div class="flex justify-between items-center mt-6">
+			<h3 class="font-bold text-lg">Related Cases</h3>
+			<!-- <div class="flex my-2">
 				<div>
 					<Select.Root>
 						<Select.Trigger class="w-[180px]">
@@ -205,7 +205,7 @@
 						</Select.Content>
 					</Select.Root>
 				</div>
-			</div>
+			</div> -->
 			<div class="flex">
 				{#if data.stage !== 'vote'}
 					<Button href="/policies/{data.policy.id}/editcase">
@@ -215,7 +215,7 @@
 			</div>
 		</div>
 		{#if data.cases.length > 0}
-			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1">
+			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
 				{#each data.cases as c}
 					<CaseCard {...c} {userId} />
 				{/each}
@@ -226,7 +226,7 @@
 			</p>
 		{/if}
 	</div>
-	<div class="col-span-1 p-2">
+	<div class="md:col-span-1 p-2">
 		<DiscussionPanel
 			discussions={data.discussions}
 			dataMessage={data.formMessage}

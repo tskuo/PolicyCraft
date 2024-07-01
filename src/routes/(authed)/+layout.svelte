@@ -10,11 +10,11 @@
 <div class="sticky top-0 z-50">
 	<Header user={data.user} stage={data.stage}></Header>
 </div>
-<div class="grid grid-cols-6">
-	<aside class="sm:col-span-1 p-4 self-start sticky top-14">
+<div class="grid md:grid-cols-6">
+	<aside class="md:col-span-1 p-4 self-start sticky top-14 hidden md:block">
 		<Sidebar></Sidebar>
 	</aside>
-	<main class="sm:col-span-5 m-2">
+	<main class="md:col-span-5 m-2">
 		{#if $navigating?.to}
 			<div
 				class="sm:w-4/5 h-full flex flex-col space-y-2 justify-center items-center text-muted-foreground"

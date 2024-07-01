@@ -13,7 +13,8 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Plus } from 'lucide-svelte/icons';
+	import { Plus, Send } from 'lucide-svelte/icons';
+	import { invalidateAll } from '$app/navigation';
 
 	export let discussions: any[] = [];
 	export let dataMessage: SuperValidated<Infer<MessageCreateFormSchema>>;
@@ -63,26 +64,49 @@
 								</p>
 							{/each}
 							<!-- <Textarea placeholder="Type your message here." class="mt-4 outline-none" /> -->
-							<form method="POST" use:enhance1 action="?/createMessage">
-								<Form.Field form={formMessage} name="message">
-									<Form.Control let:attrs>
-										<!-- <Form.Label>Description</Form.Label> -->
-										<Textarea
-											{...attrs}
-											bind:value={$formDataMessage.message}
-											placeholder="Type your message here."
-											class="mt-4 outline-none"
-										/>
-									</Form.Control>
-									<Form.FieldErrors />
-								</Form.Field>
+							<form
+								method="POST"
+								use:enhance1
+								action="?/createMessage"
+								class="flex w-full items-center"
+							>
 								<Form.Field form={formMessage} name="id">
 									<Form.Control let:attrs>
 										<Input type="hidden" {...attrs} value={discussion.id} />
 									</Form.Control>
 								</Form.Field>
-								<Form.Button>Submit</Form.Button>
+								<Form.Field form={formMessage} name="message" class="space-y-0 mr-1 grow">
+									<Form.Control let:attrs>
+										<Input
+											{...attrs}
+											bind:value={$formDataMessage.message}
+											class="outline-none"
+											placeholder="Type your message"
+										/>
+									</Form.Control>
+									<Form.FieldErrors />
+								</Form.Field>
+								<Form.Button size="icon">
+									<Send class="h-4 w-4" />
+								</Form.Button>
 							</form>
+							{#if discussion.userId == userId}
+								<Button
+									variant="destructive"
+									class="mt-2 w-full"
+									disabled={!discussion.open}
+									on:click={async () => {
+										discussion.open = false;
+										await fetch(`/api/discussions/${discussion.id}`, {
+											method: 'PATCH',
+											body: JSON.stringify({ action: 'closeDiscussion' })
+										});
+										invalidateAll();
+									}}
+								>
+									Close this discussion thread
+								</Button>
+							{/if}
 						</Accordion.Content>
 					</Accordion.Item>
 				{/each}

@@ -62,8 +62,8 @@
 </script>
 
 <div>
-	<div class="grid grid-cols-4">
-		<div class="col-span-3 p-2">
+	<div class="grid md:grid-cols-4">
+		<div class="md:col-span-3 p-2">
 			<div class="flex justify-between items-center">
 				<Breadcrumb.Root class="my-2">
 					<Breadcrumb.List>
@@ -76,17 +76,6 @@
 						</Breadcrumb.Item>
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger><Ellipsis class="h-4 w-4" /></DropdownMenu.Trigger>
-					<DropdownMenu.Content>
-						<DropdownMenu.Group>
-							<DropdownMenu.Label>More Actions</DropdownMenu.Label>
-							<DropdownMenu.Separator />
-							<DropdownMenu.Item>Action 1</DropdownMenu.Item>
-							<DropdownMenu.Item>Action 2</DropdownMenu.Item>
-						</DropdownMenu.Group>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
 			</div>
 			<h1 class="font-bold text-xl mt-4">{data.c.title}</h1>
 			<p class="leading-relaxed my-2">{data.c.description}</p>
@@ -171,7 +160,7 @@
 			<!-- <PolicyCard />
 			<PolicyCard /> -->
 		</div>
-		<div class="col-span-1 p-2">
+		<div class="md:col-span-1 p-2">
 			<DiscussionPanel
 				discussions={data.discussions}
 				dataMessage={data.formMessage}
