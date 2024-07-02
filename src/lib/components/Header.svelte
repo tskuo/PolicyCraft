@@ -57,7 +57,7 @@
 			{#if stage !== 'vote'}
 				<Button href="/create" class="mr-2">
 					<Plus class="w-4 h-4" />
-					<span class="ml-1">Create</span>
+					<span class="ml-1 hidden md:block">Create</span>
 				</Button>
 			{/if}
 			<DropdownMenu.Root>

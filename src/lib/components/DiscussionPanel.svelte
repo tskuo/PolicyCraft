@@ -59,7 +59,9 @@
 						<Accordion.Content>
 							{#each discussion.comments as comment}
 								<p class="font-bold py-2">{userDisplayNames.get(comment.userId)}</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
+								<p
+									class="rounded p-2 mb-2 {comment.userId == userId ? 'bg-sky-100' : 'bg-gray-100'}"
+								>
 									{comment.message}
 								</p>
 							{/each}
@@ -162,7 +164,9 @@
 						<Accordion.Content>
 							{#each discussion.comments as comment}
 								<p class="font-bold py-2">{userDisplayNames.get(comment.userId)}</p>
-								<p class="bg-gray-100 rounded p-2 mb-2">
+								<p
+									class="rounded p-2 mb-2 {comment.userId == userId ? 'bg-sky-100' : 'bg-gray-100'}"
+								>
 									{comment.message}
 								</p>
 							{/each}

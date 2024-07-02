@@ -39,6 +39,6 @@
 		</div>
 	</div>
 	<div class="md:col-span-1 p-2">
-		<AIAssistantPanel />
+		<AIAssistantPanel policyDescription={data.policy.description} />
 	</div>
 </div>

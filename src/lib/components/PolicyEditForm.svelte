@@ -39,6 +39,10 @@
 			allowSubmit = false;
 		}
 	}
+
+	if ($formData.cases.length == 0) {
+		allowSubmit = true;
+	}
 </script>
 
 <form method="POST" use:enhance action="?/editPolicy">

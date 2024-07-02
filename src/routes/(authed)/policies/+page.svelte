@@ -22,18 +22,6 @@
 					</Select.Content>
 				</Select.Root>
 			</div>
-			<div class="ml-2">
-				<Select.Root>
-					<Select.Trigger class="w-[180px]">
-						<Select.Value placeholder="Show all" />
-					</Select.Trigger>
-					<Select.Content>
-						<Select.Item value="light">Light</Select.Item>
-						<Select.Item value="dark">Dark</Select.Item>
-						<Select.Item value="system">System</Select.Item>
-					</Select.Content>
-				</Select.Root>
-			</div>
 		</div>
 		<Separator class="my-4" />
 		<div>
