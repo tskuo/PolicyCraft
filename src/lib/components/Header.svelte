@@ -5,15 +5,19 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Menu, Home, Folders, BookText } from 'lucide-svelte/icons';
 	import * as Sheet from '$lib/components/ui/sheet';
+	import { navigating } from '$app/stores';
 
 	export let user;
 	export let stage;
+
+	let openSheet = false;
+	$: if ($navigating) openSheet = false;
 </script>
 
 <div class="bg-sky-100 flex justify-between items-center py-2 pr-6">
 	<div class="flex items-center">
 		<div class="md:hidden pl-2 mr-2">
-			<Sheet.Root>
+			<Sheet.Root bind:open={openSheet}>
 				<Sheet.Trigger
 					><Button variant="ghost" size="icon">
 						<Menu class="h-6 w-6" />
