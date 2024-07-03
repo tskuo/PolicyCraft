@@ -6,6 +6,7 @@
 	import { Menu, Home, Folders, BookText } from 'lucide-svelte/icons';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { navigating } from '$app/stores';
+	import logo from '$lib/img/logo.webp';
 
 	export let user;
 	export let stage;
@@ -54,7 +55,10 @@
 				</Sheet.Content>
 			</Sheet.Root>
 		</div>
-		<div class="text-3xl font-semibold md:pl-6">PolicyCraft</div>
+		<Avatar.Root class="hidden md:block md:ml-4">
+			<Avatar.Image src={logo} alt="PolicyCraft logo" />
+		</Avatar.Root>
+		<div class="text-2xl font-semibold md:pl-2">PolicyCraft</div>
 	</div>
 	<div>
 		<div class="flex items-center">
@@ -67,7 +71,6 @@
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Avatar.Root>
-						<!-- <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" /> -->
 						<Avatar.Fallback>
 							{user.displayName.charAt(0).toUpperCase()}
 						</Avatar.Fallback>
