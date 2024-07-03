@@ -35,6 +35,7 @@
 				allCases={data.allCases}
 				dataNewCase={data.formNewCase}
 				userId={data.user?.userId}
+				userCounts={data.userCounts}
 			/>
 		</div>
 	</div>

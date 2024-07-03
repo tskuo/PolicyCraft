@@ -22,6 +22,7 @@
 	export let label = '';
 
 	export let userId: string;
+	export let userCounts: number;
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {
@@ -66,10 +67,13 @@
 		userVote = undefined;
 	}
 
-	$: totalUsers = votes.allow.length + votes.disallow.length + votes.unsure.length;
-	$: percentAllow = Math.floor((100 / totalUsers) * votes.allow.length);
-	$: percentDisallow = Math.floor((100 / totalUsers) * votes.disallow.length);
-	$: percentUnsure = Math.floor((100 / totalUsers) * votes.unsure.length);
+	$: totalVotes = votes.allow.length + votes.disallow.length + votes.unsure.length;
+	$: percentAllow = Math.floor((100 / totalVotes) * votes.allow.length);
+	$: percentDisallow = Math.floor((100 / totalVotes) * votes.disallow.length);
+	$: percentUnsure = Math.floor((100 / totalVotes) * votes.unsure.length);
+	$: barAllow = Math.floor((100 / userCounts) * votes.allow.length);
+	$: barDisallow = Math.floor((100 / userCounts) * votes.disallow.length);
+	$: barUnsure = Math.floor((100 / userCounts) * votes.unsure.length);
 
 	$: reasonsAllow = reasons.filter((r) => r.label == 'allow');
 	$: reasonsDisallow = reasons.filter((r) => r.label == 'disallow');
@@ -117,41 +121,30 @@
 									<p>
 										{description}
 									</p>
-									<div class="flex w-full h-4 mt-2 mb-2 rounded">
+									<div class="flex w-full h-4 mt-2 rounded border">
 										{#if userVote !== undefined}
-											{#if percentAllow != 0}
-												<div
-													class="bg-green-200 flex justify-center items-center text-sm"
-													style="width: {percentAllow}%"
-												>
-													{percentAllow}%
-												</div>
-											{/if}
-											{#if percentDisallow != 0}
-												<div
-													class="bg-red-200 flex justify-center items-center text-sm"
-													style="width: {percentDisallow}%"
-												>
-													{percentDisallow}%
-												</div>
-											{/if}
-											{#if percentUnsure != 0}
-												<div
-													class="bg-gray-200 flex justify-center items-center text-sm"
-													style="width: {percentUnsure}%"
-												>
-													{percentUnsure}%
-												</div>
-											{/if}
+											<div class="bg-green-200" style="width: {barAllow}%"></div>
+											<div class="bg-red-200" style="width: {barDisallow}%"></div>
+											<div class="bg-gray-200" style="width: {barUnsure}%"></div>
 										{:else}
 											<div
-												class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500"
-											>
-												vote to see distribution
-											</div>
+												class="w-full bg-gray-100"
+												style="width: {barAllow + barDisallow + barUnsure}%"
+											/>
 										{/if}
 									</div>
-									<p>{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
+									<div>
+										{#if userVote !== undefined}
+											<p>
+												<span class="text-green-400">{percentAllow}%</span>
+												<span class="text-red-400">{percentDisallow}%</span>
+												<span class="text-gray-400">{percentUnsure}%</span>
+												<span class="text-gray-500">({totalVotes})</span>
+											</p>
+										{:else}
+											<p>{totalVotes} {totalVotes < 2 ? 'vote' : 'votes'}</p>
+										{/if}
+									</div>
 									<ToggleGroup.Root
 										type="single"
 										class="w-full grid grid-cols-3"
@@ -229,16 +222,27 @@
 	</a>
 	<Card.Footer>
 		<div class="w-full">
-			<div class="flex w-full h-3 mb-2">
+			<div class="flex w-full h-3 mb-2 border">
 				{#if userVote !== undefined}
-					<div class="bg-green-200" style="width: {percentAllow}%"></div>
-					<div class="bg-red-200" style="width: {percentDisallow}%"></div>
-					<div class="bg-gray-200" style="width: {percentUnsure}%"></div>
+					<div class="bg-green-200" style="width: {barAllow}%"></div>
+					<div class="bg-red-200" style="width: {barDisallow}%"></div>
+					<div class="bg-gray-200" style="width: {barUnsure}%"></div>
 				{:else}
-					<div class="w-full bg-gray-100" />
+					<div class="w-full bg-gray-100" style="width: {barAllow + barDisallow + barUnsure}%" />
 				{/if}
 			</div>
-			<p class="mb-2">{votes.allow.length + votes.disallow.length + votes.unsure.length} votes</p>
+			<div class="mb-2 text-sm">
+				{#if userVote !== undefined}
+					<p>
+						<span class="text-green-400">{percentAllow}%</span>
+						<span class="text-red-400">{percentDisallow}%</span>
+						<span class="text-gray-400">{percentUnsure}%</span>
+						<span class="text-gray-500">({totalVotes})</span>
+					</p>
+				{:else}
+					<p>{totalVotes} {totalVotes < 2 ? 'vote' : 'votes'}</p>
+				{/if}
+			</div>
 			<ToggleGroup.Root
 				type="single"
 				class="w-full grid grid-cols-3"

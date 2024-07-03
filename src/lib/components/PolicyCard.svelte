@@ -32,6 +32,7 @@
 
 	export let userId: string;
 	export let stage: string;
+	export let userCounts: number;
 
 	let compactView = true;
 	let userVote: 'upvote' | 'downvote' | undefined;
@@ -124,35 +125,37 @@
 									<Eye class="h-4 w-4 mr-2" />{watchList.length}
 								</Toggle>
 							</button>
-							<button on:click|preventDefault hidden={stage !== 'vote'}>
-								<ToggleGroup.Root
-									type="single"
-									class="ml-1"
-									value={userVote}
-									onValueChange={(value) => handleVote(value)}
-								>
-									<ToggleGroup.Item
-										value="upvote"
-										aria-label="Toggle upvote"
-										class="data-[state=on]:bg-green-200"
+							{#if stage == 'vote'}
+								<button on:click|preventDefault>
+									<ToggleGroup.Root
+										type="single"
+										class="ml-1"
+										value={userVote}
+										onValueChange={(value) => handleVote(value)}
 									>
-										<ArrowBigUp class="h-4 w-4" />
-										{#if userVote !== undefined}
-											<div class="ml-2">{votes.upvote.length}</div>
-										{/if}
-									</ToggleGroup.Item>
-									<ToggleGroup.Item
-										value="downvote"
-										aria-label="Toggle downvote"
-										class="data-[state=on]:bg-red-200 "
-									>
-										<ArrowBigDown class="h-4 w-4" />
-										{#if userVote !== undefined}
-											<div class="ml-2">{votes.downvote.length}</div>
-										{/if}
-									</ToggleGroup.Item>
-								</ToggleGroup.Root>
-							</button>
+										<ToggleGroup.Item
+											value="upvote"
+											aria-label="Toggle upvote"
+											class="data-[state=on]:bg-green-200"
+										>
+											<ArrowBigUp class="h-4 w-4" />
+											{#if userVote !== undefined}
+												<div class="ml-2">{votes.upvote.length}</div>
+											{/if}
+										</ToggleGroup.Item>
+										<ToggleGroup.Item
+											value="downvote"
+											aria-label="Toggle downvote"
+											class="data-[state=on]:bg-red-200 "
+										>
+											<ArrowBigDown class="h-4 w-4" />
+											{#if userVote !== undefined}
+												<div class="ml-2">{votes.downvote.length}</div>
+											{/if}
+										</ToggleGroup.Item>
+									</ToggleGroup.Root>
+								</button>
+							{/if}
 						</div>
 					</div>
 
@@ -180,7 +183,7 @@
 						<Carousel.Content>
 							{#each cases as c}
 								<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-									<CaseCard {...c} {userId}></CaseCard>
+									<CaseCard {...c} {userId} {userCounts}></CaseCard>
 								</Carousel.Item>
 							{/each}
 						</Carousel.Content>

@@ -27,7 +27,12 @@
 		<div>
 			{#if data.policies.length > 0}
 				{#each data.policies as policy (policy.id)}
-					<PolicyCard {...policy} userId={data.user?.userId} stage={data.stage} />
+					<PolicyCard
+						{...policy}
+						userId={data.user?.userId}
+						stage={data.stage}
+						userCounts={data.userCounts}
+					/>
 				{/each}
 			{:else}
 				<p>The policy repository is empty.</p>

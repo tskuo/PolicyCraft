@@ -16,11 +16,11 @@
 
 	const messageExample = `Cases illustrate the policy`;
 	const messageCounterExample = 'Cases reveal the policy flaws';
-	const promptIllustrativeAllowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario with a character in the context of a university classroom where the character abides by the following policy: `;
-	const promptIllustrativeDisallowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario with a character in the context of a university classroom where the character violates the following policy: `;
-	const promptFlawAllowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario with a character in the context of a university classroom where the character abides by the following policy, but most people might think it should not be allowed: `;
-	const promptFlawDisallowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario with a character in the context of a university classroom where the character violates the following policy, but most people might think it should be allowed: `;
-	const promptFlawUnclearCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario with a character in the context of a university classroom where it is unclear whether the character violates the following policy: `;
+	const promptIllustrativeAllowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario of a student in a university computer science course where the character abides by the following policy: `;
+	const promptIllustrativeDisallowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario of a student in a university computer science course where the character violates the following policy: `;
+	const promptFlawAllowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario of a student in a university computer science course where the student technically abides by the following policy but undermines the policy's intent: `;
+	const promptFlawDisallowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario of a student in a university computer science course where the student technically violates the following policy despite genuinely trying to comply: `;
+	const promptFlawUnclearCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario of a student in a university computer science course where it is unclear whether the character violates the following policy or not: `;
 
 	const generateCase = async (message: string, category: string) => {
 		messageHistory = [...messageHistory, { person: 'You', message: message }];
@@ -41,10 +41,10 @@
 			let i = Math.floor(Math.random() * 3); // i = 0, 1, 2
 			if (i == 0) {
 				prompt = promptFlawAllowCase;
-				label = `The policy may allow the following case but most people might think it should not be allowed: `;
+				label = `The policy may allow the following case even though this case should probably be disallowed: `;
 			} else if (i == 1) {
 				prompt = promptFlawDisallowCase;
-				label = `The policy may disallow the following case but most people might think it should be allowed: `;
+				label = `The policy may disallow the following case even though this case should probably be allowed: `;
 			} else {
 				prompt = promptFlawUnclearCase;
 				label = `The policy may be unclear in the following case: `;

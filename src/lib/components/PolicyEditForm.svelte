@@ -14,6 +14,7 @@
 	export let data: SuperValidated<Infer<PolicyEditFormSchema>>;
 	export let cases;
 	export let userId;
+	export let userCounts: number;
 
 	const form = superForm(data, {
 		dataType: 'json',
@@ -79,6 +80,7 @@
 											{...cases.get($formData.cases[i].caseId)}
 											bind:label={$formData.cases[i].label}
 											{userId}
+											{userCounts}
 										/>
 										<div class="px-6">
 											<p class="pb-4 text-sm font-semibold">

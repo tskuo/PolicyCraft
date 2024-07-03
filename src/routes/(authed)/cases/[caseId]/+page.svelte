@@ -54,8 +54,7 @@
 		userVote = undefined;
 	}
 
-	$: totalUsers =
-		data.c.votes.allow.length + data.c.votes.disallow.length + data.c.votes.unsure.length;
+	$: totalUsers = data.userCounts;
 	$: percentAllow = Math.floor((100 / totalUsers) * data.c.votes.allow.length);
 	$: percentDisallow = Math.floor((100 / totalUsers) * data.c.votes.disallow.length);
 	$: percentUnsure = Math.floor((100 / totalUsers) * data.c.votes.unsure.length);

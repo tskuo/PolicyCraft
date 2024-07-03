@@ -49,7 +49,7 @@
 	} else {
 		userVote = undefined;
 	}
-	$: totalUsers = data.policy.votes.upvote.length + data.policy.votes.downvote.length;
+	$: totalUsers = data.userCounts;
 	$: percentUpvote = Math.floor((100 / totalUsers) * data.policy.votes.upvote.length);
 	$: percentDownvote = Math.floor((100 / totalUsers) * data.policy.votes.downvote.length);
 </script>
@@ -217,7 +217,7 @@
 		{#if data.cases.length > 0}
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
 				{#each data.cases as c}
-					<CaseCard {...c} {userId} />
+					<CaseCard {...c} {userId} userCounts={data.userCounts} />
 				{/each}
 			</div>
 		{:else}

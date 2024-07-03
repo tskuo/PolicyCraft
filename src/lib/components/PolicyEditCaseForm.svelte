@@ -31,6 +31,7 @@
 	export let allCases: any[];
 	export let dataNewCase: SuperValidated<Infer<RelatedCaseCreateFormSchema>>;
 	export let userId;
+	export let userCounts: number;
 
 	const form = superForm(data, {
 		dataType: 'json',
@@ -241,7 +242,7 @@
 								<div class="basis-1/3 flex-none">
 									<div class="relative h-full">
 										<!-- <div class="w-1/3 shrink-0"> -->
-										<CaseCard {...searchCase} {userId} />
+										<CaseCard {...searchCase} {userId} {userCounts} />
 										<!-- </div> -->
 										<div class="absolute top-0 right-0 m-3">
 											<DropdownMenu.Root>
