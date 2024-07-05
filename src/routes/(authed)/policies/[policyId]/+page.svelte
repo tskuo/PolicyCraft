@@ -3,7 +3,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import * as Alert from '$lib/components/ui/alert';
-	import * as Select from '$lib/components/ui/select';
 	import CaseCard from '$lib/components/CaseCard.svelte';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';

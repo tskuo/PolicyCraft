@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import PolicyEditForm from '$lib/components/PolicyEditForm.svelte';
-
+	import PolicyEditAIPanel from '$lib/components/PolicyEditAIPanel.svelte';
 	export let data;
 </script>
 
@@ -30,5 +30,8 @@
 			userId={data.user?.userId}
 			userCounts={data.userCounts}
 		/>
+	</div>
+	<div class="md:col-span-1 p-2">
+		<PolicyEditAIPanel cases={data.cases} policyDescription={data.policy.description} />
 	</div>
 </div>
