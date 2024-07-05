@@ -89,9 +89,9 @@
 		</Card.Content>
 	</Card.Root>
 {/if}
-<div class="grid grid-cols-2 my-4 gap-2">
+<div class="grid md:grid-cols-2 my-4 gap-2">
 	<div>
-		<h4 class="font-semibold text-center capitalize">{label1} ({reasons1.length})</h4>
+		<h4 class="font-semibold md:text-center capitalize">{label1} ({reasons1.length})</h4>
 		{#each reasons1 as reason (reason.id)}
 			<Card.Root class="mt-2">
 				<Card.Header>
@@ -130,7 +130,7 @@
 		{/each}
 	</div>
 	<div>
-		<h4 class="font-semibold text-center capitalize">{label2} ({reasons2.length})</h4>
+		<h4 class="font-semibold md:text-center capitalize">{label2} ({reasons2.length})</h4>
 		{#each reasons2 as reason (reason.id)}
 			<Card.Root class="mt-2">
 				<Card.Header>

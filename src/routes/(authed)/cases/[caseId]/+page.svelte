@@ -54,10 +54,14 @@
 		userVote = undefined;
 	}
 
-	$: totalUsers = data.userCounts;
-	$: percentAllow = Math.floor((100 / totalUsers) * data.c.votes.allow.length);
-	$: percentDisallow = Math.floor((100 / totalUsers) * data.c.votes.disallow.length);
-	$: percentUnsure = Math.floor((100 / totalUsers) * data.c.votes.unsure.length);
+	$: totalVotes =
+		data.c.votes.allow.length + data.c.votes.disallow.length + data.c.votes.unsure.length;
+	$: percentAllow = Math.floor((100 / totalVotes) * data.c.votes.allow.length);
+	$: percentDisallow = Math.floor((100 / totalVotes) * data.c.votes.disallow.length);
+	$: percentUnsure = Math.floor((100 / totalVotes) * data.c.votes.unsure.length);
+	$: barAllow = Math.floor((100 / data.userCounts) * data.c.votes.allow.length);
+	$: barDisallow = Math.floor((100 / data.userCounts) * data.c.votes.disallow.length);
+	$: barUnsure = Math.floor((100 / data.userCounts) * data.c.votes.unsure.length);
 </script>
 
 <div>
@@ -110,16 +114,15 @@
 			</ToggleGroup.Root>
 
 			<h3 class="font-bold mt-6 text-lg">
-				Vote Distribution ({data.c.votes.allow.length +
-					data.c.votes.disallow.length +
-					data.c.votes.unsure.length})
+				Vote Distribution ({totalVotes}
+				{totalVotes > 1 ? 'votes' : 'vote'})
 			</h3>
-			<div class="flex w-full h-4 my-4 rounded">
+			<div class="flex w-full h-4 my-4 rounded border">
 				{#if userVote !== undefined}
 					{#if percentAllow != 0}
 						<div
 							class="bg-green-200 flex justify-center items-center text-sm"
-							style="width: {percentAllow}%"
+							style="width: {barAllow}%"
 						>
 							{percentAllow}%
 						</div>
@@ -127,7 +130,7 @@
 					{#if percentDisallow != 0}
 						<div
 							class="bg-red-200 flex justify-center items-center text-sm"
-							style="width: {percentDisallow}%"
+							style="width: {barDisallow}%"
 						>
 							{percentDisallow}%
 						</div>
@@ -135,7 +138,7 @@
 					{#if percentUnsure != 0}
 						<div
 							class="bg-gray-200 flex justify-center items-center text-sm"
-							style="width: {percentUnsure}%"
+							style="width: {barUnsure}%"
 						>
 							{percentUnsure}%
 						</div>
@@ -154,7 +157,6 @@
 				{userId}
 				userDisplayNames={data.userDisplayNames}
 			/>
-
 			<h3 class="font-bold mt-6 text-lg">Related Policies</h3>
 			<!-- <PolicyCard />
 			<PolicyCard /> -->

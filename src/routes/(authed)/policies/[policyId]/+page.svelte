@@ -49,9 +49,11 @@
 	} else {
 		userVote = undefined;
 	}
-	$: totalUsers = data.userCounts;
-	$: percentUpvote = Math.floor((100 / totalUsers) * data.policy.votes.upvote.length);
-	$: percentDownvote = Math.floor((100 / totalUsers) * data.policy.votes.downvote.length);
+	$: totalVotes = data.policy.votes.upvote.length + data.policy.votes.downvote.length;
+	$: percentUpvote = Math.floor((100 / totalVotes) * data.policy.votes.upvote.length);
+	$: percentDownvote = Math.floor((100 / totalVotes) * data.policy.votes.downvote.length);
+	$: barUpvote = Math.floor((100 / data.userCounts) * data.policy.votes.upvote.length);
+	$: barDownvote = Math.floor((100 / data.userCounts) * data.policy.votes.downvote.length);
 </script>
 
 <div class="grid md:grid-cols-4">
@@ -141,14 +143,15 @@
 			</ToggleGroup.Root>
 
 			<h3 class="font-bold mt-6 text-lg">
-				Vote Distribution ({data.policy.votes.upvote.length + data.policy.votes.downvote.length})
+				Vote Distribution ({totalVotes}
+				{totalVotes > 1 ? 'votes' : 'vote'})
 			</h3>
-			<div class="flex w-full h-4 my-4 rounded">
+			<div class="flex w-full h-4 my-4 rounded border">
 				{#if userVote !== undefined}
 					{#if percentUpvote != 0}
 						<div
 							class="bg-green-200 flex justify-center items-center text-sm"
-							style="width: {percentUpvote}%"
+							style="width: {barUpvote}%"
 						>
 							{percentUpvote}%
 						</div>
@@ -156,7 +159,7 @@
 					{#if percentDownvote != 0}
 						<div
 							class="bg-red-200 flex justify-center items-center text-sm"
-							style="width: {percentDownvote}%"
+							style="width: {barDownvote}%"
 						>
 							{percentDownvote}%
 						</div>
