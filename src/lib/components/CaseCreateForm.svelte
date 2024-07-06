@@ -6,14 +6,26 @@
 	import { caseCreateFormSchema, type CaseCreateFormSchema } from '$lib/schema';
 	import SuperDebug, { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { LoaderCircle } from 'lucide-svelte';
 
 	export let data: SuperValidated<Infer<CaseCreateFormSchema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(caseCreateFormSchema)
+		validators: zodClient(caseCreateFormSchema),
+		onSubmit() {
+			disalbeSubmitButton = true;
+		},
+		onError() {
+			disalbeSubmitButton = false;
+		},
+		onUpdated() {
+			disalbeSubmitButton = false;
+		}
 	});
 
 	const { form: formData, enhance } = form;
+
+	let disalbeSubmitButton = false;
 </script>
 
 <form method="POST" use:enhance action="?/createCase">
@@ -58,6 +70,11 @@
 		</RadioGroup.Root>
 		<Form.FieldErrors />
 	</Form.Fieldset>
-	<Form.Button class="mt-6">Submit</Form.Button>
+	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
+		{#if disalbeSubmitButton}
+			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+		{/if}
+		Submit
+	</Form.Button>
 </form>
 <!-- <SuperDebug data={$formData} /> -->

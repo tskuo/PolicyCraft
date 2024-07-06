@@ -3,16 +3,28 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { policyCreateFormSchema, type PolicyCreateFormSchema } from '$lib/schema';
+	import { LoaderCircle } from 'lucide-svelte';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	export let data: SuperValidated<Infer<PolicyCreateFormSchema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(policyCreateFormSchema)
+		validators: zodClient(policyCreateFormSchema),
+		onSubmit() {
+			disalbeSubmitButton = true;
+		},
+		onError() {
+			disalbeSubmitButton = false;
+		},
+		onUpdated() {
+			disalbeSubmitButton = false;
+		}
 	});
 
 	const { form: formData, enhance } = form;
+
+	let disalbeSubmitButton = false;
 </script>
 
 <form method="POST" use:enhance action="?/createPolicy">
@@ -32,5 +44,10 @@
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Button class="mt-6">Submit</Form.Button>
+	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
+		{#if disalbeSubmitButton}
+			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+		{/if}
+		Submit
+	</Form.Button>
 </form>

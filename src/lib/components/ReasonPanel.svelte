@@ -38,8 +38,6 @@
 	$: reasons1 = reasons.filter((r) => r.label == label1);
 	$: reasons2 = reasons.filter((r) => r.label == label2);
 
-	$: console.log('form posted: ', form.posted);
-
 	let showCreateReasonForm = false;
 	let disalbeSubmitButton = false;
 </script>
