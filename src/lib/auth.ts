@@ -15,17 +15,26 @@ export const authenticateUser = async (event: RequestEvent) => {
 	// to see if it is valid and return the user object
 	if (userAuthToken) {
 		const q = query(collection(db, 'users'), where('userAuthToken', '==', userAuthToken));
-		const querySnapshot = await getDocs(q);
-		if (querySnapshot.docs.length == 1) {
-			const doc = querySnapshot.docs[0];
-			const user = {
-				userId: doc.id,
-				displayName: doc.data().displayName,
-				email: doc.data().email,
-				role: doc.data().role
-			};
-			return user;
-		} else {
+		try {
+			const querySnapshot = await getDocs(q);
+			if (querySnapshot.docs.length == 1) {
+				const doc = querySnapshot.docs[0];
+				const user = {
+					userId: doc.id,
+					displayName: doc.data().displayName,
+					email: doc.data().email,
+					role: doc.data().role
+				};
+				return user;
+			} else {
+				cookies.set('__session', '', {
+					path: '/',
+					expires: new Date(0)
+				});
+				await signOut(auth);
+				throw redirect(303, '/login');
+			}
+		} catch {
 			cookies.set('__session', '', {
 				path: '/',
 				expires: new Date(0)
