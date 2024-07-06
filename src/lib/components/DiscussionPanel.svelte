@@ -13,7 +13,7 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Plus, Send } from 'lucide-svelte/icons';
+	import { LoaderCircle, Plus, Send } from 'lucide-svelte/icons';
 	import { invalidateAll } from '$app/navigation';
 
 	export let discussions: any[] = [];
@@ -23,17 +23,35 @@
 	export let userDisplayNames;
 
 	let showNewDiscussionPanel = false;
+	let disableMessageSubmitBtn = false;
+	let disableDiscussionSubmitBtn = false;
 
 	const formMessage = superForm(dataMessage, {
-		validators: zodClient(messageCreateFormSchema)
+		validators: zodClient(messageCreateFormSchema),
+		onSubmit() {
+			disableMessageSubmitBtn = true;
+		},
+		onError() {
+			disableMessageSubmitBtn = false;
+		},
+		onUpdated() {
+			disableMessageSubmitBtn = false;
+		}
 	});
 
 	const formDiscussion = superForm(dataDiscussion, {
 		validators: zodClient(discussionCreateFormSchema),
+		onSubmit() {
+			disableDiscussionSubmitBtn = true;
+		},
+		onError() {
+			disableDiscussionSubmitBtn = false;
+		},
 		onUpdated({ form }) {
 			if (form.valid) {
 				showNewDiscussionPanel = false;
 			}
+			disableDiscussionSubmitBtn = false;
 		}
 	});
 
@@ -88,14 +106,18 @@
 									</Form.Control>
 									<Form.FieldErrors />
 								</Form.Field>
-								<Form.Button size="icon">
-									<Send class="h-4 w-4" />
+								<Form.Button size="icon" disabled={disableMessageSubmitBtn}>
+									{#if disableMessageSubmitBtn}
+										<LoaderCircle class="h-4 w-4 animate-spin" />
+									{:else}
+										<Send class="h-4 w-4" />
+									{/if}
 								</Form.Button>
 							</form>
 							{#if discussion.userId == userId}
 								<Button
 									variant="destructive"
-									class="mt-2 w-full"
+									class="mt-6 w-full"
 									disabled={!discussion.open}
 									on:click={async () => {
 										discussion.open = false;
@@ -138,13 +160,20 @@
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
-				<Form.Button>Submit</Form.Button>
-				<Button
-					variant="secondary"
-					on:click={() => {
-						showNewDiscussionPanel = false;
-					}}>Cancel</Button
-				>
+				<Form.Button disabled={disableDiscussionSubmitBtn}>
+					{#if disableDiscussionSubmitBtn}
+						<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+					{/if}
+					Submit
+				</Form.Button>
+				{#if !disableDiscussionSubmitBtn}
+					<Button
+						variant="secondary"
+						on:click={() => {
+							showNewDiscussionPanel = false;
+						}}>Cancel</Button
+					>
+				{/if}
 			</form>
 		{:else}
 			<Button

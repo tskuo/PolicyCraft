@@ -6,7 +6,7 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { ThumbsUp, Pencil } from 'lucide-svelte/icons';
+	import { ThumbsUp, Pencil, LoaderCircle } from 'lucide-svelte/icons';
 	import { reasonCreateFormSchema, type ReasonCreateFormSchema } from '$lib/schema';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -19,10 +19,17 @@
 
 	const form = superForm(dataReason, {
 		validators: zodClient(reasonCreateFormSchema),
+		onSubmit() {
+			disalbeSubmitButton = true;
+		},
+		onError() {
+			disalbeSubmitButton = false;
+		},
 		onUpdated({ form }) {
 			if (form.valid) {
 				showCreateReasonForm = false;
 			}
+			disalbeSubmitButton = false;
 		}
 	});
 
@@ -31,7 +38,10 @@
 	$: reasons1 = reasons.filter((r) => r.label == label1);
 	$: reasons2 = reasons.filter((r) => r.label == label2);
 
+	$: console.log('form posted: ', form.posted);
+
 	let showCreateReasonForm = false;
+	let disalbeSubmitButton = false;
 </script>
 
 <div class="flex justify-between items-center">
@@ -84,7 +94,12 @@
 					</RadioGroup.Root>
 					<Form.FieldErrors />
 				</Form.Fieldset>
-				<Form.Button class="mt-6">Submit</Form.Button>
+				<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
+					{#if disalbeSubmitButton}
+						<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+					{/if}
+					Submit
+				</Form.Button>
 			</form>
 		</Card.Content>
 	</Card.Root>

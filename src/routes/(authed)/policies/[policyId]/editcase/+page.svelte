@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PolicyEditCaseForm from '$lib/components/PolicyEditCaseForm.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
-	import AIAssistantPanel from '$lib/components/AIAssistantPanel.svelte';
+	import PolicyEditCaseAIPanel from '$lib/components/PolicyEditCaseAIPanel.svelte';
 
 	export let data;
 </script>
@@ -40,6 +40,6 @@
 		</div>
 	</div>
 	<div class="md:col-span-1 p-2">
-		<AIAssistantPanel policyDescription={data.policy.description} />
+		<PolicyEditCaseAIPanel policyDescription={data.policy.description} />
 	</div>
 </div>

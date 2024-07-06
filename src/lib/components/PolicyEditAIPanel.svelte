@@ -3,7 +3,6 @@
 	import * as Select from '$lib/components/ui/select';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { unknown } from 'zod';
 
 	export let cases;
 	export let policyDescription;
