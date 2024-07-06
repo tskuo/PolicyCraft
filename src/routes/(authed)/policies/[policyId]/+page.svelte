@@ -57,8 +57,8 @@
 
 <div class="grid md:grid-cols-4">
 	<div class="md:col-span-3 p-2">
-		<div class="flex justify-between items-center">
-			<Breadcrumb.Root class="my-2">
+		<div class="flex justify-end md:justify-between items-center">
+			<Breadcrumb.Root class="my-2 hidden md:block">
 				<Breadcrumb.List>
 					<Breadcrumb.Item>
 						<Breadcrumb.Link href="/policies">Policy Repository</Breadcrumb.Link>

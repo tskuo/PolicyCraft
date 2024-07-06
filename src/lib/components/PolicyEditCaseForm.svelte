@@ -24,7 +24,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import SuperDebug from 'sveltekit-superforms';
 	import { browser } from '$app/environment';
-	import { X, Plus, Search } from 'lucide-svelte';
+	import { X, Plus, Search, LoaderCircle } from 'lucide-svelte';
 	import type { ActionData } from '../../routes/(authed)/policies/[policyId]/editcase/$types';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
@@ -33,9 +33,20 @@
 	export let userId;
 	export let userCounts: number;
 
+	let disalbeSubmitButton = false;
+
 	const form = superForm(data, {
 		dataType: 'json',
-		validators: zodClient(policyEditCaseFormSchema)
+		validators: zodClient(policyEditCaseFormSchema),
+		onSubmit() {
+			disalbeSubmitButton = true;
+		},
+		onError() {
+			disalbeSubmitButton = false;
+		},
+		onUpdated() {
+			disalbeSubmitButton = false;
+		}
 	});
 
 	const { form: formData, enhance } = form;
@@ -68,7 +79,7 @@
 		<div class="flex flex-wrap">
 			{#each $formData.cases as _, i}
 				<div
-					class="w-1/4 flex items-center justify-between rounded-md pl-3 my-1 mr-2
+					class="w-full md:w-2/5 flex items-center justify-between rounded-md pl-3 my-1 mr-2
                 	{$formData.cases[i].label == 'allow'
 						? 'bg-green-200'
 						: $formData.cases[i].label == 'disallow'
@@ -239,7 +250,7 @@
 					<ScrollArea orientation="horizontal" class="rounded-lg md:w-[61vw]">
 						<div class="flex space-x-2 pb-4 w-[61vw]">
 							{#each searchCases as searchCase (searchCase.id)}
-								<div class="basis-1/3 flex-none">
+								<div class="basis-full md:basis-1/3 flex-none">
 									<div class="relative h-full">
 										<!-- <div class="w-1/3 shrink-0"> -->
 										<CaseCard {...searchCase} {userId} {userCounts} />
@@ -300,7 +311,12 @@
 			</div>
 		</div>
 	</Form.Fieldset>
-	<Form.Button>Submit</Form.Button>
+	<Form.Button disabled={disalbeSubmitButton}>
+		{#if disalbeSubmitButton}
+			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+		{/if}
+		Submit
+	</Form.Button>
 </form>
 <!-- 
 {#if browser}

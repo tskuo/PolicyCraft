@@ -8,7 +8,7 @@
 
 <div class="grid md:grid-cols-4">
 	<div class="md:col-span-3 p-2">
-		<Breadcrumb.Root class="my-2">
+		<Breadcrumb.Root class="my-2 hidden md:block">
 			<Breadcrumb.List>
 				<Breadcrumb.Item>
 					<Breadcrumb.Link href="/policies">Policy Repository</Breadcrumb.Link>

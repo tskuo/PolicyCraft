@@ -10,15 +10,27 @@
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
+	import { LoaderCircle } from 'lucide-svelte';
 
 	export let data: SuperValidated<Infer<PolicyEditFormSchema>>;
 	export let cases;
 	export let userId;
 	export let userCounts: number;
 
+	let disalbeSubmitButton = false;
+
 	const form = superForm(data, {
 		dataType: 'json',
-		validators: zodClient(policyEditFormSchema)
+		validators: zodClient(policyEditFormSchema),
+		onSubmit() {
+			disalbeSubmitButton = true;
+		},
+		onError() {
+			disalbeSubmitButton = false;
+		},
+		onUpdated() {
+			disalbeSubmitButton = false;
+		}
 	});
 
 	const { form: formData, enhance } = form;
@@ -70,19 +82,19 @@
 				now allowed after your edit).
 			</Form.Description>
 			<div class="flex justify-center">
-				<Carousel.Root class="w-10/12" bind:api>
+				<Carousel.Root class="w-9/12 md:w-10/12" bind:api>
 					<Carousel.Content>
 						{#each $formData.cases as _, i}
 							<Carousel.Item>
 								<Card.Root>
-									<Card.Content class="p-4 grid grid-cols-2">
+									<Card.Content class="p-4 grid md:grid-cols-2">
 										<CaseCard
 											{...cases.get($formData.cases[i].caseId)}
 											bind:label={$formData.cases[i].label}
 											{userId}
 											{userCounts}
 										/>
-										<div class="px-6">
+										<div class="pt-4 md:pt-0 md:px-6">
 											<p class="pb-4 text-sm font-semibold">
 												Related cases {i + 1} of {count}
 											</p>
@@ -122,5 +134,10 @@
 			</div>
 		</Form.Fieldset>
 	{/if}
-	<Form.Button class="mt-6" disabled={!allowSubmit}>Submit</Form.Button>
+	<Form.Button class="mt-6" disabled={!allowSubmit || disalbeSubmitButton}>
+		{#if disalbeSubmitButton}
+			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+		{/if}
+		Submit
+	</Form.Button>
 </form>
