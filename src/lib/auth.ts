@@ -1,6 +1,7 @@
-import type { RequestEvent } from '@sveltejs/kit';
+import { redirect, type RequestEvent } from '@sveltejs/kit';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from './firebase';
+import { auth, db } from './firebase';
+import { signOut } from 'firebase/auth';
 
 export const authenticateUser = async (event: RequestEvent) => {
 	// get the cookies from the request
@@ -25,7 +26,12 @@ export const authenticateUser = async (event: RequestEvent) => {
 			};
 			return user;
 		} else {
-			return null;
+			cookies.set('__session', '', {
+				path: '/',
+				expires: new Date(0)
+			});
+			await signOut(auth);
+			throw redirect(303, '/login');
 		}
 	}
 
