@@ -12,6 +12,8 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { CircleAlert, LoaderCircle } from 'lucide-svelte';
+	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+	import Button from './ui/button/button.svelte';
 
 	export let data: SuperValidated<Infer<PolicyEditFormSchema>>;
 	export let cases;
@@ -19,6 +21,7 @@
 	export let userId;
 	export let userCounts: number;
 
+	let showNextStep = false;
 	let disalbeSubmitButton = false;
 
 	const form = superForm(data, {
@@ -73,6 +76,7 @@
 	</Alert.Root>
 {/if}
 <form method="POST" use:enhance action="?/editPolicy">
+	<h2 class="font-bold mt-4 mb-2">Step 1 of 2: Edit policy title and description</h2>
 	<Form.Field {form} name="title">
 		<Form.Control let:attrs>
 			<Form.Label>Title</Form.Label>
@@ -87,16 +91,49 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	{#if $formData.cases.length !== 0}
+	{#if !showNextStep}
+		<h3 class="text-sm font-medium my-3">
+			Related Cases <span class="text-muted-foreground">(for reference only, not editable)</span>
+		</h3>
+		{#if $formData.cases.length !== 0}
+			<ScrollArea orientation="horizontal" class="rounded-lg md:w-[60vw]">
+				<div class="flex space-x-2 pb-4 w-[60vw]">
+					{#each $formData.cases as _, i}
+						<div class="basis-full md:basis-1/3 flex-none">
+							<div class="relative h-full">
+								<CaseCard
+									{...cases.get($formData.cases[i].caseId)}
+									label={$formData.cases[i].label}
+									{userId}
+									{userCounts}
+								/>
+							</div>
+						</div>
+					{/each}
+				</div>
+			</ScrollArea>
+		{:else}
+			<p class="text-sm">This policy doesn't have any related cases.</p>
+		{/if}
+		<Button
+			class="mt-4"
+			on:click={() => {
+				showNextStep = true;
+			}}
+			>Next step
+		</Button>
+	{/if}
+	{#if $formData.cases.length !== 0 && showNextStep}
+		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels</h2>
 		<Form.Fieldset {form} name="cases" class="mt-4">
-			<Form.Legend>Check related case labels</Form.Legend>
-			<Form.Description>
+			<!-- <Form.Legend>Step 2 of 2: Review related case labels</Form.Legend> -->
+			<Form.Description class="mb-4">
 				Please check the labels of related cases to see if your policy edit will result in any
 				labels that need to be updated (e.g., a case that was previously disallowed by the policy is
 				now allowed after your edit).
 			</Form.Description>
 			<div class="flex justify-center">
-				<Carousel.Root class="w-9/12 md:w-10/12" bind:api>
+				<Carousel.Root class="w-[70vw] md:w-[50vw]" bind:api>
 					<Carousel.Content>
 						{#each $formData.cases as _, i}
 							<Carousel.Item>
@@ -110,7 +147,7 @@
 										/>
 										<div class="pt-4 md:pt-0 md:px-6">
 											<p class="pb-4 text-sm font-semibold">
-												Related cases {i + 1} of {count}
+												Related Case {i + 1} of {count}
 											</p>
 											<RadioGroup.Root
 												bind:value={$formData.cases[i].label}
@@ -148,10 +185,12 @@
 			</div>
 		</Form.Fieldset>
 	{/if}
-	<Form.Button class="mt-6" disabled={!allowSubmit || disalbeSubmitButton}>
-		{#if disalbeSubmitButton}
-			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
-		{/if}
-		Submit
-	</Form.Button>
+	{#if $formData.cases.length == 0 || showNextStep}
+		<Form.Button class="mt-6" disabled={!allowSubmit || disalbeSubmitButton}>
+			{#if disalbeSubmitButton}
+				<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+			{/if}
+			Submit
+		</Form.Button>
+	{/if}
 </form>
