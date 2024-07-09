@@ -101,7 +101,7 @@
 </script>
 
 <Dialog.Root>
-	<div class="relative">
+	<div class="relative h-full w-full">
 		<Dialog.Trigger class="items-center flex h-full w-full">
 			<Card.Root class="hover:bg-gray-50 h-full w-full flex flex-col justify-between text-left">
 				<div>

@@ -4,6 +4,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
+	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import {
 		ChevronsUpDown,
 		Eye,
@@ -178,7 +179,7 @@
 		<Card.Content>
 			<h3 class="font-bold mb-2">Related Cases</h3>
 			{#if cases.length > 0}
-				<div class="flex justify-center w-full">
+				<!-- <div class="flex justify-center w-full">
 					<Carousel.Root opts={{ align: 'start' }} class="w-11/12">
 						<Carousel.Content>
 							{#each cases as c}
@@ -190,7 +191,16 @@
 						<Carousel.Previous />
 						<Carousel.Next />
 					</Carousel.Root>
-				</div>
+				</div> -->
+				<ScrollArea orientation="horizontal" class="rounded-lg md:w-[57vw]">
+					<div class="flex space-x-2 pb-4 w-[57vw]">
+						{#each cases as c}
+							<div class="basis-full md:basis-1/3 flex-none">
+								<CaseCard {...c} {userId} {userCounts}></CaseCard>
+							</div>
+						{/each}
+					</div>
+				</ScrollArea>
 			{:else}
 				<p class="text-sm">There are no related cases.</p>
 			{/if}
