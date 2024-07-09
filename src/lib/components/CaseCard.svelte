@@ -100,7 +100,7 @@
 	}
 </script>
 
-<Card.Root class="hover:bg-gray-50 h-full">
+<Card.Root class="hover:bg-gray-50 h-full flex flex-col justify-between">
 	<a href="/cases/{id}">
 		<Card.Header>
 			<Card.Description>

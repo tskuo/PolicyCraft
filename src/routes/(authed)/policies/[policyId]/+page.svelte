@@ -217,7 +217,7 @@
 			</div>
 		</div>
 		{#if data.cases.length > 0}
-			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1 mt-2">
+			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1 mt-2 auto-rows-fr">
 				{#each data.cases as c}
 					<CaseCard {...c} {userId} userCounts={data.userCounts} />
 				{/each}
