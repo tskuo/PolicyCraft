@@ -27,6 +27,7 @@
 		<PolicyEditForm
 			data={data.form}
 			cases={data.cases}
+			policy={data.policy}
 			userId={data.user?.userId}
 			userCounts={data.userCounts}
 		/>

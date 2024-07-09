@@ -10,10 +10,12 @@
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import { type CarouselAPI } from '$lib/components/ui/carousel/context.js';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { LoaderCircle } from 'lucide-svelte';
+	import * as Alert from '$lib/components/ui/alert/index.js';
+	import { CircleAlert, LoaderCircle } from 'lucide-svelte';
 
 	export let data: SuperValidated<Infer<PolicyEditFormSchema>>;
 	export let cases;
+	export let policy;
 	export let userId;
 	export let userCounts: number;
 
@@ -33,7 +35,7 @@
 		}
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, message } = form;
 
 	let api: CarouselAPI;
 	let current = 0;
@@ -58,6 +60,18 @@
 	}
 </script>
 
+{#if $message}
+	<Alert.Root variant="destructive" class="my-4">
+		<CircleAlert class="h-4 w-4" />
+		<Alert.Title>Heads up!</Alert.Title>
+		<Alert.Description>
+			Other people edited the policy while you were working on it. Please review their changes below
+			and consider incorporating them into your submission.
+			<p class="mt-2">Edited title:</p>
+			<p class="mt-2">Edited description:</p>
+		</Alert.Description>
+	</Alert.Root>
+{/if}
 <form method="POST" use:enhance action="?/editPolicy">
 	<Form.Field {form} name="title">
 		<Form.Control let:attrs>

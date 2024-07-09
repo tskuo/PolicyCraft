@@ -24,7 +24,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import SuperDebug from 'sveltekit-superforms';
 	import { browser } from '$app/environment';
-	import { X, Plus, Search, LoaderCircle } from 'lucide-svelte';
+	import { X, Plus, Search, LoaderCircle, Ellipsis } from 'lucide-svelte';
 	import type { ActionData } from '../../routes/(authed)/policies/[policyId]/editcase/$types';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
@@ -71,12 +71,85 @@
 	let searchText = '';
 	let searchCases: any[] = [];
 	let searchResultText = 'Search results will appear here.';
+	$: formDataCaseId = $formData.cases.map((c) => c.caseId);
+
+	const handleCase = async (caseId: string, label: 'allow' | 'disallow' | 'unsure' | 'remove') => {
+		if (label == 'remove') {
+			$formData.cases = $formData.cases.filter((formCase) => formCase.caseId !== caseId);
+		} else {
+			const existedCaseIndex = $formData.cases.findIndex((formCase) => formCase.caseId == caseId);
+			if (existedCaseIndex == -1) {
+				$formData.cases = [...$formData.cases, { caseId, label }];
+			} else {
+				let newFormData = $formData.cases;
+				newFormData[existedCaseIndex] = { caseId, label };
+				$formData.cases = newFormData;
+			}
+		}
+	};
 </script>
 
 <form method="POST" use:enhance action="?/editRelatedCases">
 	<Form.Fieldset {form} name="cases">
-		<Form.Legend>Related cases</Form.Legend>
-		<div class="flex flex-wrap">
+		<Form.Legend class="font-bold">Related cases</Form.Legend>
+		{#if $formData.cases.length == 0}
+			<p class="text-sm">There are no related cases.</p>
+		{:else}
+			<ScrollArea orientation="horizontal" class="rounded-lg md:w-[60vw]">
+				<div class="flex space-x-2 pb-4 w-[60vw]">
+					{#each $formData.cases as _, i}
+						<div class="basis-full md:basis-1/3 flex-none">
+							<div class="relative h-full">
+								<CaseCard
+									{...allCases.find((c) => $formData.cases[i].caseId == c.id)}
+									label={$formData.cases[i].label}
+									{userId}
+									{userCounts}
+									hideAlert={true}
+								/>
+								<div class="absolute top-0 right-0 mt-4 mr-2">
+									<DropdownMenu.Root>
+										<DropdownMenu.Trigger>
+											<Button variant="ghost"><Ellipsis class="h-4 w-4" /></Button>
+										</DropdownMenu.Trigger>
+										<DropdownMenu.Content>
+											<DropdownMenu.Group>
+												<DropdownMenu.Label>Edit label or remove case</DropdownMenu.Label>
+												<DropdownMenu.Separator />
+												<DropdownMenu.Item
+													on:click={() => {
+														handleCase($formData.cases[i].caseId, 'allow');
+													}}
+													>allow by this policy
+												</DropdownMenu.Item>
+												<DropdownMenu.Item
+													on:click={() => {
+														handleCase($formData.cases[i].caseId, 'disallow');
+													}}>disallow by this policy</DropdownMenu.Item
+												>
+												<DropdownMenu.Item
+													on:click={() => {
+														handleCase($formData.cases[i].caseId, 'unsure');
+													}}>unsure under this policy</DropdownMenu.Item
+												>
+												<DropdownMenu.Item
+													class="text-red-500 data-[highlighted]:text-red-500"
+													on:click={() => {
+														handleCase($formData.cases[i].caseId, 'remove');
+													}}>remove the case</DropdownMenu.Item
+												>
+											</DropdownMenu.Group>
+										</DropdownMenu.Content>
+									</DropdownMenu.Root>
+								</div>
+							</div>
+						</div>
+					{/each}
+				</div>
+			</ScrollArea>
+		{/if}
+		<!-- deprecated -->
+		<!-- <div class="flex flex-wrap">
 			{#each $formData.cases as _, i}
 				<div
 					class="w-full md:w-2/5 flex items-center justify-between rounded-md pl-3 my-1 mr-2
@@ -108,9 +181,9 @@
 					</Button>
 				</div>
 			{/each}
-		</div>
+		</div> -->
 		<div>
-			<h3 class="text-sm font-medium mt-4 mb-2">Add more cases</h3>
+			<h3 class="text-sm font-bold mt-4 mb-2">Add more cases</h3>
 			<div class="flex items-center space-x-2">
 				<form
 					class="grow"
@@ -120,8 +193,9 @@
 								let title = c.title.toLowerCase();
 								let description = c.description.toLowerCase();
 								return (
-									title.includes(searchText.toLowerCase()) ||
-									description.includes(searchText.toLowerCase())
+									(title.includes(searchText.toLowerCase()) ||
+										description.includes(searchText.toLowerCase())) &&
+									!formDataCaseId.includes(c.id)
 								);
 							});
 						}
@@ -247,16 +321,43 @@
 			</div>
 			<div class="my-2 w-full">
 				{#if searchCases.length !== 0}
-					<ScrollArea orientation="horizontal" class="rounded-lg md:w-[61vw]">
-						<div class="flex space-x-2 pb-4 w-[61vw]">
+					<ScrollArea orientation="horizontal" class="rounded-lg md:w-[60vw]">
+						<div class="flex space-x-2 pb-4 w-[60vw]">
 							{#each searchCases as searchCase (searchCase.id)}
 								<div class="basis-full md:basis-1/3 flex-none">
 									<div class="relative h-full">
 										<!-- <div class="w-1/3 shrink-0"> -->
-										<CaseCard {...searchCase} {userId} {userCounts} />
+										<CaseCard {...searchCase} {userId} {userCounts} hideAlert={true} />
 										<!-- </div> -->
-										<div class="absolute top-0 right-0 m-3">
+										<div class="absolute top-0 right-0 mt-4 mr-2">
 											<DropdownMenu.Root>
+												<DropdownMenu.Trigger>
+													<Button variant="ghost"><Plus class="h-4 w-4" /></Button>
+												</DropdownMenu.Trigger>
+												<DropdownMenu.Content>
+													<DropdownMenu.Group>
+														<DropdownMenu.Label>Label and add case</DropdownMenu.Label>
+														<DropdownMenu.Separator />
+														<DropdownMenu.Item
+															on:click={() => {
+																handleCase(searchCase.id, 'allow');
+															}}
+															>allow by this policy
+														</DropdownMenu.Item>
+														<DropdownMenu.Item
+															on:click={() => {
+																handleCase(searchCase.id, 'disallow');
+															}}>disallow by this policy</DropdownMenu.Item
+														>
+														<DropdownMenu.Item
+															on:click={() => {
+																handleCase(searchCase.id, 'unsure');
+															}}>unsure under this policy</DropdownMenu.Item
+														>
+													</DropdownMenu.Group>
+												</DropdownMenu.Content>
+											</DropdownMenu.Root>
+											<!-- <DropdownMenu.Root>
 												<DropdownMenu.Trigger asChild let:builder>
 													<Button variant="ghost" builders={[builder]}
 														><Plus class="h-4 w-4" /></Button
@@ -296,7 +397,7 @@
 														>
 													</DropdownMenu.RadioGroup>
 												</DropdownMenu.Content>
-											</DropdownMenu.Root>
+											</DropdownMenu.Root> -->
 										</div>
 									</div>
 								</div>

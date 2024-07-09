@@ -49,15 +49,24 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 
 export const actions: Actions = {
 	editPolicy: async (event) => {
-		const form = await superValidate(event, zod(policyEditFormSchema));
+		const formData = await event.request.formData();
+		const form = await superValidate(formData, zod(policyEditFormSchema));
 
+		// const form = await superValidate(event, zod(policyEditFormSchema));
+
+		// Form is invalid
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
+		// No policy edit during the voting stage
 		if (event.locals.stage == 'vote') {
 			return fail(400, { form });
 		}
+
+		// Check if anyone else edited the policy during this period
+		// const res = await event.fetch(`/api/policies/${event.params.policyId}`);
+		// const currentPolicy = await res.json();
 
 		await event.fetch(`/api/policies/${event.params.policyId}`, {
 			method: 'PATCH',

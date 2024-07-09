@@ -18,11 +18,11 @@
 		disallow: [] as string[],
 		unsure: [] as string[]
 	};
-
 	export let label = '';
-
 	export let userId: string;
 	export let userCounts: number;
+	export let hideAlert = false;
+
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {
@@ -205,7 +205,7 @@
 							<p class="bg-gray-200 px-1 rounded">unsure under this policy</p>
 						{/if}
 					</div>
-					{#if showAlert}<TriangleAlert class="w-4 h-4" />{/if}
+					{#if showAlert && !hideAlert}<TriangleAlert class="w-4 h-4" />{/if}
 				</div>
 			</Card.Description>
 			<Card.Title class="leading-normal">{title}</Card.Title>
