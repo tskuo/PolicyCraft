@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<Separator class="my-4" />
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-1">
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-1 auto-rows-fr">
 			{#if data.cases.length > 0}
 				{#each data.cases as c (c.id)}
 					<CaseCard {...c} userId={data.user?.userId} userCounts={data.userCounts} />
