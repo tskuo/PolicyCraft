@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from './ui/button/button.svelte';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Select from '$lib/components/ui/select';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton';
@@ -10,39 +10,42 @@
 	let messageHistory: any[] = [
 		{
 			person: 'AI Assistant',
-			message: `Hi, I am an AI assistant who can help brainstorm policy edits to cover specific related cases. Please select a related case below and specify whether it should be allowed by the policy.`
+			message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws based on related cases misaligned with the policy. To begin with, please select a related case below.`
 		}
 	];
-	const messageAskLabel = {
-		person: 'AI Assistant',
-		message: `Should this case be allowed or disallowed by the policy?`
-	};
 	let loading = false;
-	let selectedCaseDescription = '';
-	let showSelect = true;
-	let showButtons = false;
+	let selectedCaseId: string;
+	let selectedCaseLabel: string;
+	let selectedCaseReasons: any[] = [];
+	let selectedCaseReason: string;
+	let showCaseSelector = true;
+	let showMisalignSelector = false;
+	let showUnsureSelector = false;
+	let showReasonSelector = false;
+	let showReasonMunualInput = false;
+	let manualInputValue = '';
 
-	const generatePolicy = async (label: string) => {
-		showButtons = false;
+	const generatePolicy = async () => {
 		loading = true;
-		messageHistory = [
-			...messageHistory,
-			{
-				person: 'You',
-				message: label == 'allow' ? 'This should be allowed' : 'This should be disallowed'
-			}
-		];
+
+		const prompt =
+			`You are a helpful assistant focusing on supporting users' revision of the following policy: ` +
+			policyDescription +
+			` In a few sentences, slightly revise the policy without significant changes so that the policy ` +
+			selectedCaseLabel +
+			` the following scenario: ` +
+			cases.get(selectedCaseId).description +
+			` Here is the reason why the policy should ` +
+			selectedCaseLabel +
+			` the scenario: ` +
+			selectedCaseReason;
+
+		console.log('prompt: ', prompt);
 
 		const res = await fetch('/api/assistant/policy', {
 			method: 'POST',
 			body: JSON.stringify({
-				prompt:
-					`You are a helpful assistant focusing on supporting users' revision of the following policy: ` +
-					policyDescription +
-					` In a few sentences, slightly revise the policy without significant changes so that the policy ` +
-					label +
-					` the following scenario: ` +
-					selectedCaseDescription
+				prompt: prompt
 			})
 		});
 
@@ -54,7 +57,7 @@
 				{ person: 'AI Assistant', message: `Here is the suggested policy edit: ` + data.text }
 			];
 			loading = false;
-			showSelect = true;
+			showCaseSelector = true;
 		} else {
 			messageHistory = [
 				...messageHistory,
@@ -64,7 +67,7 @@
 				}
 			];
 			loading = false;
-			showSelect = true;
+			showCaseSelector = true;
 		}
 	};
 </script>
@@ -84,11 +87,11 @@
 		</div>
 	</div>
 	<div class="flex flex-col space-y-2 my-2">
-		{#if showSelect}
-			<div class="mx-3">
+		{#if showCaseSelector}
+			<div class="mx-3 mt-1">
 				<Select.Root
 					onSelectedChange={(v) => {
-						selectedCaseDescription = v.value;
+						selectedCaseId = v?.value;
 
 						messageHistory = [
 							...messageHistory,
@@ -96,37 +99,237 @@
 								person: 'You',
 								message: v?.label
 							},
-							messageAskLabel
+							{
+								person: 'AI Assistant',
+								message: `How is the selected case misaligned with the policy?`
+							}
 						];
-						showSelect = false;
-						showButtons = true;
+						showCaseSelector = false;
+						showMisalignSelector = true;
 					}}
 				>
 					<Select.Trigger>
 						<Select.Value placeholder="Select a related case" />
 					</Select.Trigger>
 					<Select.Content>
-						{#each [...cases] as [_, c], i}
-							<Select.Item value={c.description} label={c.title} />
+						{#each [...cases] as [caseId, c], i}
+							<Select.Item value={caseId} label={c.title} />
 						{/each}
 					</Select.Content>
 				</Select.Root>
 			</div>
 		{/if}
+		{#if showMisalignSelector}
+			<div class="mx-3 mt-1">
+				<Select.Root
+					onSelectedChange={(v) => {
+						showMisalignSelector = false;
+						messageHistory = [
+							...messageHistory,
+							{
+								person: 'You',
+								message: v?.label
+							}
+						];
 
-		{#if showButtons}
-			<Button
-				variant="secondary"
-				class="mx-3"
-				disabled={loading}
-				on:click={() => generatePolicy('allow')}>This should be allowed</Button
-			>
-			<Button
-				variant="secondary"
-				class="mx-3"
-				disabled={loading}
-				on:click={() => generatePolicy('disallow')}>This should be disallowed</Button
-			>
+						if (v?.value == 'allow' || v?.value == 'disallow') {
+							selectedCaseLabel = v?.value;
+							if (cases.get(selectedCaseId).reasons.length !== 0) {
+								selectedCaseReasons = cases
+									.get(selectedCaseId)
+									.reasons.filter((c) => c.label == selectedCaseLabel);
+								if (selectedCaseReasons.length !== 0) {
+									messageHistory = [
+										...messageHistory,
+										{
+											person: 'AI Assistant',
+											message:
+												`Why should this case be ` +
+												selectedCaseLabel +
+												`ed? Please select a reason submitted by the community or enter a reason manually. Click on the related case on this page to check the details of each reason.`
+										}
+									];
+									showReasonSelector = true;
+								} else {
+									messageHistory = [
+										...messageHistory,
+										{
+											person: 'AI Assistant',
+											message: `Why should this case be ` + selectedCaseLabel + `ed? `
+										}
+									];
+									showReasonMunualInput = true;
+								}
+							} else {
+								messageHistory = [
+									...messageHistory,
+									{
+										person: 'AI Assistant',
+										message: `Why should this case be allowed? Please enter a reason manually.`
+									}
+								];
+								showReasonMunualInput = true;
+							}
+						} else {
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'AI Assistant',
+									message: 'Should this case be allowed or disallowed, or is it unsure by itself?'
+								}
+							];
+							showUnsureSelector = true;
+						}
+					}}
+				>
+					<Select.Trigger>
+						<Select.Value placeholder="Select a misalignment condition" />
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Item
+							value="allow"
+							label="The case should be allowed but is currently disallowed by the policy"
+						/>
+						<Select.Item
+							value="disallow"
+							label="The case should be disallowed but is currently allowed by the policy"
+						/>
+						<Select.Item
+							value="unsure"
+							label="It is unsure whether the case should be allowed or disallowed given the current policy"
+						/>
+					</Select.Content>
+				</Select.Root>
+			</div>
+		{/if}
+		{#if showUnsureSelector}
+			<div class="mx-3 mt-1">
+				<Select.Root
+					onSelectedChange={(v) => {
+						messageHistory = [
+							...messageHistory,
+							{
+								person: 'You',
+								message: v?.label
+							}
+						];
+						showUnsureSelector = false;
+
+						if (v?.value == 'allow' || v?.value == 'disallow') {
+							selectedCaseLabel = v?.value;
+							if (cases.get(selectedCaseId).reasons.length !== 0) {
+								selectedCaseReasons = cases
+									.get(selectedCaseId)
+									.reasons.filter((c) => c.label == selectedCaseLabel);
+								if (selectedCaseReasons.length !== 0) {
+									messageHistory = [
+										...messageHistory,
+										{
+											person: 'AI Assistant',
+											message:
+												`Why should this case be ` +
+												selectedCaseLabel +
+												`ed? Please select a reason submitted by the community or enter a reason manually. Click on the related case on this page to check the details of each reason.`
+										}
+									];
+									showReasonSelector = true;
+								} else {
+									messageHistory = [
+										...messageHistory,
+										{
+											person: 'AI Assistant',
+											message: `Why should this case be ` + selectedCaseLabel + `ed? `
+										}
+									];
+									showReasonMunualInput = true;
+								}
+							} else {
+								messageHistory = [
+									...messageHistory,
+									{
+										person: 'AI Assistant',
+										message: `Why should this case be allowed? Please enter a reason manually.`
+									}
+								];
+								showReasonMunualInput = true;
+							}
+						} else {
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'AI Assistant',
+									message: `Please consider discussing the case more before editing the policy based on an unsure case.`
+								}
+							];
+							showCaseSelector = true;
+						}
+					}}
+				>
+					<Select.Trigger>
+						<Select.Value placeholder="Select a condition" />
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Item value="allow" label="The case should be allowed" />
+						<Select.Item value="disallow" label="The case should be disallowed" />
+						<Select.Item value="unsure" label="The case is unsure by itself" />
+					</Select.Content>
+				</Select.Root>
+			</div>
+		{/if}
+		{#if showReasonSelector}
+			<div class="mx-3 mt-1">
+				<Select.Root
+					onSelectedChange={(v) => {
+						if (v?.value == 'manual') {
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'You',
+									message: v?.label
+								}
+							];
+							showReasonSelector = false;
+							showReasonMunualInput = true;
+						} else {
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'You',
+									message: v?.label
+								}
+							];
+							selectedCaseReason = v?.value;
+							showReasonSelector = false;
+							generatePolicy();
+						}
+					}}
+				>
+					<Select.Trigger>
+						<Select.Value placeholder="Select or enter a reason manually" />
+					</Select.Trigger>
+					<Select.Content>
+						{#each selectedCaseReasons as reason (reason.id)}
+							<Select.Item value={reason.description} label={reason.title} />
+						{/each}
+						<Select.Item value="manual" label="Enter a reason manually" />
+					</Select.Content>
+				</Select.Root>
+			</div>
+		{/if}
+		{#if showReasonMunualInput}
+			<div class="mx-3 mt-1">
+				<Input
+					placeholder={'The case should be ' + selectedCaseLabel + ' because ...'}
+					bind:value={manualInputValue}
+					on:keypress={(e) => {
+						if (e.key === 'Enter') {
+							showReasonMunualInput = false;
+							selectedCaseReason = manualInputValue;
+							generatePolicy();
+						}
+					}}
+				/>
+			</div>
 		{/if}
 	</div>
 </ScrollArea>

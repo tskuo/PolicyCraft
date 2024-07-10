@@ -3,6 +3,25 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select';
 	export let data;
+
+	const sortCases = async (value: string) => {
+		console.log('input: ', value);
+
+		const newCases = data.cases.sort((a, b) => {
+			const nameA = a.votes.allow.length;
+			const nameB = b.votes.allow.length;
+			if (nameA < nameB) {
+				return -1;
+			}
+			if (nameA > nameB) {
+				return 1;
+			}
+
+			return 0;
+		});
+
+		data.cases = newCases;
+	};
 </script>
 
 <div class="grid md:grid-cols-4">
@@ -15,7 +34,12 @@
 						<Select.Value placeholder="New cases" />
 					</Select.Trigger>
 					<Select.Content>
-						<Select.Item value="light">Light</Select.Item>
+						<Select.Item
+							value="light"
+							on:click={() => {
+								sortCases('here');
+							}}>Light</Select.Item
+						>
 						<Select.Item value="dark">Dark</Select.Item>
 						<Select.Item value="system">System</Select.Item>
 					</Select.Content>
