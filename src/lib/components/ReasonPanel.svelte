@@ -59,21 +59,7 @@
 		</Card.Header>
 		<Card.Content class="space-y-2">
 			<form method="POST" use:enhance action="?/createReason">
-				<Form.Field {form} name="title">
-					<Form.Control let:attrs>
-						<Form.Label>Title</Form.Label>
-						<Input {...attrs} bind:value={$formData.title} />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-				<Form.Field {form} name="description">
-					<Form.Control let:attrs>
-						<Form.Label>Description</Form.Label>
-						<Textarea {...attrs} bind:value={$formData.description} />
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
-				<Form.Fieldset {form} name="label" class="space-y-5 mt-4">
+				<Form.Fieldset {form} name="label" class="space-y-5">
 					<Form.Legend>Reason to {label1} or {label2}</Form.Legend>
 					<RadioGroup.Root bind:value={$formData.label} class="flex flex-col space-y-1">
 						<div class="flex items-center space-x-3 space-y-0">
@@ -92,7 +78,14 @@
 					</RadioGroup.Root>
 					<Form.FieldErrors />
 				</Form.Fieldset>
-				<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
+				<Form.Field {form} name="description">
+					<Form.Control let:attrs>
+						<Form.Label>Reason description</Form.Label>
+						<Textarea {...attrs} bind:value={$formData.description} />
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+				<Form.Button class="mt-2" disabled={disalbeSubmitButton}>
 					{#if disalbeSubmitButton}
 						<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
 					{/if}
@@ -108,7 +101,6 @@
 		{#each reasons1 as reason (reason.id)}
 			<Card.Root class="mt-2">
 				<Card.Header>
-					<Card.Title>{reason.title}</Card.Title>
 					<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
 				</Card.Header>
 				<Card.Content>
@@ -147,7 +139,6 @@
 		{#each reasons2 as reason (reason.id)}
 			<Card.Root class="mt-2">
 				<Card.Header>
-					<Card.Title>{reason.title}</Card.Title>
 					<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
 				</Card.Header>
 				<Card.Content>

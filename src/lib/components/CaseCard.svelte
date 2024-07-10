@@ -255,7 +255,11 @@
 		<Accordion.Root class="w-full">
 			{#each reasonsAllow as reason (reason.id)}
 				<Accordion.Item value={reason.id}>
-					<Accordion.Trigger>{reason.title}</Accordion.Trigger>
+					<Accordion.Trigger class="font-normal">
+						{reason.description.length > 47
+							? reason.description.substring(0, 47) + '...'
+							: reason.description}
+					</Accordion.Trigger>
 					<Accordion.Content>{reason.description}</Accordion.Content>
 				</Accordion.Item>
 			{/each}
@@ -264,7 +268,11 @@
 		<Accordion.Root class="w-full">
 			{#each reasonsDisallow as reason (reason.id)}
 				<Accordion.Item value={reason.id}>
-					<Accordion.Trigger>{reason.title}</Accordion.Trigger>
+					<Accordion.Trigger class="font-normal">
+						{reason.description.length > 47
+							? reason.description.substring(0, 47) + '...'
+							: reason.description}
+					</Accordion.Trigger>
 					<Accordion.Content>{reason.description}</Accordion.Content>
 				</Accordion.Item>
 			{/each}

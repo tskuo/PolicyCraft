@@ -22,7 +22,6 @@ export const POST = async ({ request, locals }) => {
 			likeList: [locals.user.userId],
 			targetEntity: entity,
 			targetEntityId: entityId,
-			title: form.data.title,
 			userId: locals.user.userId
 		});
 
@@ -34,7 +33,7 @@ export const POST = async ({ request, locals }) => {
 			action: 'createReason',
 			createAt: serverTimestamp(),
 			input: {
-				title: form.data.title,
+				title: '',
 				description: form.data.description
 			},
 			targetCollection: 'reasons',

@@ -13,6 +13,7 @@
 			message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws based on related cases misaligned with the policy. To begin with, please select a related case below.`
 		}
 	];
+
 	let loading = false;
 	let selectedCaseId: string;
 	let selectedCaseLabel: string;
@@ -32,7 +33,7 @@
 			`You are a helpful assistant focusing on supporting users' revision of the following policy: ` +
 			policyDescription +
 			` In a few sentences, slightly revise the policy without significant changes so that the policy ` +
-			selectedCaseLabel +
+			selectedCaseLabel + // allow or disallow
 			` the following scenario: ` +
 			cases.get(selectedCaseId).description +
 			` Here is the reason why the policy should ` +
@@ -40,7 +41,7 @@
 			` the scenario: ` +
 			selectedCaseReason;
 
-		console.log('prompt: ', prompt);
+		// console.log('prompt: ', prompt);
 
 		const res = await fetch('/api/assistant/policy', {
 			method: 'POST',
@@ -81,6 +82,7 @@
 				{message.message}
 			</p>
 		{/each}
+
 		<div hidden={!loading}>
 			<p class="font-bold py-2">AI Assistant</p>
 			<Skeleton class="w-full h-16" />
@@ -309,7 +311,12 @@
 					</Select.Trigger>
 					<Select.Content>
 						{#each selectedCaseReasons as reason (reason.id)}
-							<Select.Item value={reason.description} label={reason.title} />
+							<Select.Item
+								value={reason.description}
+								label={reason.description.length > 47
+									? reason.description.substring(0, 47) + '...'
+									: reason.description}
+							/>
 						{/each}
 						<Select.Item value="manual" label="Enter a reason manually" />
 					</Select.Content>
