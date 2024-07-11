@@ -63,16 +63,21 @@ export const PATCH = async ({ request, params, locals }) => {
 				});
 			}
 
-			await updateDoc(doc(db, 'policies', params.policyId), {
-				title: form.data.title,
-				description: form.data.description,
-				cases: form.data.cases
-			});
+			// await updateDoc(doc(db, 'policies', params.policyId), {
+			// 	title: form.data.title,
+			// 	description: form.data.description,
+			// 	cases: form.data.cases
+			// });
 
 			if (
 				originalPolicy?.title !== form.data.title ||
 				originalPolicy?.description !== form.data.description
 			) {
+				await updateDoc(doc(db, 'policies', params.policyId), {
+					title: form.data.title,
+					description: form.data.description
+				});
+
 				await addDoc(collection(db, 'actionLogs'), {
 					action: 'editPolicy',
 					createAt: serverTimestamp(),
@@ -89,20 +94,36 @@ export const PATCH = async ({ request, params, locals }) => {
 			}
 
 			for (const c of form.data.cases) {
-				if (c.label !== originalCases.get(c.caseId)) {
-					await addDoc(collection(db, 'actionLogs'), {
-						action: 'editRelatedCaseLabelWhileEditingPolicy',
-						createAt: serverTimestamp(),
-						input: {
-							title: c.caseId,
-							description: c.label
-						},
-						targetCollection: 'policies',
-						targetDocumentId: params.policyId,
-						targetSubCollection: '',
-						targetSubDocumentId: '',
-						userId: locals.user.userId
-					});
+				if (originalCases.has(c.caseId)) {
+					if (c.label !== originalCases.get(c.caseId)) {
+						await updateDoc(doc(db, 'policies', params.policyId), {
+							cases: arrayRemove({
+								caseId: c.caseId,
+								label: originalCases.get(c.caseId)
+							})
+						});
+
+						await updateDoc(doc(db, 'policies', params.policyId), {
+							cases: arrayUnion({
+								caseId: c.caseId,
+								label: c.label
+							})
+						});
+
+						await addDoc(collection(db, 'actionLogs'), {
+							action: 'editRelatedCaseLabelWhileEditingPolicy',
+							createAt: serverTimestamp(),
+							input: {
+								title: c.caseId,
+								description: c.label
+							},
+							targetCollection: 'policies',
+							targetDocumentId: params.policyId,
+							targetSubCollection: '',
+							targetSubDocumentId: '',
+							userId: locals.user.userId
+						});
+					}
 				}
 			}
 
