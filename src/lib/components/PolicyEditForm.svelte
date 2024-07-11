@@ -23,18 +23,24 @@
 
 	let showNextStep = false;
 	let disalbeSubmitButton = false;
+	let policyTitleBeforeEdit = policy.title;
+	let policyDescriptionBeforeEdit = policy.description;
 
 	const form = superForm(data, {
 		dataType: 'json',
 		validators: zodClient(policyEditFormSchema),
-		onSubmit() {
+		onSubmit({ formData }) {
 			disalbeSubmitButton = true;
+			formData.set('policyTitleBeforeEdit', policyTitleBeforeEdit);
+			formData.set('policyDescriptionBeforeEdit', policyDescriptionBeforeEdit);
 		},
 		onError() {
 			disalbeSubmitButton = false;
 		},
-		onUpdated() {
+		onUpdated({ form }) {
 			disalbeSubmitButton = false;
+			policyTitleBeforeEdit = form.message.uptodateTitle;
+			policyDescriptionBeforeEdit = form.message.uptodateDescription;
 		}
 	});
 
@@ -64,14 +70,16 @@
 </script>
 
 {#if $message}
-	<Alert.Root variant="destructive" class="my-4">
-		<CircleAlert class="h-4 w-4" />
+	<Alert.Root class="my-4 border-primary text-primary">
+		<CircleAlert class="h-4 w-4 stroke-primary" />
 		<Alert.Title>Heads up!</Alert.Title>
 		<Alert.Description>
 			Other people edited the policy while you were working on it. Please review their changes below
 			and consider incorporating them into your submission.
-			<p class="mt-2">Edited title:</p>
-			<p class="mt-2">Edited description:</p>
+			<p class="mt-2 font-semibold">Edited title:</p>
+			<p>{$message.uptodateTitle}</p>
+			<p class="mt-2 font-semibold">Edited description:</p>
+			<p>{$message.uptodateDescription}</p>
 		</Alert.Description>
 	</Alert.Root>
 {/if}
@@ -137,7 +145,7 @@
 					<Carousel.Content>
 						{#each $formData.cases as _, i}
 							<Carousel.Item>
-								<Card.Root>
+								<Card.Root class="h-full">
 									<Card.Content class="p-4 grid md:grid-cols-2">
 										<CaseCard
 											{...cases.get($formData.cases[i].caseId)}
@@ -185,7 +193,13 @@
 			</div>
 		</Form.Fieldset>
 	{/if}
-	{#if $formData.cases.length == 0 || showNextStep}
+	{#if $formData.cases.length == 0 && showNextStep}
+		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels</h2>
+		<p class="text-sm mt-2">
+			This policy doesn't have any related cases. Please submit the policy directly.
+		</p>
+	{/if}
+	{#if showNextStep}
 		<Form.Button class="mt-6" disabled={!allowSubmit || disalbeSubmitButton}>
 			{#if disalbeSubmitButton}
 				<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />

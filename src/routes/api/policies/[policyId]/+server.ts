@@ -68,19 +68,25 @@ export const PATCH = async ({ request, params, locals }) => {
 				description: form.data.description,
 				cases: form.data.cases
 			});
-			await addDoc(collection(db, 'actionLogs'), {
-				action: 'editPolicy',
-				createAt: serverTimestamp(),
-				input: {
-					title: form.data.title,
-					description: form.data.description
-				},
-				targetCollection: 'policies',
-				targetDocumentId: params.policyId,
-				targetSubCollection: '',
-				targetSubDocumentId: '',
-				userId: locals.user.userId
-			});
+
+			if (
+				originalPolicy?.title !== form.data.title ||
+				originalPolicy?.description !== form.data.description
+			) {
+				await addDoc(collection(db, 'actionLogs'), {
+					action: 'editPolicy',
+					createAt: serverTimestamp(),
+					input: {
+						title: form.data.title,
+						description: form.data.description
+					},
+					targetCollection: 'policies',
+					targetDocumentId: params.policyId,
+					targetSubCollection: '',
+					targetSubDocumentId: '',
+					userId: locals.user.userId
+				});
+			}
 
 			for (const c of form.data.cases) {
 				if (c.label !== originalCases.get(c.caseId)) {

@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { policyEditFormSchema } from '$lib/schema';
 
@@ -65,8 +65,22 @@ export const actions: Actions = {
 		}
 
 		// Check if anyone else edited the policy during this period
-		// const res = await event.fetch(`/api/policies/${event.params.policyId}`);
-		// const currentPolicy = await res.json();
+		const res = await event.fetch(`/api/policies/${event.params.policyId}`);
+		const uptodatePolicy = await res.json();
+
+		if (
+			uptodatePolicy.title !== formData.get('policyTitleBeforeEdit') ||
+			uptodatePolicy.description !== formData.get('policyDescriptionBeforeEdit')
+		) {
+			return message(
+				form,
+				{
+					uptodateTitle: uptodatePolicy.title,
+					uptodateDescription: uptodatePolicy.description
+				},
+				{ status: 400 }
+			);
+		}
 
 		await event.fetch(`/api/policies/${event.params.policyId}`, {
 			method: 'PATCH',
