@@ -40,6 +40,7 @@ export const relatedCaseCreateFormSchema = z.object({
 	userVote: z.enum(['allow', 'disallow', 'unsure'], {
 		required_error: 'You need to vote on the case.'
 	}),
+	reason: z.string(),
 	label: z.enum(['allow', 'disallow', 'unsure'], {
 		required_error: 'You need to label the case.'
 	})

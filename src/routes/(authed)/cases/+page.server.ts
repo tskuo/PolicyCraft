@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 
 	if (res.ok) {
 		for (const c of cases) {
-			let reasons = [];
+			const reasons = [];
 			for (const reasonId of c.reasons) {
 				const response = await fetch(`/api/reasons/${reasonId}`);
 				if (response.ok) {

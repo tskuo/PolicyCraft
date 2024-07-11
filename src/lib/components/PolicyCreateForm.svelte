@@ -30,7 +30,7 @@
 <form method="POST" use:enhance action="?/createPolicy">
 	<Form.Field {form} name="title">
 		<Form.Control let:attrs>
-			<Form.Label>Title</Form.Label>
+			<Form.Label>Policy title</Form.Label>
 			<Input {...attrs} bind:value={$formData.title} />
 		</Form.Control>
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
@@ -38,7 +38,7 @@
 	</Form.Field>
 	<Form.Field {form} name="description">
 		<Form.Control let:attrs>
-			<Form.Label>Description</Form.Label>
+			<Form.Label>Policy description</Form.Label>
 			<Textarea {...attrs} bind:value={$formData.description} />
 		</Form.Control>
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
@@ -48,6 +48,6 @@
 		{#if disalbeSubmitButton}
 			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
 		{/if}
-		Submit
+		Create
 	</Form.Button>
 </form>

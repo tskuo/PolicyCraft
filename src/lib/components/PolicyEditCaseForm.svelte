@@ -24,8 +24,9 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import SuperDebug from 'sveltekit-superforms';
 	import { browser } from '$app/environment';
-	import { X, Plus, Search, LoaderCircle, Ellipsis } from 'lucide-svelte';
+	import { Plus, Search, LoaderCircle, Ellipsis } from 'lucide-svelte';
 	import type { ActionData } from '../../routes/(authed)/policies/[policyId]/editcase/$types';
+	import { Description } from 'formsnap';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
 	export let allCases: any[];
@@ -34,6 +35,7 @@
 	export let userCounts: number;
 
 	let disalbeSubmitButton = false;
+	let disalbeSubmitButton2 = false;
 
 	const form = superForm(data, {
 		dataType: 'json',
@@ -56,6 +58,12 @@
 	const formNewCase = superForm(dataNewCase, {
 		validators: zodClient(relatedCaseCreateFormSchema),
 		invalidateAll: false,
+		onSubmit() {
+			disalbeSubmitButton2 = true;
+		},
+		onError() {
+			disalbeSubmitButton2 = false;
+		},
 		async onUpdate({ form, result }) {
 			const action = result.data as FormResult<ActionData>;
 			if (form.valid && action.caseId && action.label) {
@@ -63,6 +71,9 @@
 				$formData.cases = [...$formData.cases, { caseId: action.caseId, label: action.label }];
 				allCases = [...allCases, action.newCase];
 			}
+		},
+		onUpdated() {
+			disalbeSubmitButton2 = false;
 		}
 	});
 
@@ -92,6 +103,9 @@
 <form method="POST" use:enhance action="?/editRelatedCases">
 	<Form.Fieldset {form} name="cases">
 		<Form.Legend class="font-bold">Related cases</Form.Legend>
+		<Form.Description>
+			Related cases will not be edited until you click the submit button at the bottom.
+		</Form.Description>
 		{#if $formData.cases.length == 0}
 			<p class="text-sm">There are no related cases.</p>
 		{:else}
@@ -227,12 +241,15 @@
 					<Dialog.Content class="sm:max-w-lg max-h-screen">
 						<Dialog.Header>
 							<Dialog.Title>Create a new case</Dialog.Title>
-							<Dialog.Description>Case creation guidelines ...</Dialog.Description>
+							<Dialog.Description>
+								A new case will be created as soon as you click the create button. However, it will
+								not be added to the policy as a related case until you click the submit button.
+							</Dialog.Description>
 						</Dialog.Header>
 						<form method="POST" use:enhance2 action="?/createCase">
 							<Form.Field form={formNewCase} name="title">
 								<Form.Control let:attrs>
-									<Form.Label>Title</Form.Label>
+									<Form.Label>Case title</Form.Label>
 									<Input {...attrs} bind:value={$formNewCaseData.title} />
 								</Form.Control>
 								<!-- <Form.Description>This is your public display name.</Form.Description> -->
@@ -240,7 +257,7 @@
 							</Form.Field>
 							<Form.Field form={formNewCase} name="description">
 								<Form.Control let:attrs>
-									<Form.Label>Description</Form.Label>
+									<Form.Label>Case description</Form.Label>
 									<Textarea {...attrs} bind:value={$formNewCaseData.description} />
 								</Form.Control>
 								<!-- <Form.Description>This is your public display name.</Form.Description> -->
@@ -278,6 +295,15 @@
 								</RadioGroup.Root>
 								<Form.FieldErrors />
 							</Form.Fieldset>
+							{#if $formNewCaseData.userVote !== 'unsure'}
+								<Form.Field form={formNewCase} name="reason">
+									<Form.Control let:attrs>
+										<Form.Label>Reason for your vote</Form.Label>
+										<Textarea {...attrs} bind:value={$formNewCaseData.reason} />
+									</Form.Control>
+									<Form.FieldErrors />
+								</Form.Field>
+							{/if}
 							<Form.Fieldset form={formNewCase} name="label" class="space-y-5 mt-4">
 								<Form.Legend>Label the case based on this policy</Form.Legend>
 								<RadioGroup.Root
@@ -312,7 +338,12 @@
 								</RadioGroup.Root>
 								<Form.FieldErrors />
 							</Form.Fieldset>
-							<Form.Button class="mt-6">Submit</Form.Button>
+							<Form.Button class="mt-6" disabled={disalbeSubmitButton2}>
+								{#if disalbeSubmitButton2}
+									<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
+								{/if}
+								Create
+							</Form.Button>
 						</form>
 
 						<Dialog.Footer></Dialog.Footer>

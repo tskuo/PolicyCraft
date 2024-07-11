@@ -1,6 +1,6 @@
 import type { PageServerLoad, Actions } from './$types.js';
 import { fail, redirect } from '@sveltejs/kit';
-import { message, superValidate } from 'sveltekit-superforms';
+import { message, setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import {
 	policyCreateFormSchema,
@@ -58,9 +58,7 @@ export const actions: Actions = {
 
 		if (form.data.userVote == 'allow' || form.data.userVote == 'disallow') {
 			if (!form.data.reason) {
-				return message(form, 'Reason required when your vote is allow or disallow', {
-					status: 400
-				});
+				return setError(form, 'reason', 'Reason required when your vote is allow or disallow');
 			}
 			createReason = true;
 		}
@@ -75,7 +73,6 @@ export const actions: Actions = {
 		const data = await res.json();
 
 		if (createReason && res.ok) {
-			console.log('I am here');
 			const formReason = {
 				data: {
 					label: form.data.userVote,

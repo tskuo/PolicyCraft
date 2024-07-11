@@ -23,7 +23,7 @@
 		}
 	});
 
-	const { form: formData, enhance, message } = form;
+	const { form: formData, enhance } = form;
 
 	let disalbeSubmitButton = false;
 </script>
@@ -31,7 +31,7 @@
 <form method="POST" use:enhance action="?/createCase">
 	<Form.Field {form} name="title">
 		<Form.Control let:attrs>
-			<Form.Label>Title</Form.Label>
+			<Form.Label>Case title</Form.Label>
 			<Input {...attrs} bind:value={$formData.title} />
 		</Form.Control>
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
@@ -39,7 +39,7 @@
 	</Form.Field>
 	<Form.Field {form} name="description">
 		<Form.Control let:attrs>
-			<Form.Label>Description</Form.Label>
+			<Form.Label>Case description</Form.Label>
 			<Textarea {...attrs} bind:value={$formData.description} />
 		</Form.Control>
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
@@ -73,24 +73,17 @@
 	{#if $formData.userVote !== 'unsure'}
 		<Form.Field {form} name="reason">
 			<Form.Control let:attrs>
-				<Form.Label>
-					Reason for your vote
-					<span class="text-muted-foreground">(required when your vote is allow or disallow)</span>
-				</Form.Label>
+				<Form.Label>Reason for your vote</Form.Label>
 				<Textarea {...attrs} bind:value={$formData.reason} />
 			</Form.Control>
-			<!-- <Form.Description>Reason required when your vote is allow or disallow</Form.Description> -->
 			<Form.FieldErrors />
 		</Form.Field>
-	{/if}
-	{#if $message}
-		<div class="text-sm font-medium text-destructive">{$message}</div>
 	{/if}
 	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
 		{#if disalbeSubmitButton}
 			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
 		{/if}
-		Submit
+		Create
 	</Form.Button>
 </form>
 <!-- <SuperDebug data={$formData} /> -->
