@@ -63,10 +63,10 @@ export const actions: Actions = {
 		}
 		const res = await event.fetch(`/api/discussions/${form.data.id}`, {
 			method: 'PATCH',
-			body: JSON.stringify({ form })
-			// headers: {
-			// 	'Content-Type': 'appplication/json'
-			// }
+			body: JSON.stringify({ form }),
+			headers: {
+				'Content-Type': 'appplication/json'
+			}
 		});
 		const data = await res.json();
 
@@ -84,7 +84,10 @@ export const actions: Actions = {
 
 		const res = await event.fetch(`/api/discussions`, {
 			method: 'POST',
-			body: JSON.stringify({ form, entity: 'cases', entityId: event.params.caseId })
+			body: JSON.stringify({ form, entity: 'cases', entityId: event.params.caseId }),
+			headers: {
+				'Content-Type': 'appplication/json'
+			}
 		});
 
 		const data = await res.json();
@@ -103,7 +106,10 @@ export const actions: Actions = {
 
 		const res = await event.fetch(`/api/reasons`, {
 			method: 'POST',
-			body: JSON.stringify({ form, entity: 'cases', entityId: event.params.caseId })
+			body: JSON.stringify({ form, entity: 'cases', entityId: event.params.caseId }),
+			headers: {
+				'Content-Type': 'appplication/json'
+			}
 		});
 
 		return {

@@ -23,7 +23,7 @@
 		}
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, message } = form;
 
 	let disalbeSubmitButton = false;
 </script>
@@ -70,6 +70,22 @@
 		</RadioGroup.Root>
 		<Form.FieldErrors />
 	</Form.Fieldset>
+	{#if $formData.userVote !== 'unsure'}
+		<Form.Field {form} name="reason">
+			<Form.Control let:attrs>
+				<Form.Label>
+					Reason for your vote
+					<span class="text-muted-foreground">(required when your vote is allow or disallow)</span>
+				</Form.Label>
+				<Textarea {...attrs} bind:value={$formData.reason} />
+			</Form.Control>
+			<!-- <Form.Description>Reason required when your vote is allow or disallow</Form.Description> -->
+			<Form.FieldErrors />
+		</Form.Field>
+	{/if}
+	{#if $message}
+		<div class="text-sm font-medium text-destructive">{$message}</div>
+	{/if}
 	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
 		{#if disalbeSubmitButton}
 			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />

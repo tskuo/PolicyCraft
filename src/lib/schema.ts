@@ -26,15 +26,16 @@ export const policyEditCaseFormSchema = z.object({
 });
 
 export const caseCreateFormSchema = z.object({
-	title: z.string().min(1).max(80),
+	title: z.string().min(1).max(50),
 	description: z.string().min(1),
 	userVote: z.enum(['allow', 'disallow', 'unsure'], {
 		required_error: 'You need to vote on the case.'
-	})
+	}),
+	reason: z.string()
 });
 
 export const relatedCaseCreateFormSchema = z.object({
-	title: z.string().min(1).max(80),
+	title: z.string().min(1).max(50),
 	description: z.string().min(1),
 	userVote: z.enum(['allow', 'disallow', 'unsure'], {
 		required_error: 'You need to vote on the case.'
@@ -55,8 +56,8 @@ export const discussionCreateFormSchema = z.object({
 });
 
 export const reasonCreateFormSchema = z.object({
-	description: z.string().min(1),
-	label: z.string().min(1)
+	label: z.string().min(1),
+	description: z.string().min(1)
 });
 
 export const userLoginFormSchema = z.object({

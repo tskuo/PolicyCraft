@@ -1,8 +1,12 @@
 import type { PageServerLoad, Actions } from './$types.js';
 import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { policyCreateFormSchema, caseCreateFormSchema } from '$lib/schema.js';
+import {
+	policyCreateFormSchema,
+	caseCreateFormSchema,
+	reasonCreateFormSchema
+} from '$lib/schema.js';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.stage == 'vote') {
@@ -42,6 +46,7 @@ export const actions: Actions = {
 	},
 	createCase: async (event) => {
 		const form = await superValidate(event, zod(caseCreateFormSchema));
+		let createReason = false;
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -51,14 +56,41 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
+		if (form.data.userVote == 'allow' || form.data.userVote == 'disallow') {
+			if (!form.data.reason) {
+				return message(form, 'Reason required when your vote is allow or disallow', {
+					status: 400
+				});
+			}
+			createReason = true;
+		}
+
 		const res = await event.fetch('/api/cases', {
 			method: 'POST',
-			body: JSON.stringify({ form })
-			// headers: {
-			// 	'Content-Type': 'appplication/json'
-			// }
+			body: JSON.stringify({ form }),
+			headers: {
+				'Content-Type': 'appplication/json'
+			}
 		});
 		const data = await res.json();
+
+		if (createReason && res.ok) {
+			console.log('I am here');
+			const formReason = {
+				data: {
+					label: form.data.userVote,
+					description: form.data.reason
+				}
+			};
+			await event.fetch(`/api/reasons`, {
+				method: 'POST',
+				body: JSON.stringify({ form: formReason, entity: 'cases', entityId: data.id }),
+				headers: {
+					'Content-Type': 'appplication/json'
+				}
+			});
+		}
+
 		throw redirect(303, `/cases/${data.id}`);
 	}
 };
