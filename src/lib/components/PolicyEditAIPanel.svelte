@@ -148,7 +148,7 @@
 											message:
 												`Why should this case be ` +
 												selectedCaseLabel +
-												`ed? Please select a reason submitted by the community or enter a reason manually. Click on the related case on this page to check the details of each reason.`
+												`ed? Please select a reason submitted by the community or briefly explain the reason. Click on the related case on this page to check the details of each reason.`
 										}
 									];
 									showReasonSelector = true;
@@ -157,7 +157,10 @@
 										...messageHistory,
 										{
 											person: 'AI Assistant',
-											message: `Why should this case be ` + selectedCaseLabel + `ed? `
+											message:
+												`Why should this case be ` +
+												selectedCaseLabel +
+												`ed? Please briefly explain the reason.`
 										}
 									];
 									showReasonMunualInput = true;
@@ -167,7 +170,7 @@
 									...messageHistory,
 									{
 										person: 'AI Assistant',
-										message: `Why should this case be allowed? Please enter a reason manually.`
+										message: `Why should this case be allowed? Please briefly explain the reason.`
 									}
 								];
 								showReasonMunualInput = true;
@@ -231,7 +234,7 @@
 											message:
 												`Why should this case be ` +
 												selectedCaseLabel +
-												`ed? Please select a reason submitted by the community or enter a reason manually. Click on the related case on this page to check the details of each reason.`
+												`ed? Please select a reason submitted by the community or briefly explain the reason. Click on the related case on this page to check the details of each reason.`
 										}
 									];
 									showReasonSelector = true;
@@ -240,7 +243,10 @@
 										...messageHistory,
 										{
 											person: 'AI Assistant',
-											message: `Why should this case be ` + selectedCaseLabel + `ed? `
+											message:
+												`Why should this case be ` +
+												selectedCaseLabel +
+												`ed? Please briefly explain the reason.`
 										}
 									];
 									showReasonMunualInput = true;
@@ -250,7 +256,10 @@
 									...messageHistory,
 									{
 										person: 'AI Assistant',
-										message: `Why should this case be allowed? Please enter a reason manually.`
+										message:
+											`Why should this case be ` +
+											selectedCaseLabel +
+											`ed? Please briefly explain the reason.`
 									}
 								];
 								showReasonMunualInput = true;
@@ -332,6 +341,14 @@
 						if (e.key === 'Enter') {
 							showReasonMunualInput = false;
 							selectedCaseReason = manualInputValue;
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'You',
+									message: manualInputValue
+								}
+							];
+							manualInputValue = '';
 							generatePolicy();
 						}
 					}}
