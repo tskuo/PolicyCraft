@@ -196,7 +196,8 @@
 	{#if $formData.cases.length == 0 && showNextStep}
 		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels</h2>
 		<p class="text-sm mt-2">
-			This policy doesn't have any related cases. Please submit the policy directly.
+			This policy doesn't have any related cases yet. Please submit the policy and consider adding
+			related cases.
 		</p>
 	{/if}
 	{#if showNextStep}

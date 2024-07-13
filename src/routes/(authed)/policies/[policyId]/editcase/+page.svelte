@@ -30,6 +30,7 @@
 		<div class="mt-6">
 			<PolicyEditCaseForm
 				data={data.form}
+				policy={data.policy}
 				allCases={data.allCases}
 				dataNewCase={data.formNewCase}
 				userId={data.user?.userId}

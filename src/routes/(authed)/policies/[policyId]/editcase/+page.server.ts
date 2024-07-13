@@ -41,7 +41,8 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 
 export const actions: Actions = {
 	editRelatedCases: async (event) => {
-		const form = await superValidate(event, zod(policyEditCaseFormSchema));
+		const formData = await event.request.formData();
+		const form = await superValidate(formData, zod(policyEditCaseFormSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });
@@ -51,9 +52,19 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
+		const addedCaseId = JSON.parse(formData.get('addedCaseId'));
+		const editedCaseId = JSON.parse(formData.get('editedCaseId'));
+		const removedCaseId = JSON.parse(formData.get('removedCaseId'));
+
 		await event.fetch(`/api/policies/${event.params.policyId}`, {
 			method: 'PATCH',
-			body: JSON.stringify({ form, action: 'editRelatedCases' }),
+			body: JSON.stringify({
+				form,
+				action: 'editRelatedCases',
+				addedCaseId,
+				editedCaseId,
+				removedCaseId
+			}),
 			headers: {
 				'Content-Type': 'appplication/json'
 			}

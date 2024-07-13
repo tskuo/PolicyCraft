@@ -25,7 +25,8 @@ export const PATCH = async ({ request, params, locals }) => {
 		throw error(400, 'User authentication error.');
 	}
 	try {
-		const { pressed, form, action, vote } = await request.json();
+		const { pressed, form, action, vote, addedCaseId, editedCaseId, removedCaseId } =
+			await request.json();
 		if (action == 'updateWatchList') {
 			let actionName = '';
 			if (pressed) {
@@ -137,22 +138,49 @@ export const PATCH = async ({ request, params, locals }) => {
 					originalCases.set(c.caseId, c.label);
 				});
 			}
-			const editedCaseId = form.data.cases.map((c: { caseId: string; label: string }) => c.caseId);
-
-			await updateDoc(doc(db, 'policies', params.policyId), {
-				cases: form.data.cases
-			});
 
 			for (const c of form.data.cases) {
-				let actionName = '';
-				if (originalCases.get(c.caseId) == undefined) {
-					actionName = 'addRelatedCase';
-				} else if (originalCases.get(c.caseId) !== c.label) {
-					actionName = 'editRelatedCaseLabel';
-				}
-				if (actionName !== '') {
+				if (addedCaseId.includes(c.caseId) && !originalCases.has(c.caseId)) {
+					await updateDoc(doc(db, 'policies', params.policyId), {
+						cases: arrayUnion({
+							caseId: c.caseId,
+							label: c.label
+						})
+					});
 					await addDoc(collection(db, 'actionLogs'), {
-						action: actionName,
+						action: 'addRelatedCase',
+						createAt: serverTimestamp(),
+						input: {
+							title: c.caseId,
+							description: c.label
+						},
+						targetCollection: 'policies',
+						targetDocumentId: params.policyId,
+						targetSubCollection: '',
+						targetSubDocumentId: '',
+						userId: locals.user.userId
+					});
+				} else if (
+					editedCaseId.includes(c.caseId) &&
+					originalCases.has(c.caseId) &&
+					originalCases.get(c.caseId) !== c.label
+				) {
+					await updateDoc(doc(db, 'policies', params.policyId), {
+						cases: arrayRemove({
+							caseId: c.caseId,
+							label: originalCases.get(c.caseId)
+						})
+					});
+
+					await updateDoc(doc(db, 'policies', params.policyId), {
+						cases: arrayUnion({
+							caseId: c.caseId,
+							label: c.label
+						})
+					});
+
+					await addDoc(collection(db, 'actionLogs'), {
+						action: 'editRelatedCaseLabel',
 						createAt: serverTimestamp(),
 						input: {
 							title: c.caseId,
@@ -167,8 +195,14 @@ export const PATCH = async ({ request, params, locals }) => {
 				}
 			}
 
-			for (const caseId of originalCases.keys()) {
-				if (!editedCaseId.includes(caseId)) {
+			for (const caseId of removedCaseId) {
+				if (originalCases.has(caseId)) {
+					await updateDoc(doc(db, 'policies', params.policyId), {
+						cases: arrayRemove({
+							caseId: caseId,
+							label: originalCases.get(caseId)
+						})
+					});
 					await addDoc(collection(db, 'actionLogs'), {
 						action: 'removeRelatedCases',
 						createAt: serverTimestamp(),
@@ -184,6 +218,52 @@ export const PATCH = async ({ request, params, locals }) => {
 					});
 				}
 			}
+
+			// await updateDoc(doc(db, 'policies', params.policyId), {
+			// 	cases: form.data.cases
+			// });
+
+			// for (const c of form.data.cases) {
+			// 	let actionName = '';
+			// 	if (originalCases.get(c.caseId) == undefined) {
+			// 		actionName = 'addRelatedCase';
+			// 	} else if (originalCases.get(c.caseId) !== c.label) {
+			// 		actionName = 'editRelatedCaseLabel';
+			// 	}
+			// 	if (actionName !== '') {
+			// 		await addDoc(collection(db, 'actionLogs'), {
+			// 			action: actionName,
+			// 			createAt: serverTimestamp(),
+			// 			input: {
+			// 				title: c.caseId,
+			// 				description: c.label
+			// 			},
+			// 			targetCollection: 'policies',
+			// 			targetDocumentId: params.policyId,
+			// 			targetSubCollection: '',
+			// 			targetSubDocumentId: '',
+			// 			userId: locals.user.userId
+			// 		});
+			// 	}
+			// }
+
+			// for (const caseId of originalCases.keys()) {
+			// 	if (!editedCaseId.includes(caseId)) {
+			// 		await addDoc(collection(db, 'actionLogs'), {
+			// 			action: 'removeRelatedCases',
+			// 			createAt: serverTimestamp(),
+			// 			input: {
+			// 				title: caseId,
+			// 				description: ''
+			// 			},
+			// 			targetCollection: 'policies',
+			// 			targetDocumentId: params.policyId,
+			// 			targetSubCollection: '',
+			// 			targetSubDocumentId: '',
+			// 			userId: locals.user.userId
+			// 		});
+			// 	}
+			// }
 
 			return json({ status: 201 });
 		} else if (action == 'votePolicy') {

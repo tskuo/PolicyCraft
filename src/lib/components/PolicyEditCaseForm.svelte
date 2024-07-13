@@ -26,13 +26,18 @@
 	import { browser } from '$app/environment';
 	import { Plus, Search, LoaderCircle, Ellipsis } from 'lucide-svelte';
 	import type { ActionData } from '../../routes/(authed)/policies/[policyId]/editcase/$types';
-	import { Description } from 'formsnap';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
+	export let policy;
 	export let allCases: any[];
 	export let dataNewCase: SuperValidated<Infer<RelatedCaseCreateFormSchema>>;
 	export let userId;
 	export let userCounts: number;
+
+	const casesBeforeEdit = new Map();
+	policy.cases.forEach((c: { caseId: string; label: string }) => {
+		casesBeforeEdit.set(c.caseId, c.label);
+	});
 
 	let disalbeSubmitButton = false;
 	let disalbeSubmitButton2 = false;
@@ -40,8 +45,22 @@
 	const form = superForm(data, {
 		dataType: 'json',
 		validators: zodClient(policyEditCaseFormSchema),
-		onSubmit() {
+		onSubmit({ formData }) {
 			disalbeSubmitButton = true;
+			const casesAfterEdit = $formData.cases.map((c) => c.caseId);
+			const addedCaseId = casesAfterEdit.filter((c) => !casesBeforeEdit.has(c));
+			const editedCaseId = $formData.cases
+				.filter((c) => casesBeforeEdit.has(c.caseId) && casesBeforeEdit.get(c.caseId) !== c.label)
+				.map((c) => c.caseId);
+			const removedCaseId: string[] = [];
+			casesBeforeEdit.forEach((values, keys) => {
+				if (!casesAfterEdit.includes(keys)) {
+					removedCaseId.push(keys);
+				}
+			});
+			formData.set('addedCaseId', JSON.stringify(addedCaseId));
+			formData.set('editedCaseId', JSON.stringify(editedCaseId));
+			formData.set('removedCaseId', JSON.stringify(removedCaseId));
 		},
 		onError() {
 			disalbeSubmitButton = false;
@@ -450,7 +469,7 @@
 		Submit
 	</Form.Button>
 </form>
-<!-- 
+
 {#if browser}
 	<SuperDebug data={$formData} />
-{/if} -->
+{/if}

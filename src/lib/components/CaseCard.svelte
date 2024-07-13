@@ -80,12 +80,12 @@
 
 	let showAlert = false;
 	$: if (label !== '') {
-		if (label !== 'allow' && percentAllow > percentDisallow && percentAllow > percentUnsure) {
+		if (label !== 'allow' && percentAllow > percentDisallow && percentAllow >= percentUnsure) {
 			showAlert = true;
 		} else if (
 			label !== 'disallow' &&
 			percentDisallow > percentAllow &&
-			percentDisallow > percentUnsure
+			percentDisallow >= percentUnsure
 		) {
 			showAlert = true;
 		} else if (
