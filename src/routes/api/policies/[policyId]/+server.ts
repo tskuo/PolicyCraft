@@ -161,7 +161,7 @@ export const PATCH = async ({ request, params, locals }) => {
 						userId: locals.user.userId
 					});
 				} else if (
-					editedCaseId.includes(c.caseId) &&
+					(editedCaseId.includes(c.caseId) || addedCaseId.includes(c.caseId)) &&
 					originalCases.has(c.caseId) &&
 					originalCases.get(c.caseId) !== c.label
 				) {
