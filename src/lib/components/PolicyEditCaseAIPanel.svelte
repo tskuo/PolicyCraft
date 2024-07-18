@@ -8,7 +8,7 @@
 	let messageHistory: any[] = [
 		{
 			person: 'AI Assistant',
-			message: `Hi, I am an AI assistant who can help brainstorm cases that illustrate the application of the policy, or cases that reveal the potential flaw of the policy. Please click the buttons below to see some examples.
+			message: `I am an AI assistant who can help brainstorm cases that illustrate the application of the policy, or cases that reveal the potential flaw of the policy. Please click the buttons below to see some examples.
 `
 		}
 	];
@@ -60,7 +60,15 @@
 		if (res.ok) {
 			const data = await res.json();
 
-			messageHistory = [...messageHistory, { person: 'AI Assistant', message: label + data.text }];
+			messageHistory = [
+				...messageHistory,
+				{ person: 'AI Assistant', message: label },
+				{ person: 'AI Assistant', message: data.text },
+				{
+					person: 'AI Assistant',
+					message: `If this case looks good, consider creating a new case by clicking the "create new case" button.`
+				}
+			];
 			loading = false;
 		} else {
 			messageHistory = [

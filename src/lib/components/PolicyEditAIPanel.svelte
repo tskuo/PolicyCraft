@@ -55,7 +55,9 @@
 
 			messageHistory = [
 				...messageHistory,
-				{ person: 'AI Assistant', message: `Here is the suggested policy edit: ` + data.text }
+				{ person: 'AI Assistant', message: `Here is the suggested policy edit:` },
+				{ person: 'AI Assistant', message: data.text },
+				{ person: 'AI Assistant', message: `To restart, please select a related case below.` }
 			];
 			loading = false;
 			showCaseSelector = true;
@@ -270,6 +272,10 @@
 								{
 									person: 'AI Assistant',
 									message: `Please consider discussing the case more before editing the policy based on an unsure case.`
+								},
+								{
+									person: 'AI Assistant',
+									message: `To restart, please select a related case below.`
 								}
 							];
 							showCaseSelector = true;

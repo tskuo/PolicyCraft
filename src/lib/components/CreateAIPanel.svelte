@@ -55,7 +55,8 @@
 
 			messageHistory = [
 				...messageHistory,
-				{ person: 'AI Assistant', message: `Here is the suggested policy: ` + data.text }
+				{ person: 'AI Assistant', message: `Here is the suggested policy:` },
+				{ person: 'AI Assistant', message: data.text }
 			];
 		} else {
 			messageHistory = [
