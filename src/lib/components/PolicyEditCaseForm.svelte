@@ -470,6 +470,6 @@
 	</Form.Button>
 </form>
 
-{#if browser}
+<!-- {#if browser}
 	<SuperDebug data={$formData} />
-{/if}
+{/if} -->

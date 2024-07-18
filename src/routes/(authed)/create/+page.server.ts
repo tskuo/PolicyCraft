@@ -1,21 +1,25 @@
 import type { PageServerLoad, Actions } from './$types.js';
 import { fail, redirect } from '@sveltejs/kit';
-import { message, setError, superValidate } from 'sveltekit-superforms';
+import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import {
-	policyCreateFormSchema,
-	caseCreateFormSchema,
-	reasonCreateFormSchema
-} from '$lib/schema.js';
+import { policyCreateFormSchema, caseCreateFormSchema } from '$lib/schema.js';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ fetch, locals }) => {
 	if (locals.stage == 'vote') {
 		throw redirect(303, '/');
 	}
 
+	const resCases = await fetch('/api/cases');
+	const cases = await resCases.json();
+
+	const resPolicies = await fetch('/api/policies');
+	const policies = await resPolicies.json();
+
 	return {
 		form1: await superValidate(zod(policyCreateFormSchema)),
-		form2: await superValidate(zod(caseCreateFormSchema))
+		form2: await superValidate(zod(caseCreateFormSchema)),
+		cases,
+		policies
 	};
 };
 
@@ -33,16 +37,13 @@ export const actions: Actions = {
 
 		const res = await event.fetch('/api/policies', {
 			method: 'POST',
-			body: JSON.stringify({ form })
-			// headers: {
-			// 	'Content-Type': 'appplication/json'
-			// }
+			body: JSON.stringify({ form }),
+			headers: {
+				'Content-Type': 'appplication/json'
+			}
 		});
 		const data = await res.json();
 		throw redirect(303, `/policies/${data.id}`);
-		// return {
-		// 	form
-		// };
 	},
 	createCase: async (event) => {
 		const form = await superValidate(event, zod(caseCreateFormSchema));
@@ -87,7 +88,6 @@ export const actions: Actions = {
 				}
 			});
 		}
-
 		throw redirect(303, `/cases/${data.id}`);
 	}
 };

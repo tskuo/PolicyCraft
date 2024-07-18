@@ -4,6 +4,7 @@
 	import type { PageData } from './$types.js';
 	import PolicyCreateForm from '$lib/components/PolicyCreateForm.svelte';
 	import CaseCreateForm from '$lib/components/CaseCreateForm.svelte';
+	import CreateAIPanel from '$lib/components/CreateAIPanel.svelte';
 	export let data: PageData;
 </script>
 
@@ -39,5 +40,8 @@
 				</Card.Root>
 			</Tabs.Content>
 		</Tabs.Root>
+	</div>
+	<div class="md:col-span-1 p-2">
+		<CreateAIPanel cases={data.cases} policies={data.policies} />
 	</div>
 </div>
