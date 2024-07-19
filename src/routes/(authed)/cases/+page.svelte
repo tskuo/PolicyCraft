@@ -6,6 +6,26 @@
 
 	let displayCases = data.cases;
 
+	const filterCases = (filterBy: string) => {
+		if (filterBy == 'all') {
+			displayCases = data.cases;
+		} else if (filterBy == 'voted') {
+			displayCases = data.cases.filter(
+				(c) =>
+					c.votes.allow.includes(data.user?.userId) ||
+					c.votes.disallow.includes(data.user?.userId) ||
+					c.votes.unsure.includes(data.user?.userId)
+			);
+		} else if (filterBy == 'notvoted') {
+			displayCases = data.cases.filter(
+				(c) =>
+					!c.votes.allow.includes(data.user?.userId) &&
+					!c.votes.disallow.includes(data.user?.userId) &&
+					!c.votes.unsure.includes(data.user?.userId)
+			);
+		}
+	};
+
 	const sortCases = (sortBy: string) => {
 		if (sortBy == 'title') {
 			displayCases = displayCases.sort((caseA, caseB) => {
@@ -57,26 +77,6 @@
 				.reverse();
 		}
 	};
-
-	const filterCases = (filterBy: string) => {
-		if (filterBy == 'all') {
-			displayCases = data.cases;
-		} else if (filterBy == 'voted') {
-			displayCases = data.cases.filter(
-				(c) =>
-					c.votes.allow.includes(data.user?.userId) ||
-					c.votes.disallow.includes(data.user?.userId) ||
-					c.votes.unsure.includes(data.user?.userId)
-			);
-		} else if (filterBy == 'notvoted') {
-			displayCases = data.cases.filter(
-				(c) =>
-					!c.votes.allow.includes(data.user?.userId) &&
-					!c.votes.disallow.includes(data.user?.userId) &&
-					!c.votes.unsure.includes(data.user?.userId)
-			);
-		}
-	};
 </script>
 
 <div class="grid md:grid-cols-4">
@@ -120,20 +120,20 @@
 			</div>
 		</div>
 		<Separator class="my-4" />
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-1 auto-rows-fr">
-			{#if data.cases.length > 0}
-				{#key displayCases}
-					{#if displayCases.length > 0}
+		{#if data.cases.length > 0}
+			{#key displayCases}
+				{#if displayCases.length > 0}
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-1 auto-rows-fr">
 						{#each displayCases as c (c.id)}
 							<CaseCard {...c} userId={data.user?.userId} userCounts={data.userCounts} />
 						{/each}
-					{:else}
-						<p>There are no cases that meet the filtering criteria.</p>
-					{/if}
-				{/key}
-			{:else}
-				<p>The case repository is empty.</p>
-			{/if}
-		</div>
+					</div>
+				{:else}
+					<p>There are no cases that meet the filtering criteria.</p>
+				{/if}
+			{/key}
+		{:else}
+			<p>The case repository is empty.</p>
+		{/if}
 	</div>
 </div>
