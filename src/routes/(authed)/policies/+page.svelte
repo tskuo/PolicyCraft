@@ -9,6 +9,7 @@
 
 	let displayPolicies = data.policies;
 	let loading = false;
+	let filterValue = 'all';
 
 	const filterPolicies = async (filterBy: string) => {
 		await invalidateAll();
@@ -21,7 +22,7 @@
 		}
 	};
 	const sortPolicies = async (sortBy: string) => {
-		await filterPolicies('all');
+		await filterPolicies(filterValue);
 		if (sortBy == 'new') {
 			displayPolicies = displayPolicies
 				.sort((policyA, policyB) => {
@@ -80,7 +81,8 @@
 				<Select.Root
 					onSelectedChange={async (v) => {
 						loading = true;
-						await filterPolicies(v.value);
+						filterValue = v?.value;
+						await filterPolicies(filterValue);
 						loading = false;
 					}}
 				>

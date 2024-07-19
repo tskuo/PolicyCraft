@@ -2,11 +2,17 @@
 	import CaseCard from '$lib/components/CaseCard.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select';
+	import { invalidateAll } from '$app/navigation';
+	import { LoaderCircle } from 'lucide-svelte';
 	export let data;
 
 	let displayCases = data.cases;
+	let loading = false;
+	let filterValue = 'all';
+	$: console.log('filterValue: ', filterValue);
 
-	const filterCases = (filterBy: string) => {
+	const filterCases = async (filterBy: string) => {
+		await invalidateAll();
 		if (filterBy == 'all') {
 			displayCases = data.cases;
 		} else if (filterBy == 'voted') {
@@ -26,7 +32,8 @@
 		}
 	};
 
-	const sortCases = (sortBy: string) => {
+	const sortCases = async (sortBy: string) => {
+		await filterCases(filterValue);
 		if (sortBy == 'title') {
 			displayCases = displayCases.sort((caseA, caseB) => {
 				const a = caseA.title;
@@ -85,8 +92,11 @@
 			<p class="hidden md:inline mr-2">Filter by:</p>
 			<div class="mr-2">
 				<Select.Root
-					onSelectedChange={(v) => {
-						filterCases(v.value);
+					onSelectedChange={async (v) => {
+						loading = true;
+						filterValue = v?.value;
+						await filterCases(filterValue);
+						loading = false;
 					}}
 				>
 					<Select.Trigger class="w-[160px]">
@@ -102,8 +112,10 @@
 			<p class="hidden md:inline mx-2">Sort by:</p>
 			<div class="mr-2">
 				<Select.Root
-					onSelectedChange={(v) => {
-						sortCases(v.value);
+					onSelectedChange={async (v) => {
+						loading = true;
+						await sortCases(v.value);
+						loading = false;
 					}}
 				>
 					<Select.Trigger class="w-[160px]">
@@ -120,7 +132,14 @@
 			</div>
 		</div>
 		<Separator class="my-4" />
-		{#if data.cases.length > 0}
+		{#if loading}
+			<div
+				class="w-full h-full flex flex-col space-y-2 justify-center items-center text-muted-foreground"
+			>
+				<p>Loading ...</p>
+				<LoaderCircle class="w-1/5 h-1/5 animate-spin" />
+			</div>
+		{:else if data.cases.length > 0}
 			{#key displayCases}
 				{#if displayCases.length > 0}
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-1 auto-rows-fr">
