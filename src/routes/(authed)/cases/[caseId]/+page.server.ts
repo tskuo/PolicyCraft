@@ -13,6 +13,10 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 	const res = await fetch(`/api/cases/${params.caseId}`);
 	const c = await res.json();
 
+	const resPolicy = await fetch(`/api/policies`);
+	const policies = await resPolicy.json();
+	const relatedPolicies = policies.filter((p) => p.cases.some((e) => e.caseId == params.caseId));
+
 	if (res.ok) {
 		const discussions = [];
 		for (const discussionId of c.discussions) {
@@ -42,6 +46,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 
 		return {
 			c,
+			relatedPolicies,
 			discussions,
 			reasons,
 			formMessage: await superValidate(zod(messageCreateFormSchema)),

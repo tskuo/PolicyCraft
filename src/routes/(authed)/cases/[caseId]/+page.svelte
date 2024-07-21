@@ -1,11 +1,11 @@
 <script lang="ts">
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import PolicyCard from '$lib/components/PolicyCard.svelte';
 	import { Check, Ban, CircleHelp } from 'lucide-svelte/icons';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import * as Table from '$lib/components/ui/table';
 
 	export let data;
 
@@ -113,41 +113,69 @@
 				</ToggleGroup.Item>
 			</ToggleGroup.Root>
 
-			<h3 class="font-bold mt-6 text-lg">
-				Vote Distribution ({totalVotes}
-				{totalVotes > 1 ? 'votes' : 'vote'})
-			</h3>
-			<div class="flex w-full h-4 my-4 rounded border">
-				{#if userVote !== undefined}
-					{#if percentAllow != 0}
-						<div
-							class="bg-green-200 flex justify-center items-center text-sm"
-							style="width: {barAllow}%"
-						>
-							{percentAllow}%
+			<h3 class="font-bold mt-6 text-lg">Vote Distribution</h3>
+			<div class="mb-4">
+				<Tooltip.Root>
+					<Tooltip.Trigger class="w-full text-left">
+						<div class="flex w-full h-4 my-4 rounded border">
+							{#if userVote !== undefined}
+								{#if percentAllow != 0}
+									<div
+										class="bg-green-200 flex justify-center items-center text-sm"
+										style="width: {barAllow}%"
+									>
+										<!-- {percentAllow}% -->
+									</div>
+								{/if}
+								{#if percentDisallow != 0}
+									<div
+										class="bg-red-200 flex justify-center items-center text-sm"
+										style="width: {barDisallow}%"
+									>
+										<!-- {percentDisallow}% -->
+									</div>
+								{/if}
+								{#if percentUnsure != 0}
+									<div
+										class="bg-gray-200 flex justify-center items-center text-sm"
+										style="width: {barUnsure}%"
+									>
+										<!-- {percentUnsure}% -->
+									</div>
+								{/if}
+							{:else}
+								<div
+									class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500"
+								>
+									vote to see distribution
+								</div>
+							{/if}
 						</div>
-					{/if}
-					{#if percentDisallow != 0}
-						<div
-							class="bg-red-200 flex justify-center items-center text-sm"
-							style="width: {barDisallow}%"
-						>
-							{percentDisallow}%
+						<div>
+							{#if userVote !== undefined}
+								<p>
+									<span class="text-green-400">{percentAllow}%</span>
+									<span class="text-red-400">{percentDisallow}%</span>
+									<span class="text-gray-400">{percentUnsure}%</span>
+									<span class="text-gray-500">({totalVotes})</span>
+								</p>
+							{:else}{/if}
 						</div>
-					{/if}
-					{#if percentUnsure != 0}
-						<div
-							class="bg-gray-200 flex justify-center items-center text-sm"
-							style="width: {barUnsure}%"
-						>
-							{percentUnsure}%
-						</div>
-					{/if}
-				{:else}
-					<div class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500">
-						vote to see distribution
-					</div>
-				{/if}
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						{#if userVote !== undefined}
+							<p>allow: {data.c.votes.allow.length}</p>
+							<p>disallow: {data.c.votes.disallow.length}</p>
+							<p>unsure: {data.c.votes.unsure.length}</p>
+							<p>
+								total: {totalVotes} / {data.userCounts}
+								users
+							</p>
+						{:else}
+							<p>Vote to see distribution</p>
+						{/if}
+					</Tooltip.Content>
+				</Tooltip.Root>
 			</div>
 			<ReasonPanel
 				reasons={data.reasons}
@@ -158,8 +186,17 @@
 				userDisplayNames={data.userDisplayNames}
 			/>
 			<h3 class="font-bold mt-6 text-lg">Related Policies</h3>
-			<!-- <PolicyCard />
-			<PolicyCard /> -->
+			<Table.Root>
+				<Table.Body>
+					{#each data.relatedPolicies as policy}
+						<Table.Row>
+							<a href="/policies/{policy.id}" class="w-full">
+								<Table.Cell class="w-full">{policy.title}</Table.Cell>
+							</a>
+						</Table.Row>
+					{/each}
+				</Table.Body>
+			</Table.Root>
 		</div>
 		<div class="md:col-span-1 p-2">
 			<DiscussionPanel
