@@ -9,7 +9,6 @@
 	let displayCases = data.cases;
 	let loading = false;
 	let filterValue = 'all';
-	$: console.log('filterValue: ', filterValue);
 
 	const filterCases = async (filterBy: string) => {
 		await invalidateAll();
@@ -47,6 +46,18 @@
 				.sort((caseA, caseB) => {
 					const a = caseA.createAt;
 					const b = caseB.createAt;
+					if (a < b) return -1;
+					else if (a > b) return 1;
+					return 0;
+				})
+				.reverse();
+		} else if (sortBy == 'votes') {
+			displayCases = displayCases
+				.sort((caseA, caseB) => {
+					const a =
+						caseA.votes.allow.length + caseA.votes.disallow.length + caseA.votes.unsure.length;
+					const b =
+						caseB.votes.allow.length + caseB.votes.disallow.length + caseB.votes.unsure.length;
 					if (a < b) return -1;
 					else if (a > b) return 1;
 					return 0;
@@ -124,6 +135,7 @@
 					<Select.Content>
 						<Select.Item value="new">new</Select.Item>
 						<Select.Item value="title">title</Select.Item>
+						<Select.Item value="votes">total votes</Select.Item>
 						<Select.Item value="allow">allow votes</Select.Item>
 						<Select.Item value="disallow">disallow votes</Select.Item>
 						<Select.Item value="unsure">unsure votes</Select.Item>

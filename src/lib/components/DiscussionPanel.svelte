@@ -73,7 +73,7 @@
 			{#if openDiscussions.length > 0}
 				{#each openDiscussions as discussion}
 					<Accordion.Item value={discussion.id} class="text-sm">
-						<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
+						<Accordion.Trigger class="capitalize">{discussion.title}</Accordion.Trigger>
 						<Accordion.Content>
 							{#each discussion.comments as comment}
 								<p class="font-bold py-2">{userDisplayNames.get(comment.userId)}</p>
@@ -189,7 +189,7 @@
 			{#if closedDiscussion.length > 0}
 				{#each closedDiscussion as discussion}
 					<Accordion.Item value={discussion.id} class="text-sm">
-						<Accordion.Trigger>{discussion.title}</Accordion.Trigger>
+						<Accordion.Trigger class="capitalize">{discussion.title}</Accordion.Trigger>
 						<Accordion.Content>
 							{#each discussion.comments as comment}
 								<p class="font-bold py-2">{userDisplayNames.get(comment.userId)}</p>

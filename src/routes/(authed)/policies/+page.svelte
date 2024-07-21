@@ -113,7 +113,7 @@
 						<Select.Item value="title">title</Select.Item>
 						<Select.Item value="watch">most watching</Select.Item>
 						<Select.Item value="discuss">most discussion</Select.Item>
-						<Select.Item value="case">less cases</Select.Item>
+						<Select.Item value="case">least cases</Select.Item>
 					</Select.Content>
 				</Select.Root>
 			</div>

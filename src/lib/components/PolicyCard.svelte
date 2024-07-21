@@ -2,17 +2,19 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Toggle } from '$lib/components/ui/toggle';
 	import * as Table from '$lib/components/ui/table';
-	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import {
-		ChevronsUpDown,
 		Eye,
 		MessageSquare,
 		Folder,
-		ChevronsDownUp,
+		// ChevronsUpDown,
+		// ChevronsDownUp,
 		ArrowBigUp,
-		ArrowBigDown
+		ArrowBigDown,
+		Maximize2,
+		Minimize2
 	} from 'lucide-svelte/icons';
 	import CaseCard from './CaseCard.svelte';
 	import type { Timestamp } from 'firebase/firestore';
@@ -95,37 +97,44 @@
 									}}
 								>
 									{#if compactView === true}
-										<ChevronsUpDown class="h-4 w-4" />
+										<Maximize2 class="h-4 w-4" />
 									{:else}
-										<ChevronsDownUp class="h-4 w-4" />
+										<Minimize2 class="h-4 w-4" />
 									{/if}
 								</Toggle>
 							</button>
-							<button on:click|preventDefault>
-								<Toggle
-									aria-label="Toggle watch"
-									class="ml-1 data-[state=on]:bg-sky-100"
-									pressed={watchList.includes(userId)}
-									onPressedChange={async (pressed) => {
-										let newWatchList;
-										if (watchList.includes(userId)) {
-											newWatchList = watchList.filter((u) => u !== userId);
-										} else {
-											newWatchList = [...watchList, userId];
-										}
-										watchList = newWatchList;
-										await fetch(`/api/policies/${id}`, {
-											method: 'PATCH',
-											body: JSON.stringify({ pressed, action: 'updateWatchList' }),
-											headers: {
-												'Content-Type': 'application/json'
-											}
-										});
-									}}
-								>
-									<Eye class="h-4 w-4 mr-2" />{watchList.length}
-								</Toggle>
-							</button>
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<button on:click|preventDefault>
+										<Toggle
+											aria-label="Toggle watch"
+											class="ml-1 data-[state=on]:bg-sky-100"
+											pressed={watchList.includes(userId)}
+											onPressedChange={async (pressed) => {
+												let newWatchList;
+												if (watchList.includes(userId)) {
+													newWatchList = watchList.filter((u) => u !== userId);
+												} else {
+													newWatchList = [...watchList, userId];
+												}
+												watchList = newWatchList;
+												await fetch(`/api/policies/${id}`, {
+													method: 'PATCH',
+													body: JSON.stringify({ pressed, action: 'updateWatchList' }),
+													headers: {
+														'Content-Type': 'application/json'
+													}
+												});
+											}}
+										>
+											<Eye class="h-4 w-4 mr-2" />{watchList.length}
+										</Toggle>
+									</button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>Watch to get notifications for updates on this policy</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
 							{#if stage == 'vote'}
 								<button on:click|preventDefault>
 									<ToggleGroup.Root
@@ -210,7 +219,7 @@
 					{#if openDiscussions.length > 0}
 						{#each openDiscussions as discussion}
 							<Table.Row>
-								<Table.Cell class="font-medium">{discussion.title}</Table.Cell>
+								<Table.Cell class="font-medium capitalize">{discussion.title}</Table.Cell>
 								<!-- <Table.Cell class="text-right">{discussion.comments.length} comments</Table.Cell> -->
 							</Table.Row>
 						{/each}

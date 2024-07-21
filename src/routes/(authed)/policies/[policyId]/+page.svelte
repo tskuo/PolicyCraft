@@ -7,6 +7,7 @@
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { ArrowBigDown, ArrowBigUp, Eye, Pencil, TriangleAlert } from 'lucide-svelte/icons';
 
 	export let data;
@@ -70,29 +71,36 @@
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
 			<div>
-				<Toggle
-					aria-label="Toggle watch"
-					class="data-[state=on]:bg-sky-100"
-					pressed={data.policy.watchList.includes(userId)}
-					onPressedChange={async (pressed) => {
-						let newWatchList;
-						if (data.policy.watchList.includes(userId)) {
-							newWatchList = data.policy.watchList.filter((u) => u !== userId);
-						} else {
-							newWatchList = [...data.policy.watchList, userId];
-						}
-						data.policy.watchList = newWatchList;
-						await fetch(`/api/policies/${data.policy.id}`, {
-							method: 'PATCH',
-							body: JSON.stringify({ pressed, action: 'updateWatchList' }),
-							headers: {
-								'Content-Type': 'application/json'
-							}
-						});
-					}}
-				>
-					<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
-				</Toggle>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						<Toggle
+							aria-label="Toggle watch"
+							class="data-[state=on]:bg-sky-100"
+							pressed={data.policy.watchList.includes(userId)}
+							onPressedChange={async (pressed) => {
+								let newWatchList;
+								if (data.policy.watchList.includes(userId)) {
+									newWatchList = data.policy.watchList.filter((u) => u !== userId);
+								} else {
+									newWatchList = [...data.policy.watchList, userId];
+								}
+								data.policy.watchList = newWatchList;
+								await fetch(`/api/policies/${data.policy.id}`, {
+									method: 'PATCH',
+									body: JSON.stringify({ pressed, action: 'updateWatchList' }),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								});
+							}}
+						>
+							<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
+						</Toggle>
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						<p>Watch to get notifications for updates on this policy</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
 				{#if data.stage !== 'vote'}
 					<Button href="/policies/{data.policy.id}/editpolicy">
 						<Pencil class="h-4 w-4 mr-2" />Edit policy
