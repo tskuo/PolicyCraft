@@ -3,9 +3,11 @@
 	import * as Select from '$lib/components/ui/select';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import Button from './ui/button/button.svelte';
 
 	export let cases;
 	export let policyDescription;
+	export let policyId;
 
 	let messageHistory: any[] = [
 		{
@@ -21,10 +23,12 @@
 	let selectedCaseReason: string;
 	let showCaseSelector = true;
 	let showMisalignSelector = false;
+	let showLinktoEditCase = false;
 	let showUnsureSelector = false;
 	let showReasonSelector = false;
 	let showReasonMunualInput = false;
 	let manualInputValue = '';
+	let showRestartBtn = false;
 
 	const generatePolicy = async () => {
 		loading = true;
@@ -177,7 +181,7 @@
 								];
 								showReasonMunualInput = true;
 							}
-						} else {
+						} else if (v?.value == 'unsure') {
 							messageHistory = [
 								...messageHistory,
 								{
@@ -186,6 +190,17 @@
 								}
 							];
 							showUnsureSelector = true;
+						} else if (v?.value == 'unrelated') {
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'AI Assistant',
+									message:
+										'Please click the link below to visit the edit case page, where you may remove the case from the policy.'
+								}
+							];
+							showLinktoEditCase = true;
+							showRestartBtn = true;
 						}
 					}}
 				>
@@ -205,9 +220,15 @@
 							value="unsure"
 							label="It is unsure whether the case should be allowed or disallowed given the current policy"
 						/>
+						<Select.Item value="unrelated" label="The case is unrelated to the current policy" />
 					</Select.Content>
 				</Select.Root>
 			</div>
+		{/if}
+		{#if showLinktoEditCase}
+			<Button variant="secondary" class="mx-3" href="/policies/{policyId}/editcase">
+				Visit edit case page
+			</Button>
 		{/if}
 		{#if showUnsureSelector}
 			<div class="mx-3 mt-1">
@@ -360,6 +381,24 @@
 					}}
 				/>
 			</div>
+		{/if}
+		{#if showRestartBtn}
+			<Button
+				variant="secondary"
+				class="mx-3"
+				on:click={() => {
+					messageHistory = [
+						...messageHistory,
+						{
+							person: 'AI Assistant',
+							message: `To restart, please select a related case below.`
+						}
+					];
+					showRestartBtn = false;
+					showLinktoEditCase = false;
+					showCaseSelector = true;
+				}}>Restart</Button
+			>
 		{/if}
 	</div>
 </ScrollArea>
