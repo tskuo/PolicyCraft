@@ -95,7 +95,7 @@
 	<Form.Field {form} name="description">
 		<Form.Control let:attrs>
 			<Form.Label>Description</Form.Label>
-			<Textarea {...attrs} bind:value={$formData.description} />
+			<Textarea {...attrs} bind:value={$formData.description} class="h-[15vh]" />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>

@@ -99,6 +99,7 @@
 				prompt: prompt
 			})
 		});
+		console.log('prompt: ', prompt);
 		if (res.ok) {
 			const data = await res.json();
 			suggestedPolicy = data.text;
