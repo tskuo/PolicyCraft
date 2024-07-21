@@ -99,9 +99,9 @@
 	const { form: formNewCaseData, enhance: enhance2 } = formNewCase;
 
 	let searchText = '';
-	let searchCases: any[] = [];
 	let searchResultText = 'Search results will appear here.';
 	$: formDataCaseId = $formData.cases.map((c) => c.caseId);
+	let searchCases = allCases;
 
 	const handleCase = async (caseId: string, label: 'allow' | 'disallow' | 'unsure' | 'remove') => {
 		if (label == 'remove') {
@@ -123,7 +123,8 @@
 	<Form.Fieldset {form} name="cases">
 		<Form.Legend class="font-bold">Related cases</Form.Legend>
 		<Form.Description>
-			Related cases will not be edited until you click the submit button at the bottom.
+			To edit the label of a related case or remove it from the policy, click on the ellipsis icon.
+			Your changes will only be saved once you click the submit button at the bottom of the page.
 		</Form.Description>
 		{#if $formData.cases.length == 0}
 			<p class="text-sm">There are no related cases.</p>
@@ -217,6 +218,12 @@
 		</div> -->
 		<div>
 			<h3 class="text-sm font-bold mt-4 mb-2">Add more cases</h3>
+			<p class="text-sm text-muted-foreground mb-2">
+				To add an existing case from the case repository as a related case, click the plus icon. To
+				create and add a new case that is not in the case repository, click the "create new case"
+				button. Your changes will only be saved once you click the submit button at the bottom of
+				the page.
+			</p>
 			<div class="flex items-center space-x-2">
 				<form
 					class="grow"
@@ -231,6 +238,8 @@
 									!formDataCaseId.includes(c.id)
 								);
 							});
+						} else {
+							searchCases = allCases;
 						}
 						if (searchCases.length == 0) {
 							if (searchText) {
