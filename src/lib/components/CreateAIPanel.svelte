@@ -19,11 +19,15 @@
 	let showPolicyOrCaseBtn = true;
 	let showPolicySelector = false;
 	let selectedPolicyId = '';
-	let showLinkAndRestartBtn = false;
+	let showPolicyEditLink = false;
 	let showCaseSelector = false;
 	let selectedCases: string[] = [];
 	let selectedCaseLabels: string[] = [];
 	let showLabelBtn = false;
+	let showInstructionInput = false;
+	let iterateInstruction = '';
+	let suggestedPolicy = '';
+	let showRestartBtn = false;
 
 	const generatePolicy = async () => {
 		messageHistory = [
@@ -52,30 +56,75 @@
 		});
 		if (res.ok) {
 			const data = await res.json();
+			suggestedPolicy = data.text;
 
 			messageHistory = [
 				...messageHistory,
 				{ person: 'AI Assistant', message: `Here is the suggested policy:` },
-				{ person: 'AI Assistant', message: data.text }
+				{ person: 'AI Assistant', message: data.text },
+				{
+					person: 'AI Assistant',
+					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+				}
 			];
+			showInstructionInput = true;
+			showRestartBtn = true;
 		} else {
 			messageHistory = [
 				...messageHistory,
 				{
 					person: 'AI Assistant',
-					message: 'Sorry, something went wrong. Please try again.'
+					message:
+						'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
 				}
 			];
+			showPolicyOrCaseBtn = true;
 		}
-		messageHistory = [
-			...messageHistory,
-			{
-				person: 'AI Assistant',
-				message: `To restart, please choose whether you would like to create a policy or a case.`
-			}
-		];
 		loading = false;
-		showPolicyOrCaseBtn = true;
+	};
+
+	const iteratePolicy = async () => {
+		loading = true;
+		showRestartBtn = false;
+		let prompt =
+			`You are a helpful assistant focusing on supporting users in editing the following course policy: ` +
+			suggestedPolicy +
+			` In a few sentences, slightly revise the policy without significant changes based on the following instructions: ` +
+			iterateInstruction;
+		const res = await fetch('/api/assistant/policy', {
+			method: 'POST',
+			body: JSON.stringify({
+				prompt: prompt
+			})
+		});
+		if (res.ok) {
+			const data = await res.json();
+			suggestedPolicy = data.text;
+			messageHistory = [
+				...messageHistory,
+				{ person: 'AI Assistant', message: `Here is the suggested policy:` },
+				{ person: 'AI Assistant', message: data.text },
+				{
+					person: 'AI Assistant',
+					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+				}
+			];
+			showInstructionInput = true;
+			showRestartBtn = true;
+		} else {
+			messageHistory = [
+				...messageHistory,
+				{
+					person: 'AI Assistant',
+					message:
+						'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
+				}
+			];
+			showPolicyOrCaseBtn = true;
+		}
+		iterateInstruction = '';
+		loading = false;
+		showRestartBtn = true;
 	};
 </script>
 
@@ -154,7 +203,8 @@
 						];
 						selectedPolicyId = v?.value;
 						showPolicySelector = false;
-						showLinkAndRestartBtn = true;
+						showPolicyEditLink = true;
+						showRestartBtn = true;
 					}}
 				>
 					<Select.Trigger>
@@ -168,25 +218,10 @@
 				</Select.Root>
 			</div>
 		{/if}
-		{#if showLinkAndRestartBtn}
-			<Button variant="secondary" class="mx-3" href="/policies/{selectedPolicyId}/editcase"
-				>Visit policy edit page</Button
-			>
-			<Button
-				variant="secondary"
-				class="mx-3"
-				on:click={() => {
-					messageHistory = [
-						...messageHistory,
-						{
-							person: 'AI Assistant',
-							message: `To restart, please choose whether you would like to create a policy or a case.`
-						}
-					];
-					showLinkAndRestartBtn = false;
-					showPolicyOrCaseBtn = true;
-				}}>Restart</Button
-			>
+		{#if showPolicyEditLink}
+			<Button variant="secondary" class="mx-3" href="/policies/{selectedPolicyId}/editcase">
+				Visit policy edit page
+			</Button>
 		{/if}
 		{#if showCaseSelector}
 			<div class="mx-3 mt-1">
@@ -264,6 +299,56 @@
 					showLabelBtn = false;
 					showCaseSelector = true;
 				}}>Disallow</Button
+			>
+		{/if}
+		{#if showInstructionInput}
+			<div class="mx-3 mt-1">
+				<Input
+					placeholder={'Please edit the policy so that ...'}
+					bind:value={iterateInstruction}
+					on:keypress={(e) => {
+						if (e.key === 'Enter') {
+							showInstructionInput = false;
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'You',
+									message: iterateInstruction
+								}
+							];
+							iteratePolicy();
+						}
+					}}
+				/>
+			</div>
+		{/if}
+		{#if showRestartBtn}
+			<Button
+				variant="secondary"
+				class="mx-3"
+				on:click={() => {
+					messageHistory = [
+						...messageHistory,
+						{
+							person: 'AI Assistant',
+							message: `To restart, please choose whether you would like to create a policy or a case.`
+						}
+					];
+
+					showPolicyEditLink = false;
+					showPolicyOrCaseBtn = true;
+					showInstructionInput = false;
+					showRestartBtn = false;
+
+					showPolicySelector = false;
+					selectedPolicyId = '';
+					showCaseSelector = false;
+					selectedCases = [];
+					selectedCaseLabels = [];
+					showLabelBtn = false;
+					iterateInstruction = '';
+					suggestedPolicy = '';
+				}}>Restart</Button
 			>
 		{/if}
 	</div>
