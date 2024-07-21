@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Input } from '$lib/components/ui/input/index.js';
 	import Button from './ui/button/button.svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton';
@@ -13,6 +14,11 @@
 		}
 	];
 	let loading = false;
+	let showGenerateCaseBtn = true;
+	let showInstructionInput = false;
+	let iterateInstruction = '';
+	let suggestedCase = '';
+	let showRestartBtn = false;
 
 	const messageExample = `Cases illustrate the policy`;
 	const messageCounterExample = 'Cases reveal the policy flaws';
@@ -25,6 +31,7 @@
 	const generateCase = async (message: string, category: string) => {
 		messageHistory = [...messageHistory, { person: 'You', message: message }];
 		loading = true;
+		showGenerateCaseBtn = false;
 
 		let prompt: string = '';
 		let label: string = '';
@@ -59,6 +66,7 @@
 		});
 		if (res.ok) {
 			const data = await res.json();
+			suggestedCase = data.text;
 
 			messageHistory = [
 				...messageHistory,
@@ -66,10 +74,13 @@
 				{ person: 'AI Assistant', message: data.text },
 				{
 					person: 'AI Assistant',
-					message: `If this case looks good, consider creating a new case by clicking the "create new case" button.`
+					message: `Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
 				}
 			];
-			loading = false;
+
+			showInstructionInput = true;
+			iterateInstruction = '';
+			showRestartBtn = true;
 		} else {
 			messageHistory = [
 				...messageHistory,
@@ -78,8 +89,53 @@
 					message: 'Sorry, something went wrong. Please try again.'
 				}
 			];
-			loading = false;
+			showGenerateCaseBtn = true;
 		}
+		loading = false;
+	};
+
+	const iterateCase = async () => {
+		loading = true;
+		showRestartBtn = false;
+		let prompt =
+			`You are a helpful assistant focusing on supporting users in editing the following case: ` +
+			suggestedCase +
+			` In a few sentences, slightly revise the case without significant changes based on the following instructions: ` +
+			iterateInstruction;
+		const res = await fetch('/api/assistant/case', {
+			method: 'POST',
+			body: JSON.stringify({
+				prompt: prompt
+			})
+		});
+		if (res.ok) {
+			const data = await res.json();
+			suggestedCase = data.text;
+			messageHistory = [
+				...messageHistory,
+				{ person: 'AI Assistant', message: `Here is the revised case:` },
+				{ person: 'AI Assistant', message: data.text },
+				{
+					person: 'AI Assistant',
+					message: `Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
+				}
+			];
+			showInstructionInput = true;
+			iterateInstruction = '';
+			showRestartBtn = true;
+		} else {
+			messageHistory = [
+				...messageHistory,
+				{
+					person: 'AI Assistant',
+					message:
+						'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
+				}
+			];
+			showGenerateCaseBtn = true;
+		}
+
+		loading = false;
 	};
 </script>
 
@@ -98,21 +154,63 @@
 		</div>
 	</div>
 	<div class="flex flex-col space-y-2 my-2">
-		<Button
-			variant="secondary"
-			class="mx-3"
-			disabled={loading}
-			on:click={() => generateCase(messageExample, 'illustrative')}
-		>
-			{messageExample}
-		</Button>
-		<Button
-			variant="secondary"
-			class="mx-3"
-			disabled={loading}
-			on:click={() => generateCase(messageCounterExample, 'flaw')}
-		>
-			{messageCounterExample}
-		</Button>
+		{#if showGenerateCaseBtn}
+			<Button
+				variant="secondary"
+				class="mx-3"
+				on:click={() => generateCase(messageExample, 'illustrative')}
+			>
+				{messageExample}
+			</Button>
+			<Button
+				variant="secondary"
+				class="mx-3"
+				on:click={() => generateCase(messageCounterExample, 'flaw')}
+			>
+				{messageCounterExample}
+			</Button>
+		{/if}
+		{#if showInstructionInput}
+			<div class="mx-3 mt-1">
+				<Input
+					placeholder={'Please edit the case so that ...'}
+					bind:value={iterateInstruction}
+					on:keypress={(e) => {
+						if (e.key === 'Enter') {
+							showInstructionInput = false;
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'You',
+									message: iterateInstruction
+								}
+							];
+							iterateCase();
+						}
+					}}
+				/>
+			</div>
+		{/if}
+		{#if showRestartBtn}
+			<Button
+				variant="secondary"
+				class="mx-3"
+				on:click={() => {
+					messageHistory = [
+						...messageHistory,
+						{
+							person: 'AI Assistant',
+							message: `To restart, please click the buttons below to see some examples.`
+						}
+					];
+					showGenerateCaseBtn = true;
+					showInstructionInput = false;
+					showRestartBtn = false;
+
+					iterateInstruction = '';
+					suggestedCase = '';
+				}}>Restart</Button
+			>
+		{/if}
 	</div>
 </ScrollArea>
