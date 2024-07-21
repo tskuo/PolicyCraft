@@ -28,6 +28,9 @@
 	let showReasonSelector = false;
 	let showReasonMunualInput = false;
 	let manualInputValue = '';
+	let showInstructionInput = false;
+	let iterateInstruction = '';
+	let suggestedPolicy = '';
 	let showRestartBtn = false;
 
 	const generatePolicy = async () => {
@@ -56,15 +59,19 @@
 
 		if (res.ok) {
 			const data = await res.json();
+			suggestedPolicy = data.text;
 
 			messageHistory = [
 				...messageHistory,
 				{ person: 'AI Assistant', message: `Here is the suggested policy edit:` },
 				{ person: 'AI Assistant', message: data.text },
-				{ person: 'AI Assistant', message: `To restart, please select a related case below.` }
+				{
+					person: 'AI Assistant',
+					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+				}
 			];
-			loading = false;
-			showCaseSelector = true;
+			showInstructionInput = true;
+			showRestartBtn = true;
 		} else {
 			messageHistory = [
 				...messageHistory,
@@ -73,9 +80,53 @@
 					message: 'Sorry, something went wrong. Please try again.'
 				}
 			];
-			loading = false;
 			showCaseSelector = true;
 		}
+		loading = false;
+	};
+
+	const iteratePolicy = async () => {
+		loading = true;
+		showRestartBtn = false;
+		let prompt =
+			`You are a helpful assistant focusing on supporting users in editing the following course policy: ` +
+			suggestedPolicy +
+			` In a few sentences, slightly revise the policy without significant changes based on the following instructions: ` +
+			iterateInstruction;
+		const res = await fetch('/api/assistant/policy', {
+			method: 'POST',
+			body: JSON.stringify({
+				prompt: prompt
+			})
+		});
+		if (res.ok) {
+			const data = await res.json();
+			suggestedPolicy = data.text;
+			messageHistory = [
+				...messageHistory,
+				{ person: 'AI Assistant', message: `Here is the suggested policy edit:` },
+				{ person: 'AI Assistant', message: data.text },
+				{
+					person: 'AI Assistant',
+					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+				}
+			];
+			showInstructionInput = true;
+			showRestartBtn = true;
+		} else {
+			messageHistory = [
+				...messageHistory,
+				{
+					person: 'AI Assistant',
+					message:
+						'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
+				}
+			];
+			showCaseSelector = true;
+		}
+		iterateInstruction = '';
+		loading = false;
+		showRestartBtn = true;
 	};
 </script>
 
@@ -382,6 +433,27 @@
 				/>
 			</div>
 		{/if}
+		{#if showInstructionInput}
+			<div class="mx-3 mt-1">
+				<Input
+					placeholder={'Please edit the policy so that ...'}
+					bind:value={iterateInstruction}
+					on:keypress={(e) => {
+						if (e.key === 'Enter') {
+							showInstructionInput = false;
+							messageHistory = [
+								...messageHistory,
+								{
+									person: 'You',
+									message: iterateInstruction
+								}
+							];
+							iteratePolicy();
+						}
+					}}
+				/>
+			</div>
+		{/if}
 		{#if showRestartBtn}
 			<Button
 				variant="secondary"
@@ -395,6 +467,7 @@
 						}
 					];
 					showRestartBtn = false;
+					showInstructionInput = false;
 					showLinktoEditCase = false;
 					showCaseSelector = true;
 				}}>Restart</Button
