@@ -132,7 +132,7 @@
 		</Button>
 	{/if}
 	{#if $formData.cases.length !== 0 && showNextStep}
-		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels</h2>
+		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels before submission</h2>
 		<Form.Fieldset {form} name="cases" class="mt-4">
 			<!-- <Form.Legend>Step 2 of 2: Review related case labels</Form.Legend> -->
 			<Form.Description class="mb-4">
@@ -194,10 +194,10 @@
 		</Form.Fieldset>
 	{/if}
 	{#if $formData.cases.length == 0 && showNextStep}
-		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels</h2>
+		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels before submission</h2>
 		<p class="text-sm mt-2">
-			This policy doesn't have any related cases yet. Please submit the policy and consider adding
-			related cases.
+			This policy doesn't have any related cases yet. Please directly submit the edit and consider
+			adding related cases.
 		</p>
 	{/if}
 	{#if showNextStep}
