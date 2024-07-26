@@ -9,8 +9,6 @@
 		Eye,
 		MessageSquare,
 		Folder,
-		// ChevronsUpDown,
-		// ChevronsDownUp,
 		ArrowBigUp,
 		ArrowBigDown,
 		Maximize2,
@@ -75,115 +73,102 @@
 	}
 </script>
 
-<!-- <a href="/policy/1"> -->
 <Card.Root class="my-2">
-	<a href="/policies/{id} ">
-		<div class=" hover:bg-gray-50 rounded-lg">
-			<Card.Header>
-				<!-- <Card.Description>#{id}</Card.Description> -->
-				<Card.Title class="capitalize">{title}</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<p>{description}</p>
-			</Card.Content>
-			<Card.Footer>
-				<div class="flex items-center justify-between w-full">
-					<div>
-						<div class="flex items-center">
-							<button on:click|preventDefault>
-								<Toggle
-									on:click={() => {
-										compactView = !compactView;
-									}}
-								>
-									{#if compactView === true}
-										<Maximize2 class="h-4 w-4" />
-									{:else}
-										<Minimize2 class="h-4 w-4" />
-									{/if}
-								</Toggle>
-							</button>
-							<Tooltip.Root>
-								<Tooltip.Trigger>
-									<button on:click|preventDefault>
-										<Toggle
-											aria-label="Toggle watch"
-											class="ml-1 data-[state=on]:bg-sky-100"
-											pressed={watchList.includes(userId)}
-											onPressedChange={async (pressed) => {
-												let newWatchList;
-												if (watchList.includes(userId)) {
-													newWatchList = watchList.filter((u) => u !== userId);
-												} else {
-													newWatchList = [...watchList, userId];
-												}
-												watchList = newWatchList;
-												await fetch(`/api/policies/${id}`, {
-													method: 'PATCH',
-													body: JSON.stringify({ pressed, action: 'updateWatchList' }),
-													headers: {
-														'Content-Type': 'application/json'
-													}
-												});
-											}}
-										>
-											<Eye class="h-4 w-4 mr-2" />{watchList.length}
-										</Toggle>
-									</button>
-								</Tooltip.Trigger>
-								<Tooltip.Content>
-									<p>Watch to get notifications for updates on this policy</p>
-								</Tooltip.Content>
-							</Tooltip.Root>
-							{#if stage == 'vote'}
-								<button on:click|preventDefault>
-									<ToggleGroup.Root
-										type="single"
-										class="ml-1"
-										value={userVote}
-										onValueChange={(value) => handleVote(value)}
-									>
-										<ToggleGroup.Item
-											value="upvote"
-											aria-label="Toggle upvote"
-											class="data-[state=on]:bg-green-200"
-										>
-											<ArrowBigUp class="h-4 w-4" />
-											{#if userVote !== undefined}
-												<div class="ml-2">{votes.upvote.length}</div>
-											{/if}
-										</ToggleGroup.Item>
-										<ToggleGroup.Item
-											value="downvote"
-											aria-label="Toggle downvote"
-											class="data-[state=on]:bg-red-200 "
-										>
-											<ArrowBigDown class="h-4 w-4" />
-											{#if userVote !== undefined}
-												<div class="ml-2">{votes.downvote.length}</div>
-											{/if}
-										</ToggleGroup.Item>
-									</ToggleGroup.Root>
-								</button>
+	<div class="relative h-full w-full">
+		<a href="/policies/{id} ">
+			<div class="hover:bg-gray-50 rounded-lg">
+				<Card.Header>
+					<Card.Title class="capitalize">{title}</Card.Title>
+				</Card.Header>
+				<Card.Content>
+					<p>{description}</p>
+				</Card.Content>
+				<Card.Footer class="pb-12"></Card.Footer>
+			</div>
+		</a>
+		<div class="absolute flex items-center justify-between w-full bottom-4 px-6">
+			<div class="flex items-center">
+				<Toggle
+					on:click={() => {
+						compactView = !compactView;
+					}}
+				>
+					{#if compactView === true}
+						<Maximize2 class="h-4 w-4" />
+					{:else}
+						<Minimize2 class="h-4 w-4" />
+					{/if}
+				</Toggle>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						<Toggle
+							aria-label="Toggle watch"
+							class="ml-1 data-[state=on]:bg-sky-100"
+							pressed={watchList.includes(userId)}
+							onPressedChange={async (pressed) => {
+								let newWatchList;
+								if (watchList.includes(userId)) {
+									newWatchList = watchList.filter((u) => u !== userId);
+								} else {
+									newWatchList = [...watchList, userId];
+								}
+								watchList = newWatchList;
+								await fetch(`/api/policies/${id}`, {
+									method: 'PATCH',
+									body: JSON.stringify({ pressed, action: 'updateWatchList' }),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								});
+							}}
+						>
+							<Eye class="h-4 w-4 mr-2" />{watchList.length}
+						</Toggle>
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						<p>Watch to get notifications for updates on this policy</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
+				{#if stage == 'vote'}
+					<ToggleGroup.Root
+						type="single"
+						class="ml-1"
+						value={userVote}
+						onValueChange={(value) => handleVote(value)}
+					>
+						<ToggleGroup.Item
+							value="upvote"
+							aria-label="Toggle upvote"
+							class="data-[state=on]:bg-green-200"
+						>
+							<ArrowBigUp class="h-4 w-4" />
+							{#if userVote !== undefined}
+								<div class="ml-2">{votes.upvote.length}</div>
 							{/if}
-						</div>
-					</div>
-
-					<div class="flex text-gray-400">
-						<!-- <div class="flex mx-2 items-center">
-							<TriangleAlert class="w-4 h-4 mr-2" />3
-						</div> -->
-						<div class="flex mx-2 items-center">
-							<Folder class="w-4 h-4 mr-2" />{cases.length}
-						</div>
-						<div class="flex mx-2 items-center">
-							<MessageSquare class="w-4 h-4 mr-2" />{openDiscussions.length}
-						</div>
-					</div>
+						</ToggleGroup.Item>
+						<ToggleGroup.Item
+							value="downvote"
+							aria-label="Toggle downvote"
+							class="data-[state=on]:bg-red-200 "
+						>
+							<ArrowBigDown class="h-4 w-4" />
+							{#if userVote !== undefined}
+								<div class="ml-2">{votes.downvote.length}</div>
+							{/if}
+						</ToggleGroup.Item>
+					</ToggleGroup.Root>
+				{/if}
+			</div>
+			<div class="flex text-gray-400">
+				<div class="flex mx-2 items-center">
+					<Folder class="w-4 h-4 mr-2" />{cases.length}
 				</div>
-			</Card.Footer>
+				<div class="flex mx-2 items-center">
+					<MessageSquare class="w-4 h-4 mr-2" />{openDiscussions.length}
+				</div>
+			</div>
 		</div>
-	</a>
+	</div>
 	{#if compactView === false}
 		<Card.Content>
 			<h3 class="font-bold mb-2">Related Cases</h3>
