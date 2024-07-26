@@ -64,7 +64,7 @@
 				{ person: 'AI Assistant', message: data.text },
 				{
 					person: 'AI Assistant',
-					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also create a policy based on the suggested content or restart the conversation.`
 				}
 			];
 			showInstructionInput = true;
@@ -158,7 +158,7 @@
 						},
 						{
 							person: 'AI Assistant',
-							message: `Select a case you'd like to build upon for creating the policy. You can select additional cases later if needed.`
+							message: `Select a case you'd like to build upon for creating the policy. You may view the details of individual cases in the case repository. You may select additional cases later if needed.`
 						}
 					];
 					showCaseSelector = true;

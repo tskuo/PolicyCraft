@@ -7,6 +7,7 @@
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { navigating } from '$app/stores';
 	import logo from '$lib/img/logo.webp';
+	import { goto } from '$app/navigation';
 
 	export let user;
 	export let stage;
@@ -80,12 +81,17 @@
 					<DropdownMenu.Group>
 						<DropdownMenu.Label>{user.displayName}</DropdownMenu.Label>
 						<DropdownMenu.Separator />
+						<DropdownMenu.Item
+							class="hover:cursor-pointer"
+							on:click={() => {
+								goto('/discussions');
+							}}>My Discussions</DropdownMenu.Item
+						>
 						<DropdownMenu.Item class="w-full">
 							<form action="/logout" method="POST" class="w-full">
 								<button class="w-full flex justify-start">Logout</button>
 							</form>
 						</DropdownMenu.Item>
-						<!-- <DropdownMenu.Item>Text</DropdownMenu.Item> -->
 					</DropdownMenu.Group>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
