@@ -1,5 +1,5 @@
 import { authenticateUser } from '$lib/auth';
-import { db } from '$lib/firebase';
+import { db, auth } from '$lib/firebase';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -10,6 +10,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (event.route.id?.includes('(authed)')) {
 		if (!event.locals.user) {
 			throw redirect(303, '/login');
+		}
+		if (auth.currentUser?.emailVerified !== true) {
+			throw redirect(303, '/verify');
 		}
 	}
 

@@ -5,7 +5,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { userSignUpFormSchema } from '$lib/schema.js';
 import { auth, db } from '$lib/firebase';
 import { serverTimestamp, setDoc, doc, getDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -72,6 +72,7 @@ export const actions: Actions = {
 			});
 		}
 
-		throw redirect(303, '/');
+		sendEmailVerification(auth.currentUser);
+		throw redirect(303, '/verify');
 	}
 };

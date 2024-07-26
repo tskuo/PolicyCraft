@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<div class="mx-auto">
-			<Button href="/register" variant="outline">Create new account</Button>
+			<Button href="/register" variant="ghost">Create new account</Button>
 		</div>
 	</div>
 </div>
