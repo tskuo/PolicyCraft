@@ -149,35 +149,64 @@
 				</ToggleGroup.Item>
 			</ToggleGroup.Root>
 
-			<h3 class="font-bold mt-6 text-lg">
-				Vote Distribution ({totalVotes}
-				{totalVotes > 1 ? 'votes' : 'vote'})
-			</h3>
-			<div class="flex w-full h-4 my-4 rounded border">
-				{#if userVote !== undefined}
-					{#if percentUpvote != 0}
-						<div
-							class="bg-green-200 flex justify-center items-center text-sm"
-							style="width: {barUpvote}%"
-						>
-							{percentUpvote}%
+			<h3 class="font-bold mt-6 text-lg">Vote Distribution</h3>
+			<div class="mb-4">
+				<Tooltip.Root>
+					<Tooltip.Trigger class="w-full text-left">
+						<div class="flex w-full h-4 my-4 rounded border">
+							{#if userVote !== undefined}
+								{#if percentUpvote != 0}
+									<div
+										class="bg-green-200 flex justify-center items-center text-sm"
+										style="width: {barUpvote}%"
+									>
+										<!-- {percentUpvote}% -->
+									</div>
+								{/if}
+								{#if percentDownvote != 0}
+									<div
+										class="bg-red-200 flex justify-center items-center text-sm"
+										style="width: {barDownvote}%"
+									>
+										<!-- {percentDownvote}% -->
+									</div>
+								{/if}
+							{:else}
+								<div
+									class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500"
+								>
+									vote to see distribution
+								</div>
+							{/if}
 						</div>
-					{/if}
-					{#if percentDownvote != 0}
-						<div
-							class="bg-red-200 flex justify-center items-center text-sm"
-							style="width: {barDownvote}%"
-						>
-							{percentDownvote}%
+						<div>
+							{#if userVote !== undefined}
+								<p>
+									<span class="text-green-400">{percentUpvote}%</span>
+									<span class="text-red-400">{percentDownvote}%</span>
+									<span class="text-gray-500"
+										>({totalVotes} {totalVotes > 1 ? 'votes' : 'vote'})</span
+									>
+								</p>
+							{:else}
+								<p>{totalVotes} {totalVotes > 1 ? 'votes' : 'vote'}</p>
+							{/if}
 						</div>
-					{/if}
-				{:else}
-					<div class="w-full bg-gray-100 flex justify-center items-center text-sm text-gray-500">
-						vote to see distribution
-					</div>
-				{/if}
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						{#if userVote !== undefined}
+							<p>upvote: {data.policy.votes.upvote.length}</p>
+							<p>downvote: {data.policy.votes.downvote.length}</p>
+							<p>
+								total: {totalVotes} / {data.userCounts}
+								users
+							</p>
+						{:else}
+							<p>Vote to see distribution</p>
+						{/if}
+					</Tooltip.Content>
+				</Tooltip.Root>
 			</div>
-
 			<ReasonPanel
 				reasons={data.reasons}
 				dataReason={data.formReason}

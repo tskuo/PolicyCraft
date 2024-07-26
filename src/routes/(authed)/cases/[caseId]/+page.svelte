@@ -157,9 +157,13 @@
 									<span class="text-green-400">{percentAllow}%</span>
 									<span class="text-red-400">{percentDisallow}%</span>
 									<span class="text-gray-400">{percentUnsure}%</span>
-									<span class="text-gray-500">({totalVotes})</span>
+									<span class="text-gray-500"
+										>({totalVotes} {totalVotes > 1 ? 'votes' : 'vote'})</span
+									>
 								</p>
-							{:else}{/if}
+							{:else}
+								<p>{totalVotes} {totalVotes > 1 ? 'votes' : 'vote'}</p>
+							{/if}
 						</div>
 					</Tooltip.Trigger>
 					<Tooltip.Content>

@@ -69,6 +69,36 @@
 				else if (a > b) return 1;
 				return 0;
 			});
+		} else if (sortBy == 'votes') {
+			displayPolicies = displayPolicies
+				.sort((policyA, policyB) => {
+					const a = policyA.votes.upvote.length + policyA.votes.downvote.length;
+					const b = policyB.votes.upvote.length + policyB.votes.downvote.length;
+					if (a < b) return -1;
+					else if (a > b) return 1;
+					return 0;
+				})
+				.reverse();
+		} else if (sortBy == 'upvotes') {
+			displayPolicies = displayPolicies
+				.sort((policyA, policyB) => {
+					const a = policyA.votes.upvote.length;
+					const b = policyB.votes.upvote.length;
+					if (a < b) return -1;
+					else if (a > b) return 1;
+					return 0;
+				})
+				.reverse();
+		} else if (sortBy == 'downvotes') {
+			displayPolicies = displayPolicies
+				.sort((policyA, policyB) => {
+					const a = policyA.votes.downvote.length;
+					const b = policyB.votes.downvote.length;
+					if (a < b) return -1;
+					else if (a > b) return 1;
+					return 0;
+				})
+				.reverse();
 		}
 	};
 </script>
@@ -114,6 +144,11 @@
 						<Select.Item value="watch">most watching</Select.Item>
 						<Select.Item value="discuss">most discussion</Select.Item>
 						<Select.Item value="case">least cases</Select.Item>
+						{#if data.stage == 'vote'}
+							<Select.Item value="votes">total votes</Select.Item>
+							<Select.Item value="upvotes">upvotes</Select.Item>
+							<Select.Item value="downvotes">downvotes</Select.Item>
+						{/if}
 					</Select.Content>
 				</Select.Root>
 			</div>
