@@ -61,7 +61,6 @@
 								<span class="font-semibold">Related case:</span>
 								<span><a class="underline" href="/cases/{edit.input.title}">link</a></span>
 							</p>
-							<p>Label: {edit.input.description} by this policy</p>
 						{:else}
 							<p>
 								<span class="font-semibold">Related case:</span>

@@ -67,7 +67,7 @@
 				{ person: 'AI Assistant', message: data.text },
 				{
 					person: 'AI Assistant',
-					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also create a policy based on the suggested content or restart the conversation.`
 				}
 			];
 			showInstructionInput = true;
