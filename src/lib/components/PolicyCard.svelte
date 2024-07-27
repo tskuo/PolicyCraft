@@ -203,7 +203,7 @@
 				<Table.Body>
 					{#if openDiscussions.length > 0}
 						{#each openDiscussions as discussion}
-							<Table.Row>
+							<Table.Row class="hover:bg-transparent">
 								<Table.Cell class="font-medium capitalize">{discussion.title}</Table.Cell>
 								<!-- <Table.Cell class="text-right">{discussion.comments.length} comments</Table.Cell> -->
 							</Table.Row>

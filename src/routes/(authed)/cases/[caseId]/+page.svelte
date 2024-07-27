@@ -154,7 +154,7 @@
 						<div>
 							{#if userVote !== undefined}
 								<p>
-									<span class="text-green-400">{percentAllow}%</span>
+									<span class="text-green-500">{percentAllow}%</span>
 									<span class="text-red-400">{percentDisallow}%</span>
 									<span class="text-gray-400">{percentUnsure}%</span>
 									<span class="text-gray-500"

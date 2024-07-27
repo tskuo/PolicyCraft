@@ -182,7 +182,7 @@
 						<div>
 							{#if userVote !== undefined}
 								<p>
-									<span class="text-green-400">{percentUpvote}%</span>
+									<span class="text-green-500">{percentUpvote}%</span>
 									<span class="text-red-400">{percentDownvote}%</span>
 									<span class="text-gray-500"
 										>({totalVotes} {totalVotes > 1 ? 'votes' : 'vote'})</span
