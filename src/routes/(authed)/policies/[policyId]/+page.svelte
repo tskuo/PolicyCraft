@@ -8,7 +8,14 @@
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { ArrowBigDown, ArrowBigUp, Eye, Pencil, TriangleAlert } from 'lucide-svelte/icons';
+	import {
+		ArrowBigDown,
+		ArrowBigUp,
+		Eye,
+		FileClock,
+		Pencil,
+		TriangleAlert
+	} from 'lucide-svelte/icons';
 
 	export let data;
 
@@ -73,6 +80,16 @@
 			<div>
 				<Tooltip.Root>
 					<Tooltip.Trigger>
+						<Button variant="ghost" href="/policies/{data.policy.id}/edithistory">
+							<FileClock class="w-4 h-4" />
+						</Button>
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						<p>Edit history</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
 						<Toggle
 							aria-label="Toggle watch"
 							class="data-[state=on]:bg-sky-100"
@@ -101,6 +118,7 @@
 						<p>Watch to get notifications for updates on this policy</p>
 					</Tooltip.Content>
 				</Tooltip.Root>
+
 				{#if data.stage !== 'vote'}
 					<Button href="/policies/{data.policy.id}/editpolicy">
 						<Pencil class="h-4 w-4 mr-2" />Edit policy

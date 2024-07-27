@@ -1,11 +1,13 @@
 import { json, error } from '@sveltejs/kit';
-import { serverTimestamp, addDoc, collection, getDocs } from 'firebase/firestore';
+import { serverTimestamp, addDoc, collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
 // Get all cases from the database
 export const GET = async () => {
 	try {
-		const querySnapshot = await getDocs(collection(db, 'cases'));
+		const querySnapshot = await getDocs(
+			query(collection(db, 'cases'), orderBy('createAt', 'desc'))
+		);
 		const res: any[] = [];
 		querySnapshot.forEach((doc) => {
 			const c = { id: doc.id, ...doc.data() };

@@ -42,15 +42,7 @@
 				return 0;
 			});
 		} else if (sortBy == 'new') {
-			displayCases = displayCases
-				.sort((caseA, caseB) => {
-					const a = caseA.createAt;
-					const b = caseB.createAt;
-					if (a < b) return -1;
-					else if (a > b) return 1;
-					return 0;
-				})
-				.reverse();
+			displayCases = data.cases; // default sort by new
 		} else if (sortBy == 'votes') {
 			displayCases = displayCases
 				.sort((caseA, caseB) => {

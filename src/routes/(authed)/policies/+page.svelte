@@ -24,15 +24,7 @@
 	const sortPolicies = async (sortBy: string) => {
 		await filterPolicies(filterValue);
 		if (sortBy == 'new') {
-			displayPolicies = displayPolicies
-				.sort((policyA, policyB) => {
-					const a = policyA.createAt;
-					const b = policyB.createAt;
-					if (a < b) return -1;
-					else if (a > b) return 1;
-					return 0;
-				})
-				.reverse();
+			displayPolicies = data.policies; // default sort by new
 		} else if (sortBy == 'title') {
 			displayPolicies = displayPolicies.sort((policyA, policyB) => {
 				const a = policyA.title;
