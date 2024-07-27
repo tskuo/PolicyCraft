@@ -195,7 +195,7 @@
 			</ToggleGroup.Root>
 		</div> -->
 	</div>
-	<Dialog.Content class="sm:max-w-lg max-h-screen overflow-y-scroll">
+	<Dialog.Content class="sm:max-w-lg max-h-[80%] overflow-y-scroll">
 		<Dialog.Header>
 			<Dialog.Title class="leading-normal">
 				{title}
