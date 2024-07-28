@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import {
 		messageCreateFormSchema,
 		discussionCreateFormSchema,
@@ -13,7 +15,7 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { LoaderCircle, Plus, Send } from 'lucide-svelte/icons';
+	import { CircleHelp, LoaderCircle, Plus, Send } from 'lucide-svelte/icons';
 	import { invalidateAll } from '$app/navigation';
 
 	export let discussions: any[] = [];
@@ -21,6 +23,8 @@
 	export let dataDiscussion: SuperValidated<Infer<DiscussionCreateFormSchema>>;
 	export let userId;
 	export let userDisplayNames;
+
+	console.log('URL: ', $page.url.pathname);
 
 	let showNewDiscussionPanel = false;
 	let disableMessageSubmitBtn = false;
@@ -62,7 +66,22 @@
 	$: closedDiscussion = discussions.filter((discussion) => discussion.open == false);
 </script>
 
-<h3 class="font-bold text-lg mt-2">Discussions</h3>
+<div class="flex items-center mt-2">
+	<h3 class="font-semibold">
+		{$page.url.pathname == '/'
+			? 'General'
+			: $page.url.pathname.startsWith('/policies')
+				? 'Policy'
+				: 'Case'} Discussions
+		<!-- </h3>
+	<Tooltip.Root>
+		<Tooltip.Trigger><CircleHelp class="w-4 h-4 ml-2" /></Tooltip.Trigger>
+		<Tooltip.Content>
+			<p>Only the discussion thread's creator can close it.</p>
+		</Tooltip.Content>
+	</Tooltip.Root> -->
+	</h3>
+</div>
 <Tabs.Root value="open" class="w-full mt-4">
 	<Tabs.List class="grid w-full grid-cols-2">
 		<Tabs.Trigger value="open">Open</Tabs.Trigger>
@@ -116,7 +135,7 @@
 							</form>
 							{#if discussion.userId == userId}
 								<Button
-									variant="destructive"
+									variant="secondary"
 									class="mt-6 w-full"
 									disabled={!discussion.open}
 									on:click={async () => {
@@ -128,7 +147,7 @@
 										invalidateAll();
 									}}
 								>
-									Close this discussion thread
+									Close discussion thread
 								</Button>
 							{/if}
 						</Accordion.Content>

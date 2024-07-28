@@ -34,7 +34,7 @@
 					>
 						<Table.Cell class="capitalize">{discussion.title}</Table.Cell>
 						<Table.Cell class="text-right"
-							>{discussion.targetEntity == 'meta' ? 'about' : discussion.targetEntity}</Table.Cell
+							>{discussion.targetEntity == 'meta' ? 'general' : discussion.targetEntity}</Table.Cell
 						>
 						<Table.Cell class="text-right {discussion.open ? 'text-green-500' : 'text-red-400'}"
 							>{discussion.open ? 'open' : 'closed'}</Table.Cell
