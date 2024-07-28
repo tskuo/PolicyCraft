@@ -154,14 +154,14 @@
 				<ToggleGroup.Item
 					value="upvote"
 					aria-label="Toggle upvote"
-					class="data-[state=on]:bg-green-200"
+					class="data-[state=on]:bg-green-200 flex-1 md:max-w-28"
 				>
 					<ArrowBigUp class="h-4 w-4 mr-2" />upvote
 				</ToggleGroup.Item>
 				<ToggleGroup.Item
 					value="downvote"
 					aria-label="Toggle downvote"
-					class="data-[state=on]:bg-red-200"
+					class="data-[state=on]:bg-red-200 flex-1 md:max-w-28"
 				>
 					<ArrowBigDown class="h-4 w-4 mr-2" />downvote
 				</ToggleGroup.Item>

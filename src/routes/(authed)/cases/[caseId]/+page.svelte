@@ -93,21 +93,21 @@
 				<ToggleGroup.Item
 					value="allow"
 					aria-label="Toggle allow"
-					class="data-[state=on]:bg-green-200"
+					class="data-[state=on]:bg-green-200 flex-1 md:max-w-28"
 				>
 					<Check class="h-4 w-4 mr-2" />allow
 				</ToggleGroup.Item>
 				<ToggleGroup.Item
 					value="disallow"
 					aria-label="Toggle disallow"
-					class="data-[state=on]:bg-red-200"
+					class="data-[state=on]:bg-red-200 flex-1 md:max-w-28"
 				>
 					<Ban class="h-4 w-4 mr-2" />disallow
 				</ToggleGroup.Item>
 				<ToggleGroup.Item
 					value="unsure"
 					aria-label="Toggle unsure"
-					class="data-[state=on]:bg-gray-200"
+					class="data-[state=on]:bg-gray-200 flex-1 md:max-w-28"
 				>
 					<Meh class="h-4 w-4 mr-2" />unsure
 				</ToggleGroup.Item>
