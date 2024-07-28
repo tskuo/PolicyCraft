@@ -4,7 +4,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { Check, Ban, CircleHelp, Maximize, TriangleAlert } from 'lucide-svelte/icons';
+	import { Check, Ban, TriangleAlert, Meh } from 'lucide-svelte/icons';
 	import type { Timestamp } from 'firebase/firestore';
 
 	export let id = '';
@@ -190,7 +190,7 @@
 					aria-label="Toggle unsure"
 					class="data-[state=on]:bg-gray-200"
 				>
-					<CircleHelp class="h-4 w-4" />
+					<Meh class="h-4 w-4" />
 				</ToggleGroup.Item>
 			</ToggleGroup.Root>
 		</div> -->
@@ -250,7 +250,7 @@
 				aria-label="Toggle unsure"
 				class="data-[state=on]:bg-gray-200"
 			>
-				<CircleHelp class="h-4 w-4 mr-2" />unsure
+				<Meh class="h-4 w-4 mr-2" />unsure
 			</ToggleGroup.Item>
 		</ToggleGroup.Root>
 		<h3 class="font-bold mt-6">Allow Reasons ({reasonsAllow.length})</h3>

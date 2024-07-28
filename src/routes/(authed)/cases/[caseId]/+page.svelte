@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
-	import { Check, Ban, CircleHelp } from 'lucide-svelte/icons';
+	import { Check, Ban, Meh } from 'lucide-svelte/icons';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 	import * as Tooltip from '$lib/components/ui/tooltip';
@@ -109,7 +109,7 @@
 					aria-label="Toggle unsure"
 					class="data-[state=on]:bg-gray-200"
 				>
-					<CircleHelp class="h-4 w-4 mr-2" />unsure
+					<Meh class="h-4 w-4 mr-2" />unsure
 				</ToggleGroup.Item>
 			</ToggleGroup.Root>
 
