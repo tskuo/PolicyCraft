@@ -139,7 +139,7 @@
 	};
 </script>
 
-<h3 class="font-bold text-lg my-2">Brainstorm with AI</h3>
+<h3 class="font-semibold mt-2 mb-2">Brainstorm with AI</h3>
 <ScrollArea class="h-[85vh] w-full rounded-md border">
 	<div class="text-sm mx-3">
 		{#each messageHistory as message}

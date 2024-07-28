@@ -82,7 +82,7 @@
 	</Tooltip.Root> -->
 	</h3>
 </div>
-<Tabs.Root value="open" class="w-full mt-4">
+<Tabs.Root value="open" class="w-full mt-5">
 	<Tabs.List class="grid w-full grid-cols-2">
 		<Tabs.Trigger value="open">Open</Tabs.Trigger>
 		<Tabs.Trigger value="closed">Closed</Tabs.Trigger>
