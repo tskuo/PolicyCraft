@@ -9,10 +9,10 @@
 	const actionDisplayName = new Map();
 	actionDisplayName.set('createPolicy', 'create policy');
 	actionDisplayName.set('editPolicy', 'edit policy');
-	actionDisplayName.set('addRelatedCase', 'add related case');
-	actionDisplayName.set('editRelatedCaseLabel', 'edit related case label');
-	actionDisplayName.set('editRelatedCaseLabelWhileEditingPolicy', 'edit related case label');
-	actionDisplayName.set('removeRelatedCases', 'remove related case');
+	actionDisplayName.set('addRelatedCase', 'add case');
+	actionDisplayName.set('editRelatedCaseLabel', 'edit case label');
+	actionDisplayName.set('editRelatedCaseLabelWhileEditingPolicy', 'edit case label');
+	actionDisplayName.set('removeRelatedCases', 'remove case');
 </script>
 
 <div class="grid md:grid-cols-4">
@@ -40,7 +40,16 @@
 				<Accordion.Item value={edit.id}>
 					<Accordion.Trigger>
 						<div class="flex text-sm font-normal w-5/6 text-left">
-							<p class="basis-1/4">{new Date(edit.createAt).toLocaleString()}</p>
+							<p class="basis-1/4">
+								{new Date(edit.createAt).toLocaleString([], {
+									year: 'numeric',
+									month: 'numeric',
+									day: 'numeric',
+									hour: '2-digit',
+									minute: '2-digit',
+									hour12: false
+								})}
+							</p>
 							<p class="basis-1/4">{data.userDisplayNames.get(edit.userId)}</p>
 							<p class="basis-1/2">
 								{#if actionDisplayName.get(edit.action) == 'create policy' || actionDisplayName.get(edit.action) == 'edit policy'}
