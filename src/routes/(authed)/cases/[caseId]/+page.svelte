@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
-	import { Check, Ban, Meh } from 'lucide-svelte/icons';
+	import { Check, Ban, Meh, Folder } from 'lucide-svelte/icons';
 	import DiscussionPanel from '$lib/components/DiscussionPanel.svelte';
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 	import * as Tooltip from '$lib/components/ui/tooltip';
@@ -80,9 +80,10 @@
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
 			</div>
-			<h1 class="font-bold text-xl mt-4">{data.c.title}</h1>
+			<h1 class="font-bold text-xl mt-4 flex items-center">
+				<Folder class="h-4 w-4 mr-2" />{data.c.title}
+			</h1>
 			<p class="leading-relaxed my-2">{data.c.description}</p>
-
 			<ToggleGroup.Root
 				type="single"
 				variant="outline"
@@ -112,7 +113,6 @@
 					<Meh class="h-4 w-4 mr-2" />unsure
 				</ToggleGroup.Item>
 			</ToggleGroup.Root>
-
 			<h3 class="font-bold mt-6 text-lg">Vote Distribution</h3>
 			<div class="mb-4">
 				<Tooltip.Root>

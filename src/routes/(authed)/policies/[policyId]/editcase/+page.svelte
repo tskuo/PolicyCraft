@@ -23,7 +23,7 @@
 				</Breadcrumb.Item>
 			</Breadcrumb.List>
 		</Breadcrumb.Root>
-		<h1 class="font-bold text-xl mt-4 capitalize">{data.policy.title}</h1>
+		<h1 class="font-bold text-xl mt-4">{data.policy.title}</h1>
 		<p class="leading-relaxed my-2">{data.policy.description}</p>
 		<div class="mt-6">
 			<PolicyEditCaseForm

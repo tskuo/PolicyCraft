@@ -11,6 +11,7 @@
 	import {
 		ArrowBigDown,
 		ArrowBigUp,
+		BookText,
 		Eye,
 		FileClock,
 		Pencil,
@@ -138,7 +139,9 @@
 				</Alert.Description>
 			</Alert.Root>
 		{/if}
-		<h1 class="font-bold text-xl mt-4 capitalize">{data.policy.title}</h1>
+		<h1 class="font-bold text-xl mt-4 flex items-center">
+			<BookText class="h-4 w-4 mr-2" />{data.policy.title}
+		</h1>
 		<p class="leading-relaxed my-2">
 			{data.policy.description}
 		</p>

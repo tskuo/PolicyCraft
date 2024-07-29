@@ -78,7 +78,7 @@
 		<a href="/policies/{id} ">
 			<div class="hover:bg-gray-50 rounded-lg">
 				<Card.Header>
-					<Card.Title class="capitalize">{title}</Card.Title>
+					<Card.Title>{title}</Card.Title>
 				</Card.Header>
 				<Card.Content>
 					<p>{description}</p>
