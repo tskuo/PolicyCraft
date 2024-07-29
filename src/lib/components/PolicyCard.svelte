@@ -81,7 +81,11 @@
 					<Card.Title>{title}</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<p>{description}</p>
+					<p>
+						{compactView && description.length > 300
+							? description.substring(0, 300) + '...'
+							: description}
+					</p>
 				</Card.Content>
 				<Card.Footer class="pb-12"></Card.Footer>
 			</div>
