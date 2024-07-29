@@ -109,7 +109,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const res = await event.fetch(`/api/reasons`, {
+		await event.fetch(`/api/reasons`, {
 			method: 'POST',
 			body: JSON.stringify({ form, entity: 'cases', entityId: event.params.caseId }),
 			headers: {

@@ -4,7 +4,9 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { Check, Ban, TriangleAlert, Meh } from 'lucide-svelte/icons';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import { Check, Ban, TriangleAlert, Meh, Plus, LoaderCircle } from 'lucide-svelte/icons';
 	import type { Timestamp } from 'firebase/firestore';
 
 	export let id = '';
@@ -23,6 +25,8 @@
 	export let userCounts: number;
 	export let hideAlert = false;
 
+	let newReason = '';
+	let creatingNewReason = false;
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {
@@ -253,7 +257,58 @@
 				<Meh class="h-4 w-4 mr-2" />unsure
 			</ToggleGroup.Item>
 		</ToggleGroup.Root>
-		<h3 class="font-bold mt-6">Allow Reasons ({reasonsAllow.length})</h3>
+		{#if userVote == 'allow' || userVote == 'disallow'}
+			<div class="flex w-full items-center space-x-1 mt-2">
+				<Label><span class="capitalize">{userVote}</span> reason:</Label>
+				<Input
+					class="flex-1"
+					bind:value={newReason}
+					placeholder={`This case should be ${userVote}ed because ...`}
+				/>
+				<Button
+					disabled={!(userVote == 'allow' || userVote == 'disallow') ||
+						newReason == '' ||
+						creatingNewReason}
+					on:click={async () => {
+						creatingNewReason = true;
+						const formNewReason = {
+							data: {
+								label: userVote,
+								description: newReason
+							}
+						};
+						const res = await fetch(`/api/reasons`, {
+							method: 'POST',
+							body: JSON.stringify({ form: formNewReason, entity: 'cases', entityId: id }),
+							headers: {
+								'Content-Type': 'application/json'
+							}
+						});
+						if (res.ok) {
+							const rr = await res.json();
+							reasons = [
+								...reasons,
+								{
+									id: rr.id,
+									description: newReason,
+									label: userVote,
+									userId: userId
+								}
+							];
+							newReason = '';
+							creatingNewReason = false;
+						}
+					}}
+				>
+					{#if creatingNewReason}
+						<LoaderCircle class="h-4 w-4 animate-spin" />
+					{:else}
+						<Plus class="h-4 w-4" />
+					{/if}
+				</Button>
+			</div>
+		{/if}
+		<h3 class="font-semibold mt-4">Allow reasons ({reasonsAllow.length})</h3>
 		<Accordion.Root class="w-full">
 			{#each reasonsAllow as reason (reason.id)}
 				<Accordion.Item value={reason.id}>
@@ -266,7 +321,7 @@
 				</Accordion.Item>
 			{/each}
 		</Accordion.Root>
-		<h3 class="font-bold">Disallow Reasons ({reasonsDisallow.length})</h3>
+		<h3 class="font-semibold">Disallow reasons ({reasonsDisallow.length})</h3>
 		<Accordion.Root class="w-full">
 			{#each reasonsDisallow as reason (reason.id)}
 				<Accordion.Item value={reason.id}>
