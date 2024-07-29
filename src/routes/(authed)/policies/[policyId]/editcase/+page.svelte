@@ -15,13 +15,11 @@
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
-					<Breadcrumb.Link class="capitalize" href="/policies/{data.policy.id}">
-						{data.policy.title}
-					</Breadcrumb.Link>
+					<Breadcrumb.Link href="/policies/{data.policy.id}">Policy</Breadcrumb.Link>
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
-					<Breadcrumb.Page class="capitalize">Editing Related Cases</Breadcrumb.Page>
+					<Breadcrumb.Page>Editing Related Cases</Breadcrumb.Page>
 				</Breadcrumb.Item>
 			</Breadcrumb.List>
 		</Breadcrumb.Root>

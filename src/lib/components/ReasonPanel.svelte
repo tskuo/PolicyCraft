@@ -94,81 +94,87 @@
 		</Card.Content>
 	</Card.Root>
 {/if}
-<div class="grid md:grid-cols-2 my-4 gap-2">
-	<div>
-		<h4 class="font-semibold md:text-center capitalize">{label1} ({reasons1.length})</h4>
-		{#each reasons1 as reason (reason.id)}
-			<Card.Root class="mt-2">
-				<Card.Header>
-					<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
-				</Card.Header>
-				<Card.Content>
-					<p>{reason.description}</p>
-				</Card.Content>
-				<Card.Footer>
-					<Toggle
-						aria-label="Toggle like"
-						class="data-[state=on]:bg-sky-100"
-						pressed={reason.likeList.includes(userId)}
-						onPressedChange={async (pressed) => {
-							let newLikeList;
-							if (reason.likeList.includes(userId)) {
-								newLikeList = reason.likeList.filter((u) => u !== userId);
-							} else {
-								newLikeList = [...reason.likeList, userId];
-							}
-							reason.likeList = newLikeList;
-							await fetch(`/api/reasons/${reason.id}`, {
-								method: 'PATCH',
-								body: JSON.stringify({ pressed }),
-								headers: {
-									'Content-Type': 'application/json'
+{#if reasons1.length + reasons2.length > 0}
+	<div class="grid md:grid-cols-2 my-4 gap-2">
+		<div>
+			<h4 class="font-semibold md:text-center capitalize">{label1} ({reasons1.length})</h4>
+			{#each reasons1 as reason (reason.id)}
+				<Card.Root class="mt-2">
+					<Card.Header>
+						<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
+					</Card.Header>
+					<Card.Content>
+						<p>{reason.description}</p>
+					</Card.Content>
+					<Card.Footer>
+						<Toggle
+							aria-label="Toggle like"
+							class="data-[state=on]:bg-sky-100"
+							pressed={reason.likeList.includes(userId)}
+							onPressedChange={async (pressed) => {
+								let newLikeList;
+								if (reason.likeList.includes(userId)) {
+									newLikeList = reason.likeList.filter((u) => u !== userId);
+								} else {
+									newLikeList = [...reason.likeList, userId];
 								}
-							});
-						}}
-					>
-						<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
-					</Toggle>
-				</Card.Footer>
-			</Card.Root>
-		{/each}
-	</div>
-	<div>
-		<h4 class="font-semibold md:text-center capitalize">{label2} ({reasons2.length})</h4>
-		{#each reasons2 as reason (reason.id)}
-			<Card.Root class="mt-2">
-				<Card.Header>
-					<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
-				</Card.Header>
-				<Card.Content>
-					<p>{reason.description}</p>
-				</Card.Content>
-				<Card.Footer>
-					<Toggle
-						aria-label="Toggle like"
-						class="data-[state=on]:bg-sky-100"
-						pressed={reason.likeList.includes(userId)}
-						onPressedChange={async (pressed) => {
-							let newLikeList;
-							if (reason.likeList.includes(userId)) {
-								newLikeList = reason.likeList.filter((u) => u !== userId);
-							} else {
-								newLikeList = [...reason.likeList, userId];
-							}
-							reason.likeList = newLikeList;
-							await fetch(`/api/reasons/${reason.id}`, {
-								method: 'PATCH',
-								body: JSON.stringify({ pressed }),
-								headers: {
-									'Content-Type': 'application/json'
+								reason.likeList = newLikeList;
+								await fetch(`/api/reasons/${reason.id}`, {
+									method: 'PATCH',
+									body: JSON.stringify({ pressed }),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								});
+							}}
+						>
+							<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
+						</Toggle>
+					</Card.Footer>
+				</Card.Root>
+			{/each}
+		</div>
+		<div>
+			<h4 class="font-semibold md:text-center capitalize">{label2} ({reasons2.length})</h4>
+			{#each reasons2 as reason (reason.id)}
+				<Card.Root class="mt-2">
+					<Card.Header>
+						<Card.Description>{userDisplayNames.get(reason.userId)}</Card.Description>
+					</Card.Header>
+					<Card.Content>
+						<p>{reason.description}</p>
+					</Card.Content>
+					<Card.Footer>
+						<Toggle
+							aria-label="Toggle like"
+							class="data-[state=on]:bg-sky-100"
+							pressed={reason.likeList.includes(userId)}
+							onPressedChange={async (pressed) => {
+								let newLikeList;
+								if (reason.likeList.includes(userId)) {
+									newLikeList = reason.likeList.filter((u) => u !== userId);
+								} else {
+									newLikeList = [...reason.likeList, userId];
 								}
-							});
-						}}
-					>
-						<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
-					</Toggle>
-				</Card.Footer>
-			</Card.Root>
-		{/each}
+								reason.likeList = newLikeList;
+								await fetch(`/api/reasons/${reason.id}`, {
+									method: 'PATCH',
+									body: JSON.stringify({ pressed }),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								});
+							}}
+						>
+							<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
+						</Toggle>
+					</Card.Footer>
+				</Card.Root>
+			{/each}
+		</div>
 	</div>
-</div>
+{:else}
+	<p class="mt-2">
+		This case currently has no vote reasons. Click the "add reason" button to provide reasons.
+	</p>
+{/if}

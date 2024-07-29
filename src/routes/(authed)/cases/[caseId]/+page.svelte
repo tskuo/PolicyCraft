@@ -75,7 +75,7 @@
 						</Breadcrumb.Item>
 						<Breadcrumb.Separator />
 						<Breadcrumb.Item>
-							<Breadcrumb.Page>{data.c.title}</Breadcrumb.Page>
+							<Breadcrumb.Page>Case</Breadcrumb.Page>
 						</Breadcrumb.Item>
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
@@ -190,17 +190,21 @@
 				userDisplayNames={data.userDisplayNames}
 			/>
 			<h3 class="font-bold mt-6 text-lg">Related Policies</h3>
-			<Table.Root>
-				<Table.Body>
-					{#each data.relatedPolicies as policy}
-						<Table.Row>
-							<a href="/policies/{policy.id}" class="w-full">
-								<Table.Cell class="w-full">{policy.title}</Table.Cell>
-							</a>
-						</Table.Row>
-					{/each}
-				</Table.Body>
-			</Table.Root>
+			{#if data.relatedPolicies.length !== 0}
+				<Table.Root>
+					<Table.Body>
+						{#each data.relatedPolicies as policy}
+							<Table.Row>
+								<a href="/policies/{policy.id}" class="w-full">
+									<Table.Cell class="w-full">{policy.title}</Table.Cell>
+								</a>
+							</Table.Row>
+						{/each}
+					</Table.Body>
+				</Table.Root>
+			{:else}
+				<p class="mt-2">This case is not currently linked to any policies as a related case.</p>
+			{/if}
 		</div>
 		<div class="md:col-span-1 p-2">
 			<DiscussionPanel

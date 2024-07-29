@@ -73,7 +73,7 @@
 					</Breadcrumb.Item>
 					<Breadcrumb.Separator />
 					<Breadcrumb.Item>
-						<Breadcrumb.Page class="capitalize">{data.policy.title}</Breadcrumb.Page>
+						<Breadcrumb.Page>Policy</Breadcrumb.Page>
 					</Breadcrumb.Item>
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
