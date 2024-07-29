@@ -65,7 +65,7 @@
 						{#if actionDisplayName.get(edit.action) == 'create policy' || actionDisplayName.get(edit.action) == 'edit policy'}
 							<p><span class="font-semibold">Policy title:</span> {edit.input.title}</p>
 							<p><span class="font-semibold">Policy description:</span> {edit.input.description}</p>
-						{:else if actionDisplayName.get(edit.action) == 'remove related case'}
+						{:else if actionDisplayName.get(edit.action) == 'remove case'}
 							<p>
 								<span class="font-semibold">Related case:</span>
 								<span><a class="underline" href="/cases/{edit.input.title}">link</a></span>
