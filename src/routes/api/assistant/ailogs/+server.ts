@@ -7,12 +7,12 @@ export const POST = async ({ request, locals }) => {
 		throw error(400, 'User authentication error.');
 	}
 	try {
-		const { action, messageHistory } = await request.json();
+		const { action, messageHistory, entity, entityId } = await request.json();
 		const docRef = await addDoc(collection(db, 'aiLogs'), {
 			action: action,
 			createAt: serverTimestamp(),
-			targetCollection: '',
-			targetDocumentId: '',
+			targetCollection: entity,
+			targetDocumentId: entityId,
 			userId: locals.user.userId
 		});
 		for (const m of messageHistory) {

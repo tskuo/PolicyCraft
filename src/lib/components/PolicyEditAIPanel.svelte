@@ -33,6 +33,39 @@
 	let suggestedPolicy = '';
 	let showRestartBtn = false;
 
+	let aiLogsDocId = '';
+	const updateMessageHistory = async (person: string, message: string) => {
+		messageHistory = [...messageHistory, { person, message }];
+		if (aiLogsDocId == '') {
+			const res = await fetch(`/api/assistant/ailogs`, {
+				method: 'POST',
+				body: JSON.stringify({
+					action: 'policyEditAI',
+					messageHistory: messageHistory,
+					entity: 'policies',
+					entityId: policyId
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await res.json();
+			aiLogsDocId = data.id;
+		} else {
+			await fetch(`/api/assistant/ailogs`, {
+				method: 'PATCH',
+				body: JSON.stringify({
+					aiLogsDocId,
+					person,
+					message
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		}
+	};
+
 	const generatePolicy = async () => {
 		loading = true;
 
@@ -48,8 +81,6 @@
 			` the scenario: ` +
 			selectedCaseReason;
 
-		// console.log('prompt: ', prompt);
-
 		const res = await fetch('/api/assistant/policy', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -60,26 +91,16 @@
 		if (res.ok) {
 			const data = await res.json();
 			suggestedPolicy = data.text;
-
-			messageHistory = [
-				...messageHistory,
-				{ person: 'AI Assistant', message: `Here is the suggested policy edit:` },
-				{ person: 'AI Assistant', message: data.text },
-				{
-					person: 'AI Assistant',
-					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also create a policy based on the suggested content or restart the conversation.`
-				}
-			];
+			await updateMessageHistory('AI Assistant', `Here is the suggested policy edit:`);
+			await updateMessageHistory('AI Assistant', data.text);
+			await updateMessageHistory(
+				'AI Assistant',
+				`Please provide instructions on how you would like to iterate on the suggested policy. You may also create a policy based on the suggested content or restart the conversation.`
+			);
 			showInstructionInput = true;
 			showRestartBtn = true;
 		} else {
-			messageHistory = [
-				...messageHistory,
-				{
-					person: 'AI Assistant',
-					message: 'Sorry, something went wrong. Please try again.'
-				}
-			];
+			await updateMessageHistory('AI Assistant', 'Sorry, something went wrong. Please try again.');
 			showCaseSelector = true;
 		}
 		loading = false;
@@ -103,26 +124,19 @@
 		if (res.ok) {
 			const data = await res.json();
 			suggestedPolicy = data.text;
-			messageHistory = [
-				...messageHistory,
-				{ person: 'AI Assistant', message: `Here is the suggested policy edit:` },
-				{ person: 'AI Assistant', message: data.text },
-				{
-					person: 'AI Assistant',
-					message: `Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
-				}
-			];
+			await updateMessageHistory('AI Assistant', `Here is the suggested policy edit:`);
+			await updateMessageHistory('AI Assistant', data.text);
+			await updateMessageHistory(
+				'AI Assistant',
+				`Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+			);
 			showInstructionInput = true;
 			showRestartBtn = true;
 		} else {
-			messageHistory = [
-				...messageHistory,
-				{
-					person: 'AI Assistant',
-					message:
-						'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
-				}
-			];
+			await updateMessageHistory(
+				'AI Assistant',
+				'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
+			);
 			showCaseSelector = true;
 		}
 		iterateInstruction = '';
@@ -150,20 +164,13 @@
 		{#if showCaseSelector}
 			<div class="mx-3 mt-1">
 				<Select.Root
-					onSelectedChange={(v) => {
+					onSelectedChange={async (v) => {
 						selectedCaseId = v?.value;
-
-						messageHistory = [
-							...messageHistory,
-							{
-								person: 'You',
-								message: v?.label
-							},
-							{
-								person: 'AI Assistant',
-								message: `How is the selected case misaligned with the policy?`
-							}
-						];
+						await updateMessageHistory('You', v?.label);
+						await updateMessageHistory(
+							'AI Assistant',
+							`How is the selected case misaligned with the policy?`
+						);
 						showCaseSelector = false;
 						showMisalignSelector = true;
 					}}
@@ -182,16 +189,9 @@
 		{#if showMisalignSelector}
 			<div class="mx-3 mt-1">
 				<Select.Root
-					onSelectedChange={(v) => {
+					onSelectedChange={async (v) => {
 						showMisalignSelector = false;
-						messageHistory = [
-							...messageHistory,
-							{
-								person: 'You',
-								message: v?.label
-							}
-						];
-
+						await updateMessageHistory('You', v?.label);
 						if (v?.value == 'allow' || v?.value == 'disallow') {
 							selectedCaseLabel = v?.value;
 							if (cases.get(selectedCaseId).reasons.length !== 0) {
@@ -199,58 +199,40 @@
 									.get(selectedCaseId)
 									.reasons.filter((c) => c.label == selectedCaseLabel);
 								if (selectedCaseReasons.length !== 0) {
-									messageHistory = [
-										...messageHistory,
-										{
-											person: 'AI Assistant',
-											message:
-												`Why should this case be ` +
-												selectedCaseLabel +
-												`ed? Please select a reason submitted by the community or briefly explain the reason. Click on the related case on this page to check the details of each reason.`
-										}
-									];
+									await updateMessageHistory(
+										'AI Assistant',
+										`Why should this case be ` +
+											selectedCaseLabel +
+											`ed? Please select a reason submitted by the community or briefly explain the reason. Click on the related case on this page to check the details of each reason.`
+									);
 									showReasonSelector = true;
 								} else {
-									messageHistory = [
-										...messageHistory,
-										{
-											person: 'AI Assistant',
-											message:
-												`Why should this case be ` +
-												selectedCaseLabel +
-												`ed? Please briefly explain the reason.`
-										}
-									];
+									await updateMessageHistory(
+										'AI Assistant',
+										`Why should this case be ` +
+											selectedCaseLabel +
+											`ed? Please briefly explain the reason.`
+									);
 									showReasonMunualInput = true;
 								}
 							} else {
-								messageHistory = [
-									...messageHistory,
-									{
-										person: 'AI Assistant',
-										message: `Why should this case be allowed? Please briefly explain the reason.`
-									}
-								];
+								await updateMessageHistory(
+									'AI Assistant',
+									`Why should this case be allowed? Please briefly explain the reason.`
+								);
 								showReasonMunualInput = true;
 							}
 						} else if (v?.value == 'unsure') {
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'AI Assistant',
-									message: 'Should this case be allowed or disallowed, or is it unsure by itself?'
-								}
-							];
+							await updateMessageHistory(
+								'AI Assistant',
+								'Should this case be allowed or disallowed, or is it unsure by itself?'
+							);
 							showUnsureSelector = true;
 						} else if (v?.value == 'unrelated') {
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'AI Assistant',
-									message:
-										'Please click the link below to visit the edit case page, where you may remove the case from the policy.'
-								}
-							];
+							await updateMessageHistory(
+								'AI Assistant',
+								'Please click the link below to visit the edit case page, where you may remove the case from the policy.'
+							);
 							showLinktoEditCase = true;
 							showRestartBtn = true;
 						}
@@ -285,14 +267,8 @@
 		{#if showUnsureSelector}
 			<div class="mx-3 mt-1">
 				<Select.Root
-					onSelectedChange={(v) => {
-						messageHistory = [
-							...messageHistory,
-							{
-								person: 'You',
-								message: v?.label
-							}
-						];
+					onSelectedChange={async (v) => {
+						await updateMessageHistory('You', v?.label);
 						showUnsureSelector = false;
 
 						if (v?.value == 'allow' || v?.value == 'disallow') {
@@ -302,55 +278,40 @@
 									.get(selectedCaseId)
 									.reasons.filter((c) => c.label == selectedCaseLabel);
 								if (selectedCaseReasons.length !== 0) {
-									messageHistory = [
-										...messageHistory,
-										{
-											person: 'AI Assistant',
-											message:
-												`Why should this case be ` +
-												selectedCaseLabel +
-												`ed? Please select a reason submitted by the community or briefly explain the reason. Click on the related case on this page to check the details of each reason.`
-										}
-									];
+									await updateMessageHistory(
+										'AI Assistant',
+										`Why should this case be ` +
+											selectedCaseLabel +
+											`ed? Please select a reason submitted by the community or briefly explain the reason. Click on the related case on this page to check the details of each reason.`
+									);
 									showReasonSelector = true;
 								} else {
-									messageHistory = [
-										...messageHistory,
-										{
-											person: 'AI Assistant',
-											message:
-												`Why should this case be ` +
-												selectedCaseLabel +
-												`ed? Please briefly explain the reason.`
-										}
-									];
+									await updateMessageHistory(
+										'AI Assistant',
+										`Why should this case be ` +
+											selectedCaseLabel +
+											`ed? Please briefly explain the reason.`
+									);
 									showReasonMunualInput = true;
 								}
 							} else {
-								messageHistory = [
-									...messageHistory,
-									{
-										person: 'AI Assistant',
-										message:
-											`Why should this case be ` +
-											selectedCaseLabel +
-											`ed? Please briefly explain the reason.`
-									}
-								];
+								await updateMessageHistory(
+									'AI Assistant',
+									`Why should this case be ` +
+										selectedCaseLabel +
+										`ed? Please briefly explain the reason.`
+								);
 								showReasonMunualInput = true;
 							}
 						} else {
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'AI Assistant',
-									message: `Please consider discussing the case more before editing the policy based on an unsure case.`
-								},
-								{
-									person: 'AI Assistant',
-									message: `To restart, please select a related case below.`
-								}
-							];
+							await updateMessageHistory(
+								'AI Assistant',
+								`Please consider discussing the case more before editing the policy based on an unsure case.`
+							);
+							await updateMessageHistory(
+								'AI Assistant',
+								`To restart, please select a related case below.`
+							);
 							showCaseSelector = true;
 						}
 					}}
@@ -369,28 +330,14 @@
 		{#if showReasonSelector}
 			<div class="mx-3 mt-1">
 				<Select.Root
-					onSelectedChange={(v) => {
+					onSelectedChange={async (v) => {
+						await updateMessageHistory('You', v?.label);
+						showReasonSelector = false;
 						if (v?.value == 'manual') {
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'You',
-									message: v?.label
-								}
-							];
-							showReasonSelector = false;
 							showReasonMunualInput = true;
 						} else {
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'You',
-									message: v?.label
-								}
-							];
 							selectedCaseReason = v?.value;
-							showReasonSelector = false;
-							generatePolicy();
+							await generatePolicy();
 						}
 					}}
 				>
@@ -416,19 +363,13 @@
 				<Input
 					placeholder={'The case should be ' + selectedCaseLabel + ' because ...'}
 					bind:value={manualInputValue}
-					on:keypress={(e) => {
+					on:keypress={async (e) => {
 						if (e.key === 'Enter') {
 							showReasonMunualInput = false;
 							selectedCaseReason = manualInputValue;
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'You',
-									message: manualInputValue
-								}
-							];
+							await updateMessageHistory('You', manualInputValue);
 							manualInputValue = '';
-							generatePolicy();
+							await generatePolicy();
 						}
 					}}
 				/>
@@ -439,17 +380,11 @@
 				<Input
 					placeholder={'Please edit the policy so that ...'}
 					bind:value={iterateInstruction}
-					on:keypress={(e) => {
+					on:keypress={async (e) => {
 						if (e.key === 'Enter') {
 							showInstructionInput = false;
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'You',
-									message: iterateInstruction
-								}
-							];
-							iteratePolicy();
+							await updateMessageHistory('You', iterateInstruction);
+							await iteratePolicy();
 						}
 					}}
 				/>
@@ -459,14 +394,11 @@
 			<Button
 				variant="secondary"
 				class="mx-3"
-				on:click={() => {
-					messageHistory = [
-						...messageHistory,
-						{
-							person: 'AI Assistant',
-							message: `To restart, please select a related case below.`
-						}
-					];
+				on:click={async () => {
+					await updateMessageHistory(
+						'AI Assistant',
+						`To restart, please select a related case below.`
+					);
 					showRestartBtn = false;
 					showInstructionInput = false;
 					showLinktoEditCase = false;
