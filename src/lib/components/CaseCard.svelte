@@ -4,9 +4,18 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { Toggle } from '$lib/components/ui/toggle';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
-	import { Check, Ban, TriangleAlert, Meh, Plus, LoaderCircle } from 'lucide-svelte/icons';
+	import {
+		Check,
+		Ban,
+		TriangleAlert,
+		Meh,
+		Plus,
+		LoaderCircle,
+		ThumbsUp
+	} from 'lucide-svelte/icons';
 	import type { Timestamp } from 'firebase/firestore';
 
 	export let id = '';
@@ -292,6 +301,9 @@
 									id: rr.id,
 									description: newReason,
 									label: userVote,
+									likeList: [userId],
+									targetEntity: 'cases',
+									targetEntityId: id,
 									userId: userId
 								}
 							];
@@ -317,7 +329,32 @@
 							? reason.description.substring(0, 47) + '...'
 							: reason.description}
 					</Accordion.Trigger>
-					<Accordion.Content>{reason.description}</Accordion.Content>
+					<Accordion.Content>
+						<p>{reason.description}</p>
+						<Toggle
+							aria-label="Toggle like"
+							class="data-[state=on]:bg-sky-100 mt-2"
+							pressed={reason.likeList.includes(userId)}
+							onPressedChange={async (pressed) => {
+								let newLikeList;
+								if (reason.likeList.includes(userId)) {
+									newLikeList = reason.likeList.filter((u) => u !== userId);
+								} else {
+									newLikeList = [...reason.likeList, userId];
+								}
+								reason.likeList = newLikeList;
+								await fetch(`/api/reasons/${reason.id}`, {
+									method: 'PATCH',
+									body: JSON.stringify({ pressed }),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								});
+							}}
+						>
+							<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
+						</Toggle>
+					</Accordion.Content>
 				</Accordion.Item>
 			{/each}
 		</Accordion.Root>
@@ -330,7 +367,32 @@
 							? reason.description.substring(0, 47) + '...'
 							: reason.description}
 					</Accordion.Trigger>
-					<Accordion.Content>{reason.description}</Accordion.Content>
+					<Accordion.Content>
+						<p>{reason.description}</p>
+						<Toggle
+							aria-label="Toggle like"
+							class="data-[state=on]:bg-sky-100 mt-2"
+							pressed={reason.likeList.includes(userId)}
+							onPressedChange={async (pressed) => {
+								let newLikeList;
+								if (reason.likeList.includes(userId)) {
+									newLikeList = reason.likeList.filter((u) => u !== userId);
+								} else {
+									newLikeList = [...reason.likeList, userId];
+								}
+								reason.likeList = newLikeList;
+								await fetch(`/api/reasons/${reason.id}`, {
+									method: 'PATCH',
+									body: JSON.stringify({ pressed }),
+									headers: {
+										'Content-Type': 'application/json'
+									}
+								});
+							}}
+						>
+							<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
+						</Toggle>
+					</Accordion.Content>
 				</Accordion.Item>
 			{/each}
 		</Accordion.Root>
