@@ -39,6 +39,6 @@
 		</div>
 	</div>
 	<div class="md:col-span-1 p-2">
-		<PolicyEditCaseAIPanel policyDescription={data.policy.description} />
+		<PolicyEditCaseAIPanel policyDescription={data.policy.description} policyId={data.policy.id} />
 	</div>
 </div>

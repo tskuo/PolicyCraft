@@ -5,6 +5,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 
 	export let policyDescription;
+	export let policyId;
 
 	let messageHistory: any[] = [
 		{
@@ -28,8 +29,41 @@
 	const promptFlawDisallowCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario of a student in a university computer science course where the student technically violates the following policy despite genuinely trying to comply: `;
 	const promptFlawUnclearCase = `You are a helpful assistant focusing on supporting users' reflections on a given policy. In a few sentences, provide an example scenario of a student in a university computer science course where it is unclear whether the character violates the following policy or not: `;
 
+	let aiLogsDocId = '';
+	const updateMessageHistory = async (person: string, message: string) => {
+		messageHistory = [...messageHistory, { person, message }];
+		if (aiLogsDocId == '') {
+			const res = await fetch(`/api/assistant/ailogs`, {
+				method: 'POST',
+				body: JSON.stringify({
+					action: 'policyEditCaseAI',
+					messageHistory: messageHistory,
+					entity: 'policies',
+					entityId: policyId
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await res.json();
+			aiLogsDocId = data.id;
+		} else {
+			await fetch(`/api/assistant/ailogs`, {
+				method: 'PATCH',
+				body: JSON.stringify({
+					aiLogsDocId,
+					person,
+					message
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		}
+	};
+
 	const generateCase = async (message: string, category: string) => {
-		messageHistory = [...messageHistory, { person: 'You', message: message }];
+		await updateMessageHistory('You', message);
 		loading = true;
 		showGenerateCaseBtn = false;
 
@@ -67,28 +101,17 @@
 		if (res.ok) {
 			const data = await res.json();
 			suggestedCase = data.text;
-
-			messageHistory = [
-				...messageHistory,
-				{ person: 'AI Assistant', message: label },
-				{ person: 'AI Assistant', message: data.text },
-				{
-					person: 'AI Assistant',
-					message: `Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
-				}
-			];
-
+			await updateMessageHistory('AI Assistant', label);
+			await updateMessageHistory('AI Assistant', data.text);
+			await updateMessageHistory(
+				'AI Assistant',
+				`Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
+			);
 			showInstructionInput = true;
 			iterateInstruction = '';
 			showRestartBtn = true;
 		} else {
-			messageHistory = [
-				...messageHistory,
-				{
-					person: 'AI Assistant',
-					message: 'Sorry, something went wrong. Please try again.'
-				}
-			];
+			await updateMessageHistory('AI Assistant', 'Sorry, something went wrong. Please try again.');
 			showGenerateCaseBtn = true;
 		}
 		loading = false;
@@ -111,27 +134,20 @@
 		if (res.ok) {
 			const data = await res.json();
 			suggestedCase = data.text;
-			messageHistory = [
-				...messageHistory,
-				{ person: 'AI Assistant', message: `Here is the revised case:` },
-				{ person: 'AI Assistant', message: data.text },
-				{
-					person: 'AI Assistant',
-					message: `Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
-				}
-			];
+			await updateMessageHistory('AI Assistant', `Here is the revised case:`);
+			await updateMessageHistory('AI Assistant', data.text);
+			await updateMessageHistory(
+				'AI Assistant',
+				`Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
+			);
 			showInstructionInput = true;
 			iterateInstruction = '';
 			showRestartBtn = true;
 		} else {
-			messageHistory = [
-				...messageHistory,
-				{
-					person: 'AI Assistant',
-					message:
-						'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
-				}
-			];
+			await updateMessageHistory(
+				'AI Assistant',
+				'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
+			);
 			showGenerateCaseBtn = true;
 		}
 
@@ -158,14 +174,18 @@
 			<Button
 				variant="secondary"
 				class="mx-3"
-				on:click={() => generateCase(messageExample, 'illustrative')}
+				on:click={async () => {
+					await generateCase(messageExample, 'illustrative');
+				}}
 			>
 				{messageExample}
 			</Button>
 			<Button
 				variant="secondary"
 				class="mx-3"
-				on:click={() => generateCase(messageCounterExample, 'flaw')}
+				on:click={async () => {
+					await generateCase(messageCounterExample, 'flaw');
+				}}
 			>
 				{messageCounterExample}
 			</Button>
@@ -175,17 +195,11 @@
 				<Input
 					placeholder={'Please edit the case so that ...'}
 					bind:value={iterateInstruction}
-					on:keypress={(e) => {
+					on:keypress={async (e) => {
 						if (e.key === 'Enter') {
 							showInstructionInput = false;
-							messageHistory = [
-								...messageHistory,
-								{
-									person: 'You',
-									message: iterateInstruction
-								}
-							];
-							iterateCase();
+							await updateMessageHistory('You', iterateInstruction);
+							await iterateCase();
 						}
 					}}
 				/>
@@ -195,18 +209,14 @@
 			<Button
 				variant="secondary"
 				class="mx-3"
-				on:click={() => {
-					messageHistory = [
-						...messageHistory,
-						{
-							person: 'AI Assistant',
-							message: `To restart, please click the buttons below to see some examples.`
-						}
-					];
+				on:click={async () => {
+					await updateMessageHistory(
+						'AI Assistant',
+						`To restart, please click the buttons below to see some examples.`
+					);
 					showGenerateCaseBtn = true;
 					showInstructionInput = false;
 					showRestartBtn = false;
-
 					iterateInstruction = '';
 					suggestedCase = '';
 				}}>Restart</Button
