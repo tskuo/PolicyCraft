@@ -123,11 +123,17 @@
 							<div class="flex justify-between items-center">
 								<div class="flex items-center">
 									{#if label == 'allow'}
-										<p class="bg-green-200 px-1 rounded">allow by this policy</p>
+										<p class="bg-green-200 text-foreground text-xs font-semibold px-1 py-1 rounded">
+											currently allowed by this policy
+										</p>
 									{:else if label == 'disallow'}
-										<p class="bg-red-200 px-1 rounded">disallow by this policy</p>
+										<p class="bg-red-200 text-foreground text-xs font-semibold px-1 py-1 rounded">
+											currently disallowed by this policy
+										</p>
 									{:else if label == 'unsure'}
-										<p class="bg-gray-200 px-1 rounded">unsure under this policy</p>
+										<p class="bg-gray-200 text-foreground text-xs font-semibold px-1 py-1 rounded">
+											currently unsure under this policy
+										</p>
 									{/if}
 								</div>
 								{#if showAlert && !hideAlert}<TriangleAlert class="w-4 h-4" />{/if}

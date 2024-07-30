@@ -164,19 +164,25 @@
 												<div class="flex items-center space-x-3 space-y-0">
 													<Form.Control let:attrs>
 														<RadioGroup.Item value="allow" {...attrs} />
-														<Form.Label class="font-normal">allowed by this policy</Form.Label>
+														<Form.Label class="font-normal"
+															>currently allowed by this policy</Form.Label
+														>
 													</Form.Control>
 												</div>
 												<div class="flex items-center space-x-3 space-y-0">
 													<Form.Control let:attrs>
 														<RadioGroup.Item value="disallow" {...attrs} />
-														<Form.Label class="font-normal">disallowed by this policy</Form.Label>
+														<Form.Label class="font-normal"
+															>currently disallowed by this policy</Form.Label
+														>
 													</Form.Control>
 												</div>
 												<div class="flex items-center space-x-3 space-y-0">
 													<Form.Control let:attrs>
 														<RadioGroup.Item value="unsure" {...attrs} />
-														<Form.Label class="font-normal">unsure under this policy</Form.Label>
+														<Form.Label class="font-normal"
+															>currently unsure under this policy</Form.Label
+														>
 													</Form.Control>
 												</div>
 												<RadioGroup.Input name="cases" />

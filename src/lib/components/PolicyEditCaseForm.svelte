@@ -154,23 +154,23 @@
 													on:click={() => {
 														handleCase($formData.cases[i].caseId, 'allow');
 													}}
-													>allow by this policy
+													>currently allowed by this policy
 												</DropdownMenu.Item>
 												<DropdownMenu.Item
 													on:click={() => {
 														handleCase($formData.cases[i].caseId, 'disallow');
-													}}>disallow by this policy</DropdownMenu.Item
+													}}>currently disallowed by this policy</DropdownMenu.Item
 												>
 												<DropdownMenu.Item
 													on:click={() => {
 														handleCase($formData.cases[i].caseId, 'unsure');
-													}}>unsure under this policy</DropdownMenu.Item
+													}}>currently unsure under this policy</DropdownMenu.Item
 												>
 												<DropdownMenu.Item
 													class="text-red-500 data-[highlighted]:text-red-500"
 													on:click={() => {
 														handleCase($formData.cases[i].caseId, 'remove');
-													}}>remove the case</DropdownMenu.Item
+													}}>remove the case from this policy</DropdownMenu.Item
 												>
 											</DropdownMenu.Group>
 										</DropdownMenu.Content>
@@ -401,17 +401,17 @@
 															on:click={() => {
 																handleCase(searchCase.id, 'allow');
 															}}
-															>allow by this policy
+															>currently allowed by this policy
 														</DropdownMenu.Item>
 														<DropdownMenu.Item
 															on:click={() => {
 																handleCase(searchCase.id, 'disallow');
-															}}>disallow by this policy</DropdownMenu.Item
+															}}>currently disallowed by this policy</DropdownMenu.Item
 														>
 														<DropdownMenu.Item
 															on:click={() => {
 																handleCase(searchCase.id, 'unsure');
-															}}>unsure under this policy</DropdownMenu.Item
+															}}>currently unsure under this policy</DropdownMenu.Item
 														>
 													</DropdownMenu.Group>
 												</DropdownMenu.Content>
