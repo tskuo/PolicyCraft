@@ -36,6 +36,8 @@ export const POST = async ({ request, locals }) => {
 				title: '',
 				description: form.data.description
 			},
+			linkedEntity: entity,
+			linkedEntityId: entityId,
 			targetCollection: 'reasons',
 			targetDocumentId: docRef.id,
 			targetSubCollection: '',

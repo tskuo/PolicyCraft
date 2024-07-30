@@ -76,8 +76,8 @@
 							<p>
 								<span class="font-semibold">Related case label:</span>
 								{edit.input.description == 'unsure'
-									? 'unsure under this policy'
-									: `${edit.input.description} by this policy`}
+									? 'currently unsure under this policy'
+									: `currently ${edit.input.description}ed by this policy`}
 							</p>
 						{/if}
 					</Accordion.Content>

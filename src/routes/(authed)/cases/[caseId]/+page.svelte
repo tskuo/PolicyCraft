@@ -6,6 +6,7 @@
 	import ReasonPanel from '$lib/components/ReasonPanel.svelte';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import * as Table from '$lib/components/ui/table';
+	import { goto } from '$app/navigation';
 
 	export let data;
 
@@ -194,10 +195,13 @@
 				<Table.Root>
 					<Table.Body>
 						{#each data.relatedPolicies as policy}
-							<Table.Row>
-								<a href="/policies/{policy.id}" class="w-full">
-									<Table.Cell class="w-full">{policy.title}</Table.Cell>
-								</a>
+							<Table.Row
+								class="hover:cursor-pointer"
+								on:click={() => {
+									goto(`/policies/${policy.id}`);
+								}}
+							>
+								<Table.Cell class="w-full">{policy.title}</Table.Cell>
 							</Table.Row>
 						{/each}
 					</Table.Body>

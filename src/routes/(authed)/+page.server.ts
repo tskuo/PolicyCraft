@@ -37,7 +37,7 @@ export const actions: Actions = {
 		}
 		await event.fetch(`/api/discussions/${form.data.id}`, {
 			method: 'PATCH',
-			body: JSON.stringify({ form })
+			body: JSON.stringify({ form, entity: 'meta', entityId: 'about' })
 		});
 
 		return { form };

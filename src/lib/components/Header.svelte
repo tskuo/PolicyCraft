@@ -84,8 +84,8 @@
 						<DropdownMenu.Item
 							class="hover:cursor-pointer"
 							on:click={() => {
-								goto('/discussions');
-							}}>My Discussions</DropdownMenu.Item
+								goto('/activities');
+							}}>My Activities</DropdownMenu.Item
 						>
 						<DropdownMenu.Item class="w-full">
 							<form action="/logout" method="POST" class="w-full">

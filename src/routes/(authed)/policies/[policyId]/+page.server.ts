@@ -88,7 +88,7 @@ export const actions: Actions = {
 		}
 		const res = await event.fetch(`/api/discussions/${form.data.id}`, {
 			method: 'PATCH',
-			body: JSON.stringify({ form })
+			body: JSON.stringify({ form, entity: 'policies', entityId: event.params.policyId })
 		});
 		const data = await res.json();
 

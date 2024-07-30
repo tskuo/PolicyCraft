@@ -34,7 +34,7 @@ export const PATCH = async ({ request, locals, params }) => {
 		throw error(400, 'User authentication error.');
 	}
 	try {
-		const { form, action } = await request.json();
+		const { form, action, entity, entityId } = await request.json();
 
 		if (action == 'closeDiscussion') {
 			await updateDoc(doc(db, 'discussions', params.discussionId), {
@@ -70,6 +70,8 @@ export const PATCH = async ({ request, locals, params }) => {
 					title: '',
 					description: form.data.message
 				},
+				linkedEntity: entity,
+				linkedEntityId: entityId,
 				targetCollection: 'discussions',
 				targetDocumentId: form.data.id,
 				targetSubCollection: 'comments',

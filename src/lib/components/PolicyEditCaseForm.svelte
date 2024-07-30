@@ -266,7 +266,7 @@
 					<Dialog.Trigger class={buttonVariants({ variant: 'secondary' })}>
 						Create new case
 					</Dialog.Trigger>
-					<Dialog.Content class="sm:max-w-lg max-h-screen">
+					<Dialog.Content class="sm:max-w-lg max-h-[80%]">
 						<Dialog.Header>
 							<Dialog.Title>Create a new case</Dialog.Title>
 							<Dialog.Description>
@@ -280,7 +280,6 @@
 									<Form.Label>Case title</Form.Label>
 									<Input {...attrs} bind:value={$formNewCaseData.title} />
 								</Form.Control>
-								<!-- <Form.Description>This is your public display name.</Form.Description> -->
 								<Form.FieldErrors />
 							</Form.Field>
 							<Form.Field form={formNewCase} name="description">
@@ -291,8 +290,12 @@
 								<!-- <Form.Description>This is your public display name.</Form.Description> -->
 								<Form.FieldErrors />
 							</Form.Field>
-							<Form.Fieldset form={formNewCase} name="userVote" class="space-y-5 mt-4">
+							<Form.Fieldset form={formNewCase} name="userVote" class="mt-4 mb-2">
 								<Form.Legend>Your vote on the case</Form.Legend>
+								<Form.Description>
+									Your vote should reflect what you think about this case, regardless of what
+									current policies say.
+								</Form.Description>
 								<RadioGroup.Root
 									bind:value={$formNewCaseData.userVote}
 									class="flex flex-col space-y-1"
@@ -341,25 +344,25 @@
 									<div class="flex items-center space-x-3 space-y-0">
 										<Form.Control let:attrs>
 											<RadioGroup.Item value="allow" {...attrs} />
-											<Form.Label class="font-normal"
-												>This case is allowed by this policy</Form.Label
-											>
+											<Form.Label class="font-normal">
+												The case is currently allowed by this policy
+											</Form.Label>
 										</Form.Control>
 									</div>
 									<div class="flex items-center space-x-3 space-y-0">
 										<Form.Control let:attrs>
 											<RadioGroup.Item value="disallow" {...attrs} />
-											<Form.Label class="font-normal"
-												>This case is disallowed by this policy</Form.Label
-											>
+											<Form.Label class="font-normal">
+												The case is currently disallowed by this policy
+											</Form.Label>
 										</Form.Control>
 									</div>
 									<div class="flex items-center space-x-3 space-y-0">
 										<Form.Control let:attrs>
 											<RadioGroup.Item value="unsure" {...attrs} />
-											<Form.Label class="font-normal"
-												>This case is unsure under this policy</Form.Label
-											>
+											<Form.Label class="font-normal">
+												The case is currently unsure under this policy
+											</Form.Label>
 										</Form.Control>
 									</div>
 									<RadioGroup.Input name="label" />
