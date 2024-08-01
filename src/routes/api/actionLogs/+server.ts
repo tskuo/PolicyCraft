@@ -1,8 +1,11 @@
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import { collection, getDocs, and, or, query, where } from 'firebase/firestore';
 import { db } from '$lib/firebase';
 
 export const GET = async ({ locals }) => {
+	if (!locals.user) {
+		throw error(400, 'User authentication error.');
+	}
 	const res: any[] = [];
 	const querySnapshot = await getDocs(
 		query(

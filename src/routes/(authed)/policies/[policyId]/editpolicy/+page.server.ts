@@ -8,12 +8,9 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 	if (locals.stage == 'vote') {
 		throw redirect(303, `/policies/${params.policyId}`);
 	}
-
 	const res = await fetch(`/api/policies/${params.policyId}`);
 	const policy = await res.json();
-
 	const form = await superValidate(zod(policyEditFormSchema));
-
 	if (res.ok) {
 		const cases = new Map();
 		for (const c of policy.cases) {
@@ -21,7 +18,6 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 			if (resCase.ok) {
 				const cc = await resCase.json();
 				cc.label = c.label;
-
 				const reasons = [];
 				for (const reasonId of cc.reasons) {
 					const resReason = await fetch(`/api/reasons/${reasonId}`);
@@ -35,15 +31,12 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 				cases.set(cc.id, cc);
 			}
 		}
-
 		form.data.title = policy.title;
 		form.data.description = policy.description;
 		form.data.cases = policy.cases;
 		return { policy, form, cases };
 	}
-
 	throw error(404, 'Fail to load this page.');
-
 	// throw redirect(307, '/policy');
 };
 
