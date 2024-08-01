@@ -10,6 +10,7 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
+	export let targetEntity;
 	export let label1, label2;
 	export let reasons: any[] = [];
 	export let dataReason: SuperValidated<Infer<ReasonCreateFormSchema>>;
@@ -175,6 +176,6 @@
 	</div>
 {:else}
 	<p class="mt-2">
-		This case currently has no vote reasons. Click the "add reason" button to provide reasons.
+		This {targetEntity} currently has no vote reasons. Click the "add reason" button to provide reasons.
 	</p>
 {/if}

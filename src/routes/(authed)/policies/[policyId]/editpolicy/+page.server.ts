@@ -62,8 +62,8 @@ export const actions: Actions = {
 		const uptodatePolicy = await res.json();
 
 		if (
-			uptodatePolicy.title !== formData.get('policyTitleBeforeEdit') ||
-			uptodatePolicy.description !== formData.get('policyDescriptionBeforeEdit')
+			uptodatePolicy.title.trim() !== formData.get('policyTitleBeforeEdit').trim() ||
+			uptodatePolicy.description.trim() !== formData.get('policyDescriptionBeforeEdit').trim()
 		) {
 			return message(
 				form,

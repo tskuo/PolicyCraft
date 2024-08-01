@@ -185,6 +185,7 @@
 			<ReasonPanel
 				reasons={data.reasons}
 				dataReason={data.formReason}
+				targetEntity="case"
 				label1="allow"
 				label2="disallow"
 				{userId}

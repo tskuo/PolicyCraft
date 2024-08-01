@@ -231,6 +231,7 @@
 			<ReasonPanel
 				reasons={data.reasons}
 				dataReason={data.formReason}
+				targetEntity="policy"
 				label1="upvote"
 				label2="downvote"
 				{userId}

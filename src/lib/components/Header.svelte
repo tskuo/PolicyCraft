@@ -64,7 +64,7 @@
 	<div>
 		<div class="flex items-center">
 			{#if stage !== 'vote'}
-				<Button href="/create" class="mr-2">
+				<Button href="/create" class="mr-2" hidden={stage == 'vote'}>
 					<Plus class="w-4 h-4" />
 					<span class="ml-1 hidden md:block">Create</span>
 				</Button>
