@@ -1,13 +1,39 @@
 import { z } from 'zod';
 
 export const policyCreateFormSchema = z.object({
-	title: z.string().min(1).max(80),
-	description: z.string().min(1)
+	title: z
+		.string()
+		.trim()
+		.min(1)
+		.max(80)
+		.refine((value) => !/\r|\n/.test(value), {
+			message: 'Input cannot include multiple lines or paragraphs'
+		}),
+	description: z
+		.string()
+		.trim()
+		.min(1)
+		.refine((value) => !/\r|\n/.test(value), {
+			message: 'Input cannot include multiple lines or paragraphs'
+		})
 });
 
 export const policyEditFormSchema = z.object({
-	title: z.string().min(1).max(80),
-	description: z.string().min(1),
+	title: z
+		.string()
+		.trim()
+		.min(1)
+		.max(80)
+		.refine((value) => !/\r|\n/.test(value), {
+			message: 'Input cannot include multiple lines or paragraphs'
+		}),
+	description: z
+		.string()
+		.trim()
+		.min(1)
+		.refine((value) => !/\r|\n/.test(value), {
+			message: 'Input cannot include multiple lines or paragraphs'
+		}),
 	cases: z
 		.object({
 			caseId: z.string(),

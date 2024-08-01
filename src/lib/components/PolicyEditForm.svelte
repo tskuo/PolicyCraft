@@ -39,8 +39,10 @@
 		},
 		onUpdated({ form }) {
 			disalbeSubmitButton = false;
-			policyTitleBeforeEdit = form.message.uptodateTitle;
-			policyDescriptionBeforeEdit = form.message.uptodateDescription;
+			if (form.valid) {
+				policyTitleBeforeEdit = form.message.uptodateTitle;
+				policyDescriptionBeforeEdit = form.message.uptodateDescription;
+			}
 		}
 	});
 
