@@ -52,39 +52,39 @@ export const policyEditCaseFormSchema = z.object({
 });
 
 export const caseCreateFormSchema = z.object({
-	title: z.string().min(1).max(50),
-	description: z.string().min(1),
+	title: z.string().trim().min(1).max(50),
+	description: z.string().trim().min(1),
 	userVote: z.enum(['allow', 'disallow', 'unsure'], {
 		required_error: 'You need to vote on the case.'
 	}),
-	reason: z.string()
+	reason: z.string().trim()
 });
 
 export const relatedCaseCreateFormSchema = z.object({
-	title: z.string().min(1).max(50),
-	description: z.string().min(1),
+	title: z.string().trim().min(1).max(50),
+	description: z.string().trim().min(1),
 	userVote: z.enum(['allow', 'disallow', 'unsure'], {
 		required_error: 'You need to vote on the case.'
 	}),
-	reason: z.string(),
+	reason: z.string().trim(),
 	label: z.enum(['allow', 'disallow', 'unsure'], {
 		required_error: 'You need to label the case.'
 	})
 });
 
 export const messageCreateFormSchema = z.object({
-	message: z.string().min(1),
+	message: z.string().trim().min(1),
 	id: z.string()
 });
 
 export const discussionCreateFormSchema = z.object({
-	title: z.string().min(1).max(30),
-	message: z.string().min(1)
+	title: z.string().trim().min(1).max(30),
+	message: z.string().trim().min(1)
 });
 
 export const reasonCreateFormSchema = z.object({
 	label: z.string().min(1),
-	description: z.string().min(1)
+	description: z.string().trim().min(1)
 });
 
 export const userLoginFormSchema = z.object({
@@ -95,7 +95,7 @@ export const userLoginFormSchema = z.object({
 export const userSignUpFormSchema = z.object({
 	email: z.string().email(),
 	password: z.string().min(6),
-	displayName: z.string().min(6),
+	displayName: z.string().trim().min(6),
 	code: z.string().min(1)
 });
 
