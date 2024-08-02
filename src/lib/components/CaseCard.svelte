@@ -7,6 +7,7 @@
 	import { Toggle } from '$lib/components/ui/toggle';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
+	import * as Alert from '$lib/components/ui/alert/index.js';
 	import {
 		Check,
 		Ban,
@@ -324,6 +325,16 @@
 						<Plus class="h-4 w-4" />
 					{/if}
 				</Button>
+			</div>
+		{:else if userVote == 'unsure'}
+			<div class="flex w-full items-center space-x-1 mt-2">
+				<Alert.Root>
+					<Meh class="h-4 w-4" />
+					<Alert.Description>
+						If you vote "unsure," you can still explain your reasons on the case page and start
+						other discussions if you wish.
+					</Alert.Description>
+				</Alert.Root>
 			</div>
 		{/if}
 		<h3 class="font-semibold mt-4">Allow reasons ({reasonsAllow.length})</h3>
