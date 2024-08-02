@@ -330,36 +330,40 @@
 		<Accordion.Root class="w-full">
 			{#each reasonsAllow as reason (reason.id)}
 				<Accordion.Item value={reason.id}>
-					<Accordion.Trigger class="font-normal">
-						{reason.description.length > 47
-							? reason.description.substring(0, 47) + '...'
-							: reason.description}
-					</Accordion.Trigger>
+					<div class="relative">
+						<Accordion.Trigger class="font-normal text-sm text-left">
+							{reason.description.length > 47
+								? reason.description.substring(0, 47) + '...'
+								: reason.description}
+						</Accordion.Trigger>
+						<div class="absolute top-2 right-0">
+							<Toggle
+								aria-label="Toggle like"
+								class="data-[state=on]:bg-sky-100 bg-white"
+								pressed={reason.likeList.includes(userId)}
+								onPressedChange={async (pressed) => {
+									let newLikeList;
+									if (reason.likeList.includes(userId)) {
+										newLikeList = reason.likeList.filter((u) => u !== userId);
+									} else {
+										newLikeList = [...reason.likeList, userId];
+									}
+									reason.likeList = newLikeList;
+									await fetch(`/api/reasons/${reason.id}`, {
+										method: 'PATCH',
+										body: JSON.stringify({ pressed }),
+										headers: {
+											'Content-Type': 'application/json'
+										}
+									});
+								}}
+							>
+								<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
+							</Toggle>
+						</div>
+					</div>
 					<Accordion.Content>
 						<p>{reason.description}</p>
-						<Toggle
-							aria-label="Toggle like"
-							class="data-[state=on]:bg-sky-100 mt-2"
-							pressed={reason.likeList.includes(userId)}
-							onPressedChange={async (pressed) => {
-								let newLikeList;
-								if (reason.likeList.includes(userId)) {
-									newLikeList = reason.likeList.filter((u) => u !== userId);
-								} else {
-									newLikeList = [...reason.likeList, userId];
-								}
-								reason.likeList = newLikeList;
-								await fetch(`/api/reasons/${reason.id}`, {
-									method: 'PATCH',
-									body: JSON.stringify({ pressed }),
-									headers: {
-										'Content-Type': 'application/json'
-									}
-								});
-							}}
-						>
-							<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
-						</Toggle>
 					</Accordion.Content>
 				</Accordion.Item>
 			{/each}
@@ -368,36 +372,40 @@
 		<Accordion.Root class="w-full">
 			{#each reasonsDisallow as reason (reason.id)}
 				<Accordion.Item value={reason.id}>
-					<Accordion.Trigger class="font-normal">
-						{reason.description.length > 47
-							? reason.description.substring(0, 47) + '...'
-							: reason.description}
-					</Accordion.Trigger>
+					<div class="relative">
+						<Accordion.Trigger class="font-normal text-sm text-left">
+							{reason.description.length > 47
+								? reason.description.substring(0, 47) + '...'
+								: reason.description}
+						</Accordion.Trigger>
+						<div class="absolute top-2 right-0">
+							<Toggle
+								aria-label="Toggle like"
+								class="data-[state=on]:bg-sky-100 bg-white"
+								pressed={reason.likeList.includes(userId)}
+								onPressedChange={async (pressed) => {
+									let newLikeList;
+									if (reason.likeList.includes(userId)) {
+										newLikeList = reason.likeList.filter((u) => u !== userId);
+									} else {
+										newLikeList = [...reason.likeList, userId];
+									}
+									reason.likeList = newLikeList;
+									await fetch(`/api/reasons/${reason.id}`, {
+										method: 'PATCH',
+										body: JSON.stringify({ pressed }),
+										headers: {
+											'Content-Type': 'application/json'
+										}
+									});
+								}}
+							>
+								<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
+							</Toggle>
+						</div>
+					</div>
 					<Accordion.Content>
 						<p>{reason.description}</p>
-						<Toggle
-							aria-label="Toggle like"
-							class="data-[state=on]:bg-sky-100 mt-2"
-							pressed={reason.likeList.includes(userId)}
-							onPressedChange={async (pressed) => {
-								let newLikeList;
-								if (reason.likeList.includes(userId)) {
-									newLikeList = reason.likeList.filter((u) => u !== userId);
-								} else {
-									newLikeList = [...reason.likeList, userId];
-								}
-								reason.likeList = newLikeList;
-								await fetch(`/api/reasons/${reason.id}`, {
-									method: 'PATCH',
-									body: JSON.stringify({ pressed }),
-									headers: {
-										'Content-Type': 'application/json'
-									}
-								});
-							}}
-						>
-							<ThumbsUp class="mr-2 h-4 w-4" />{reason.likeList.length}
-						</Toggle>
 					</Accordion.Content>
 				</Accordion.Item>
 			{/each}
