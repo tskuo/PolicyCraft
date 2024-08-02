@@ -127,7 +127,9 @@
 			Your changes will only be saved once you click the submit button at the bottom of the page.
 		</Form.Description>
 		{#if $formData.cases.length == 0}
-			<p class="text-sm">There are no related cases.</p>
+			<Card.Root class="w-full h-80 flex items-center justify-center">
+				<p class="text-muted-foreground text-sm">This policy currently has no related cases.</p>
+			</Card.Root>
 		{:else}
 			<ScrollArea orientation="horizontal" class="rounded-lg md:w-[60vw]">
 				<div class="flex space-x-2 pb-4 w-[60vw]">
@@ -266,12 +268,12 @@
 					<Dialog.Trigger class={buttonVariants({ variant: 'secondary' })}>
 						Create new case
 					</Dialog.Trigger>
-					<Dialog.Content class="sm:max-w-lg max-h-[80%]">
+					<Dialog.Content class="sm:max-w-lg max-h-[80%] overflow-y-scroll">
 						<Dialog.Header>
 							<Dialog.Title>Create a new case</Dialog.Title>
 							<Dialog.Description>
-								A new case will be created as soon as you click the create button. However, it will
-								not be added to the policy as a related case until you click the submit button.
+								A new case will be created as soon as you click the create button, but it will not
+								be added to the policy as a related case until you click the submit button.
 							</Dialog.Description>
 						</Dialog.Header>
 						<form method="POST" use:enhance2 action="?/createCase">
