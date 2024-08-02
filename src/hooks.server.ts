@@ -11,9 +11,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (!event.locals.user) {
 			throw redirect(303, '/login');
 		}
-		if (auth.currentUser?.emailVerified !== true) {
-			throw redirect(303, '/verify');
-		}
+		// if (auth.currentUser?.emailVerified !== true) {
+		// 	throw redirect(303, '/verify');
+		// }
 	}
 
 	const docSnap = await getDoc(doc(db, 'meta', 'code'));

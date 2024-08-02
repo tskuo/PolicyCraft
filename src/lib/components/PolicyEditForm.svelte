@@ -39,7 +39,7 @@
 		},
 		onUpdated({ form }) {
 			disalbeSubmitButton = false;
-			if (form.valid) {
+			if (form.message) {
 				policyTitleBeforeEdit = form.message.uptodateTitle;
 				policyDescriptionBeforeEdit = form.message.uptodateDescription;
 			}

@@ -61,11 +61,6 @@ export const actions: Actions = {
 		const res = await event.fetch(`/api/policies/${event.params.policyId}`);
 		const uptodatePolicy = await res.json();
 
-		// console.log(uptodatePolicy);
-		// console.log(uptodatePolicy.description);
-		// console.log('------------');
-		// console.log(formData.get('policyDescriptionBeforeEdit'));
-
 		if (
 			uptodatePolicy.title.trim() !== formData.get('policyTitleBeforeEdit').trim() ||
 			uptodatePolicy.description.trim() !== formData.get('policyDescriptionBeforeEdit').trim()

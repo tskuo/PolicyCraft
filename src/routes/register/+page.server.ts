@@ -72,7 +72,8 @@ export const actions: Actions = {
 			});
 		}
 
-		sendEmailVerification(auth.currentUser);
-		throw redirect(303, '/verify');
+		// sendEmailVerification(auth.currentUser);
+		// throw redirect(303, '/verify');
+		throw redirect(303, '/');
 	}
 };

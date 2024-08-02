@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import logo from '$lib/img/logo.webp';
 	import * as Form from '$lib/components/ui/form';
 	export let data;
@@ -40,4 +40,4 @@
 			</form>
 		</div>
 	</div>
-</div>
+</div> -->
