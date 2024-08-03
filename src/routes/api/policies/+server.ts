@@ -3,7 +3,7 @@ import { serverTimestamp, addDoc, collection, getDocs, query, orderBy } from 'fi
 import { db } from '$lib/firebase';
 
 // Get all policies from the database
-export const GET = async () => {
+export const GET = async ({ locals }) => {
 	try {
 		const querySnapshot = await getDocs(
 			query(collection(db, 'policies'), orderBy('createAt', 'desc'))
@@ -11,7 +11,9 @@ export const GET = async () => {
 		const res: any[] = [];
 		querySnapshot.forEach((doc) => {
 			const policy = { id: doc.id, ...doc.data() };
-			res.push(policy);
+			if (locals.stage !== 'vote' || (locals.stage == 'vote' && doc.data().cases.length > 0)) {
+				res.push(policy);
+			}
 		});
 		return json(res);
 	} catch {

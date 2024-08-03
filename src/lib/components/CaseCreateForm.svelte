@@ -35,7 +35,6 @@
 			<Form.Label>Case title</Form.Label>
 			<Input {...attrs} bind:value={$formData.title} />
 		</Form.Control>
-		<!-- <Form.Description>This is your public display name.</Form.Description> -->
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="description">
@@ -43,11 +42,14 @@
 			<Form.Label>Case description</Form.Label>
 			<Textarea {...attrs} bind:value={$formData.description} />
 		</Form.Control>
-		<!-- <Form.Description>This is your public display name.</Form.Description> -->
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Fieldset {form} name="userVote" class="space-y-5 mt-4">
+	<Form.Fieldset {form} name="userVote" class="mt-4 mb-2">
 		<Form.Legend>Your vote on the case</Form.Legend>
+		<Form.Description>
+			Your vote should reflect what you think about this case, regardless of what current policies
+			say.
+		</Form.Description>
 		<RadioGroup.Root bind:value={$formData.userVote} class="flex flex-col space-y-1">
 			<div class="flex items-center space-x-3 space-y-0">
 				<Form.Control let:attrs>

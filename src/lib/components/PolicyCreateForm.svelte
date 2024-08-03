@@ -44,6 +44,10 @@
 		<!-- <Form.Description>This is your public display name.</Form.Description> -->
 		<Form.FieldErrors />
 	</Form.Field>
+	<p class="text-muted-foreground text-sm">
+		Please note that policies without any related cases will not be eligible for voting in the final
+		stage. Consider adding related cases after you create the policy.
+	</p>
 	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
 		{#if disalbeSubmitButton}
 			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />

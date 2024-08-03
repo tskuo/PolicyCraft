@@ -103,7 +103,8 @@
 	</Form.Field>
 	{#if !showNextStep}
 		<h3 class="text-sm font-medium my-3">
-			Related Cases <span class="text-muted-foreground">(for reference only, not editable)</span>
+			Related Cases
+			<span class="text-muted-foreground">(for reference only, not editable here)</span>
 		</h3>
 		{#if $formData.cases.length !== 0}
 			<ScrollArea orientation="horizontal" class="rounded-lg md:w-[60vw]">
@@ -123,7 +124,10 @@
 				</div>
 			</ScrollArea>
 		{:else}
-			<p class="text-sm">This policy doesn't have any related cases.</p>
+			<p class="text-sm">
+				This policy currently has no related cases. Please note that policies without any related
+				cases will not be eligible for voting in the final stage.
+			</p>
 		{/if}
 		<Button
 			class="mt-4"
@@ -204,7 +208,7 @@
 	{#if $formData.cases.length == 0 && showNextStep}
 		<h2 class="font-bold mt-4">Step 2 of 2: Check related case labels before submission</h2>
 		<p class="text-sm mt-2">
-			This policy doesn't have any related cases yet. Please directly submit the edit and consider
+			This policy currently has no related cases. Please directly submit the edit and consider
 			adding related cases.
 		</p>
 	{/if}
