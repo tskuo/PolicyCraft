@@ -9,6 +9,7 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Alert from '$lib/components/ui/alert/index.js';
 	import {
 		relatedCaseCreateFormSchema,
 		policyEditCaseFormSchema,
@@ -24,7 +25,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import SuperDebug from 'sveltekit-superforms';
 	import { browser } from '$app/environment';
-	import { Plus, Search, LoaderCircle, Ellipsis } from 'lucide-svelte';
+	import { Plus, Search, LoaderCircle, Ellipsis, Meh } from 'lucide-svelte';
 	import type { ActionData } from '../../routes/(authed)/policies/[policyId]/editcase/$types';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
@@ -336,6 +337,13 @@
 									</Form.Control>
 									<Form.FieldErrors />
 								</Form.Field>
+							{:else}
+								<Alert.Root>
+									<Alert.Description>
+										If you vote "unsure," you can still explain your reasons on the case page once
+										you create it.
+									</Alert.Description>
+								</Alert.Root>
 							{/if}
 							<Form.Fieldset form={formNewCase} name="label" class="space-y-5 mt-4">
 								<Form.Legend>Label the case based on this policy</Form.Legend>

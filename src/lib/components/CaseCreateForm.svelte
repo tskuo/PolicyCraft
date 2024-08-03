@@ -6,6 +6,7 @@
 	import { caseCreateFormSchema, type CaseCreateFormSchema } from '$lib/schema';
 	import SuperDebug, { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { LoaderCircle } from 'lucide-svelte';
 
 	export let data: SuperValidated<Infer<CaseCreateFormSchema>>;
@@ -78,6 +79,13 @@
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
+	{:else}
+		<Alert.Root>
+			<Alert.Description>
+				If you vote "unsure," you can still explain your reasons on the case page once you create
+				it.
+			</Alert.Description>
+		</Alert.Root>
 	{/if}
 	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
 		{#if disalbeSubmitButton}
