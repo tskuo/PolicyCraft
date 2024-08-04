@@ -171,10 +171,7 @@
 			iterateInstruction = '';
 			showRestartBtn = true;
 		} else {
-			await updateMessageHistory(
-				'AI Assistant',
-				'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
-			);
+			await updateMessageHistory('AI Assistant', 'Sorry, something went wrong. Please try again.');
 			showGenerateCaseBtn = true;
 		}
 
