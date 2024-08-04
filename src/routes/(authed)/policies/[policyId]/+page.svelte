@@ -241,32 +241,6 @@
 
 		<div class="flex justify-between items-center mt-6">
 			<h3 class="font-bold text-lg">Related Cases</h3>
-			<!-- <div class="flex my-2">
-				<div>
-					<Select.Root>
-						<Select.Trigger class="w-[180px]">
-							<Select.Value placeholder="Theme" />
-						</Select.Trigger>
-						<Select.Content>
-							<Select.Item value="light">Light</Select.Item>
-							<Select.Item value="dark">Dark</Select.Item>
-							<Select.Item value="system">System</Select.Item>
-						</Select.Content>
-					</Select.Root>
-				</div>
-				<div class="ml-2">
-					<Select.Root>
-						<Select.Trigger class="w-[180px]">
-							<Select.Value placeholder="Theme" />
-						</Select.Trigger>
-						<Select.Content>
-							<Select.Item value="light">Light</Select.Item>
-							<Select.Item value="dark">Dark</Select.Item>
-							<Select.Item value="system">System</Select.Item>
-						</Select.Content>
-					</Select.Root>
-				</div>
-			</div> -->
 			<div class="flex">
 				{#if data.stage !== 'vote'}
 					<Button href="/policies/{data.policy.id}/editcase">
@@ -282,8 +256,10 @@
 				{/each}
 			</div>
 		{:else}
-			<p class="mt-2">
-				There are no related cases yet. Add related cases with the edit case button.
+			<p class="mt-2 text-muted-foreground text-sm">
+				This policy currently has no related cases. Please consider adding related cases with the
+				edit case button. Note that policies without any related cases will not be eligible for
+				voting in the final stage.
 			</p>
 		{/if}
 	</div>

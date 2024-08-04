@@ -46,7 +46,7 @@
 	</Form.Field>
 	<p class="text-muted-foreground text-sm">
 		Please note that policies without any related cases will not be eligible for voting in the final
-		stage. Consider adding related cases after you create the policy.
+		stage. Consider adding related cases once you create the policy.
 	</p>
 	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
 		{#if disalbeSubmitButton}

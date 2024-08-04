@@ -168,7 +168,7 @@
 					await updateMessageHistory('You', 'Create a policy.');
 					await updateMessageHistory(
 						'AI Assistant',
-						`Select a case you'd like to build upon for creating the policy. You may view the details of individual cases in the case repository. You may select additional cases later if needed.`
+						`Select a case you'd like to build upon for creating the policy. You may select additional cases later if needed. You may view the details of individual cases in the case repository. If none of the cases are relevant to the policy you're about to create, feel free to create a new case first. This will allow me to assist you in creating a policy based on that case.`
 					);
 					showCaseSelector = true;
 					selectedCases = [];
