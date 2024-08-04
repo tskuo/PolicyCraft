@@ -104,7 +104,10 @@ exports.policycraftNotificationTrigger = onDocumentCreated(
 				.then((querySnapshot) => {
 					querySnapshot.forEach((doc) => {
 						// doc.data() is never undefined for query doc snapshots
-						discusssionThreadUserIds.add(doc.data().userId);
+						if (doc.data().userId !== data.userId) {
+							// only notify others in the discussion thread
+							discusssionThreadUserIds.add(doc.data().userId);
+						}
 					});
 					for (const userId of discusssionThreadUserIds) {
 						db.collection(`users/${userId}/notifications`).add({
