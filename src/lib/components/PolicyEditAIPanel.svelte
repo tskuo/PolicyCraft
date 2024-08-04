@@ -9,19 +9,27 @@
 	export let policyDescription;
 	export let policyId;
 
-	let messageHistory: any[] = [
-		{
-			person: 'AI Assistant',
-			message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws based on related cases misaligned with the policy. To begin with, please select a related case below.`
-		}
-	];
+	let messageHistory: any[] =
+		cases.size > 0
+			? [
+					{
+						person: 'AI Assistant',
+						message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws identified in related cases where the policy misaligns with people's votes. To begin with, please select a related case below.`
+					}
+				]
+			: [
+					{
+						person: 'AI Assistant',
+						message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws identified in related cases where the policy misaligns with people's votes. It appears that this policy currently has no related cases. Please first add some related cases that reveal the policy's flaws so I can help refine the policy accordingly.`
+					}
+				];
 
 	let loading = false;
 	let selectedCaseId: string;
 	let selectedCaseLabel: string;
 	let selectedCaseReasons: any[] = [];
 	let selectedCaseReason: string;
-	let showCaseSelector = true;
+	let showCaseSelector = cases.size > 0 ? true : false;
 	let showMisalignSelector = false;
 	let showLinktoEditCase = false;
 	let showUnsureSelector = false;
@@ -120,7 +128,6 @@
 				prompt: prompt
 			})
 		});
-		console.log('prompt: ', prompt);
 		if (res.ok) {
 			const data = await res.json();
 			suggestedPolicy = data.text;
@@ -165,13 +172,13 @@
 			<div class="mx-3 mt-1">
 				<Select.Root
 					onSelectedChange={async (v) => {
+						showCaseSelector = false;
 						selectedCaseId = v?.value;
 						await updateMessageHistory('You', v?.label);
 						await updateMessageHistory(
 							'AI Assistant',
-							`How is the selected case misaligned with the policy?`
+							`How is the current policy misaligned with people's votes in this case?`
 						);
-						showCaseSelector = false;
 						showMisalignSelector = true;
 					}}
 				>
@@ -218,7 +225,9 @@
 							} else {
 								await updateMessageHistory(
 									'AI Assistant',
-									`Why should this case be allowed? Please briefly explain the reason.`
+									`Why should this case be ` +
+										selectedCaseLabel +
+										`ed? Please briefly explain the reason.`
 								);
 								showReasonMunualInput = true;
 							}
@@ -243,18 +252,18 @@
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item
-							value="allow"
-							label="The case should be allowed but is currently disallowed by the policy"
+							value="disallow"
+							label="The current policy allows this case, but most people believe it should be disallowed"
 						/>
 						<Select.Item
-							value="disallow"
-							label="The case should be disallowed but is currently allowed by the policy"
+							value="allow"
+							label="The current policy disallows this case, but most people believe it should be allowed"
 						/>
 						<Select.Item
 							value="unsure"
-							label="It is unsure whether the case should be allowed or disallowed given the current policy"
+							label="The current policy is ambiguous about whether this case should be allowed or disallowed"
 						/>
-						<Select.Item value="unrelated" label="The case is unrelated to the current policy" />
+						<Select.Item value="unrelated" label="This case is unrelated to the current policy" />
 					</Select.Content>
 				</Select.Root>
 			</div>
