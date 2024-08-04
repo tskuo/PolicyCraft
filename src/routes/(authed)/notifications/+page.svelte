@@ -2,7 +2,7 @@
 	import type { PageData } from './$types.js';
 	import * as Table from '$lib/components/ui/table';
 	import { goto } from '$app/navigation';
-	import { BookText, Folder } from 'lucide-svelte';
+	import { BookText, Folder, MessageSquare } from 'lucide-svelte';
 
 	export let data: PageData;
 </script>
@@ -26,7 +26,11 @@
 					<Table.Row
 						class="hover:cursor-pointer"
 						on:click={() => {
-							goto(`/${notification.targetCollection}/${notification.targetDocumentId}`);
+							if (notification.targetCollection == 'meta') {
+								goto('/');
+							} else {
+								goto(`/${notification.targetCollection}/${notification.targetDocumentId}`);
+							}
 						}}
 					>
 						<Table.Cell>
@@ -43,11 +47,18 @@
 							{#if notification.action == 'editPolicy'}
 								<BookText class="w-4 h-4 mr-2 inline-block" />
 								The policy that you are watching has been edited.
-							{:else if notification.action == 'editRelatedCase'}
+							{:else if notification.action == 'editRelatedCaseLabel' || notification.action == 'editRelatedCaseLabelWhileEditingPolicy'}
 								<Folder class="w-4 h-4 mr-2 inline-block" />
-								The related case of a policy that you are watching has been edited.
-							{:else}
-								{notification.action}
+								A related case's label of a policy you are watching has been edited.
+							{:else if notification.action == 'addRelatedCase'}
+								<Folder class="w-4 h-4 mr-2 inline-block" />
+								A related case has been added to a policy you are watching.
+							{:else if notification.action == 'removeRelatedCases'}
+								<Folder class="w-4 h-4 mr-2 inline-block" />
+								A related case has been removed from a policy you are watching.
+							{:else if notification.action == 'createComment'}
+								<MessageSquare class="w-4 h-4 mr-2 inline-block" />
+								A new message has been added to a discussion thread you participated in.
 							{/if}
 						</Table.Cell>
 						<!-- <Table.Cell>

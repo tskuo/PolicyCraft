@@ -89,9 +89,9 @@
 	};
 
 	const generateCase = async (message: string, category: string) => {
-		await updateMessageHistory('You', message);
 		loading = true;
 		showGenerateCaseBtn = false;
+		await updateMessageHistory('You', message);
 
 		let prompt: string = '';
 		let label: string = '';

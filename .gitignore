@@ -15,4 +15,3 @@ firebase.json
 firestore.indexes.json
 firestore.rules
 /public
-/functions
