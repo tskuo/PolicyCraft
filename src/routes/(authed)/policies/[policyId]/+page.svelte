@@ -180,17 +180,13 @@
 									<div
 										class="bg-green-200 flex justify-center items-center text-sm"
 										style="width: {barUpvote}%"
-									>
-										<!-- {percentUpvote}% -->
-									</div>
+									></div>
 								{/if}
 								{#if percentDownvote != 0}
 									<div
 										class="bg-red-200 flex justify-center items-center text-sm"
 										style="width: {barDownvote}%"
-									>
-										<!-- {percentDownvote}% -->
-									</div>
+									></div>
 								{/if}
 							{:else}
 								<div
@@ -203,24 +199,33 @@
 						<div>
 							{#if userVote !== undefined}
 								<p>
+									<span class="text-muted-foreground">
+										{totalVotes}
+										{totalVotes > 1 ? 'votes' : 'vote'}:
+									</span>
 									<span class="text-green-500">{percentUpvote}%</span>
 									<span class="text-red-400">{percentDownvote}%</span>
-									<span class="text-gray-500"
-										>({totalVotes} {totalVotes > 1 ? 'votes' : 'vote'})</span
-									>
 								</p>
 							{:else}
-								<p>{totalVotes} {totalVotes > 1 ? 'votes' : 'vote'}</p>
+								<p class="text-muted-foreground">
+									{totalVotes}
+									{totalVotes > 1 ? 'votes' : 'vote'}
+								</p>
 							{/if}
 						</div>
 					</Tooltip.Trigger>
 					<Tooltip.Content>
 						{#if userVote !== undefined}
-							<p>upvote: {data.policy.votes.upvote.length}</p>
-							<p>downvote: {data.policy.votes.downvote.length}</p>
 							<p>
-								total: {totalVotes} / {data.userCounts}
-								users
+								upvote: {data.policy.votes.upvote.length}
+								{data.policy.votes.upvote.length > 1 ? 'votes' : 'vote'}
+							</p>
+							<p>
+								downvote: {data.policy.votes.downvote.length}
+								{data.policy.votes.downvote.length > 1 ? 'votes' : 'vote'}
+							</p>
+							<p class="mt-2">
+								{totalVotes} of {data.userCounts} users have voted
 							</p>
 						{:else}
 							<p>Vote to see distribution</p>

@@ -14,13 +14,13 @@
 			? [
 					{
 						person: 'AI Assistant',
-						message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws identified in related cases where the policy misaligns with people's votes. To begin with, please select a related case below.`
+						message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws identified in related cases where the policy is misaligned with people's votes. To begin with, please select a related case below.`
 					}
 				]
 			: [
 					{
 						person: 'AI Assistant',
-						message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws identified in related cases where the policy misaligns with people's votes. It appears that this policy currently has no related cases. Please first add some related cases that reveal the policy's flaws so I can help refine the policy accordingly.`
+						message: `I am an AI assistant who can help brainstorm policy edits to address policy flaws identified in related cases where the policy is misaligned with people's votes. It appears that this policy currently has no related cases. Please first add some related cases that reveal the policy's flaws so I can help refine the policy accordingly.`
 					}
 				];
 
@@ -340,10 +340,12 @@
 				<Select.Root
 					onSelectedChange={async (v) => {
 						showReasonSelector = false;
-						await updateMessageHistory('You', v?.label);
+
 						if (v?.value == 'manual') {
+							await updateMessageHistory('You', v?.label);
 							showReasonMunualInput = true;
 						} else {
+							await updateMessageHistory('You', v?.value);
 							selectedCaseReason = v?.value;
 							await generatePolicy();
 						}

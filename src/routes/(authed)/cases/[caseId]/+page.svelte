@@ -124,25 +124,19 @@
 									<div
 										class="bg-green-200 flex justify-center items-center text-sm"
 										style="width: {barAllow}%"
-									>
-										<!-- {percentAllow}% -->
-									</div>
+									></div>
 								{/if}
 								{#if percentDisallow != 0}
 									<div
 										class="bg-red-200 flex justify-center items-center text-sm"
 										style="width: {barDisallow}%"
-									>
-										<!-- {percentDisallow}% -->
-									</div>
+									></div>
 								{/if}
 								{#if percentUnsure != 0}
 									<div
 										class="bg-gray-200 flex justify-center items-center text-sm"
 										style="width: {barUnsure}%"
-									>
-										<!-- {percentUnsure}% -->
-									</div>
+									></div>
 								{/if}
 							{:else}
 								<div
@@ -155,12 +149,13 @@
 						<div>
 							{#if userVote !== undefined}
 								<p>
+									<span class="text-muted-foreground">
+										{totalVotes}
+										{totalVotes > 1 ? 'votes' : 'vote'}:
+									</span>
 									<span class="text-green-500">{percentAllow}%</span>
 									<span class="text-red-400">{percentDisallow}%</span>
 									<span class="text-gray-400">{percentUnsure}%</span>
-									<span class="text-gray-500"
-										>({totalVotes} {totalVotes > 1 ? 'votes' : 'vote'})</span
-									>
 								</p>
 							{:else}
 								<p>{totalVotes} {totalVotes > 1 ? 'votes' : 'vote'}</p>
@@ -169,12 +164,20 @@
 					</Tooltip.Trigger>
 					<Tooltip.Content>
 						{#if userVote !== undefined}
-							<p>allow: {data.c.votes.allow.length}</p>
-							<p>disallow: {data.c.votes.disallow.length}</p>
-							<p>unsure: {data.c.votes.unsure.length}</p>
 							<p>
-								total: {totalVotes} / {data.userCounts}
-								users
+								allow: {data.c.votes.allow.length}
+								{data.c.votes.allow.length > 1 ? 'votes' : 'vote'}
+							</p>
+							<p>
+								disallow: {data.c.votes.disallow.length}
+								{data.c.votes.disallow.length > 1 ? 'votes' : 'vote'}
+							</p>
+							<p>
+								unsure: {data.c.votes.unsure.length}
+								{data.c.votes.unsure.length > 1 ? 'votes' : 'vote'}
+							</p>
+							<p class="mt-2">
+								{totalVotes} of {data.userCounts} users have voted
 							</p>
 						{:else}
 							<p>Vote to see distribution</p>

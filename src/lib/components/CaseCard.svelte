@@ -8,6 +8,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import * as Alert from '$lib/components/ui/alert/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import {
 		Check,
 		Ban,
@@ -94,12 +95,12 @@
 
 	let showAlert = false;
 	$: if (label !== '') {
-		if (label !== 'allow' && percentAllow > percentDisallow && percentAllow >= percentUnsure) {
+		if (label !== 'allow' && percentAllow > percentDisallow && percentAllow > percentUnsure) {
 			showAlert = true;
 		} else if (
 			label !== 'disallow' &&
 			percentDisallow > percentAllow &&
-			percentDisallow >= percentUnsure
+			percentDisallow > percentUnsure
 		) {
 			showAlert = true;
 		} else if (
@@ -121,7 +122,7 @@
 				<div>
 					<Card.Header>
 						<Card.Description>
-							<div class="flex justify-between items-center">
+							<!-- <div class="flex justify-between items-center">
 								<div class="flex items-center">
 									{#if label == 'allow'}
 										<p class="bg-green-200 text-foreground text-xs font-semibold px-1 py-1 rounded">
@@ -138,7 +139,20 @@
 									{/if}
 								</div>
 								{#if showAlert && !hideAlert}<TriangleAlert class="w-4 h-4" />{/if}
-							</div>
+							</div> -->
+							{#if showAlert && !hideAlert}
+								<div
+									class="flex items-center justify-between bg-yellow-200 rounded text-foreground px-2 py-1 mb-1"
+								>
+									<div>
+										<TriangleAlert class="w-4 h-4 mr-2" />
+									</div>
+									<p>
+										The policy may need editing. It's misaligned with the majority vote on this
+										case.
+									</p>
+								</div>
+							{/if}
 						</Card.Description>
 						<Card.Title class="leading-normal">{title}</Card.Title>
 					</Card.Header>
@@ -155,6 +169,21 @@
 				<!-- <Card.Footer class="mb-10"></Card.Footer> -->
 				<Card.Footer>
 					<div class="w-full">
+						{#if label == 'allow' || label == 'disallow' || label == 'unsure'}
+							<div class="flex items-center space-x-2 text-sm mb-3">
+								<p class="text-muted-foreground">What current policy says:</p>
+								<p>
+									{#if label == 'allow'}
+										<span class="bg-green-200 px-1 py-1 rounded"> allow </span>
+									{:else if label == 'disallow'}
+										<span class="bg-red-200 px-1 py-1 rounded"> disallow </span>
+									{:else if label == 'unsure'}
+										<span class="bg-gray-200 px-1 py-1 rounded"> ambiguous </span>
+									{/if}
+								</p>
+							</div>
+						{/if}
+						<p class="text-sm mb-2 text-muted-foreground">What people say:</p>
 						<div class="flex w-full h-3 mb-2 border">
 							{#if userVote !== undefined}
 								<div class="bg-green-200" style="width: {barAllow}%"></div>
@@ -170,13 +199,19 @@
 						<div class="mb-2 text-sm">
 							{#if userVote !== undefined}
 								<p>
+									<span class="text-muted-foreground">
+										{totalVotes}
+										{totalVotes > 1 ? 'votes' : 'vote'}:
+									</span>
 									<span class="text-green-500">{percentAllow}%</span>
 									<span class="text-red-400">{percentDisallow}%</span>
 									<span class="text-gray-400">{percentUnsure}%</span>
-									<span class="text-gray-500">({totalVotes})</span>
 								</p>
 							{:else}
-								<p class="text-gray-500">{totalVotes} {totalVotes < 2 ? 'vote' : 'votes'}</p>
+								<p class="text-muted-foreground">
+									{totalVotes}
+									{totalVotes > 1 ? 'votes' : 'vote'}
+								</p>
 							{/if}
 						</div>
 					</div>
@@ -224,27 +259,55 @@
 		<p>
 			{description}
 		</p>
-		<div class="flex w-full h-4 mt-2 rounded border">
-			{#if userVote !== undefined}
-				<div class="bg-green-200" style="width: {barAllow}%"></div>
-				<div class="bg-red-200" style="width: {barDisallow}%"></div>
-				<div class="bg-gray-200" style="width: {barUnsure}%"></div>
-			{:else}
-				<div class="w-full bg-gray-100" style="width: {barAllow + barDisallow + barUnsure}%" />
-			{/if}
-		</div>
-		<div>
-			{#if userVote !== undefined}
-				<p>
-					<span class="text-green-500">{percentAllow}%</span>
-					<span class="text-red-400">{percentDisallow}%</span>
-					<span class="text-gray-400">{percentUnsure}%</span>
-					<span class="text-gray-500">({totalVotes})</span>
-				</p>
-			{:else}
-				<p>{totalVotes} {totalVotes < 2 ? 'vote' : 'votes'}</p>
-			{/if}
-		</div>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				<div class="flex w-full h-4 mt-2 rounded border">
+					{#if userVote !== undefined}
+						<div class="bg-green-200" style="width: {barAllow}%"></div>
+						<div class="bg-red-200" style="width: {barDisallow}%"></div>
+						<div class="bg-gray-200" style="width: {barUnsure}%"></div>
+					{:else}
+						<div class="w-full bg-gray-100" style="width: {barAllow + barDisallow + barUnsure}%" />
+					{/if}
+				</div>
+				<div class="text-left mt-2">
+					{#if userVote !== undefined}
+						<p>
+							<span class="text-muted-foreground">
+								{totalVotes}
+								{totalVotes > 1 ? 'votes' : 'vote'}:
+							</span>
+							<span class="text-green-500">{percentAllow}%</span>
+							<span class="text-red-400">{percentDisallow}%</span>
+							<span class="text-gray-400">{percentUnsure}%</span>
+						</p>
+					{:else}
+						<p class="text-muted-foreground">{totalVotes} {totalVotes < 2 ? 'vote' : 'votes'}</p>
+					{/if}
+				</div>
+			</Tooltip.Trigger>
+			<Tooltip.Content>
+				{#if userVote !== undefined}
+					<p>
+						allow: {votes.allow.length}
+						{votes.allow.length > 1 ? 'votes' : 'vote'}
+					</p>
+					<p>
+						disallow: {votes.disallow.length}
+						{votes.disallow.length > 1 ? 'votes' : 'vote'}
+					</p>
+					<p>
+						unsure: {votes.unsure.length}
+						{votes.unsure.length > 1 ? 'votes' : 'vote'}
+					</p>
+					<p class="mt-2">
+						{totalVotes} of {userCounts} users have voted
+					</p>
+				{:else}
+					<p>Vote to see distribution</p>
+				{/if}
+			</Tooltip.Content>
+		</Tooltip.Root>
 		<ToggleGroup.Root
 			type="single"
 			class="w-full grid grid-cols-3"
