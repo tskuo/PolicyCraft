@@ -3,6 +3,8 @@ import type { PageServerLoad, Actions } from './$types';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { policyEditCaseFormSchema, relatedCaseCreateFormSchema } from '$lib/schema';
+import { db } from '$lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 	if (locals.stage == 'vote') {
@@ -33,7 +35,13 @@ export const load: PageServerLoad = async ({ fetch, params, locals }) => {
 
 		form.data.cases = policy.cases;
 
-		return { policy, form, formNewCase, allCases };
+		let caseContext = '';
+		const docSnap = await getDoc(doc(db, 'meta', 'context'));
+		if (docSnap.exists()) {
+			caseContext = docSnap.data().contextDetails;
+		}
+
+		return { policy, form, formNewCase, allCases, caseContext };
 	} catch {
 		throw error(404, 'Fail to load this page.');
 	}
