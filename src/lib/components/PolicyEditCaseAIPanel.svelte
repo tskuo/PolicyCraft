@@ -236,15 +236,15 @@
 				variant="secondary"
 				class="mx-3"
 				on:click={async () => {
+					showInstructionInput = false;
+					showRestartBtn = false;
+					showGenerateCaseBtn = true;
+					iterateInstruction = '';
+					suggestedCase = '';
 					await updateMessageHistory(
 						'AI Assistant',
 						`To restart, please click the buttons below to see some examples.`
 					);
-					showGenerateCaseBtn = true;
-					showInstructionInput = false;
-					showRestartBtn = false;
-					iterateInstruction = '';
-					suggestedCase = '';
 				}}>Restart</Button
 			>
 		{/if}

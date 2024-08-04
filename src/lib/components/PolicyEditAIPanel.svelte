@@ -277,9 +277,8 @@
 			<div class="mx-3 mt-1">
 				<Select.Root
 					onSelectedChange={async (v) => {
-						await updateMessageHistory('You', v?.label);
 						showUnsureSelector = false;
-
+						await updateMessageHistory('You', v?.label);
 						if (v?.value == 'allow' || v?.value == 'disallow') {
 							selectedCaseLabel = v?.value;
 							if (cases.get(selectedCaseId).reasons.length !== 0) {
@@ -340,8 +339,8 @@
 			<div class="mx-3 mt-1">
 				<Select.Root
 					onSelectedChange={async (v) => {
-						await updateMessageHistory('You', v?.label);
 						showReasonSelector = false;
+						await updateMessageHistory('You', v?.label);
 						if (v?.value == 'manual') {
 							showReasonMunualInput = true;
 						} else {
@@ -404,13 +403,13 @@
 				variant="secondary"
 				class="mx-3"
 				on:click={async () => {
+					showRestartBtn = false;
+					showInstructionInput = false;
+					showLinktoEditCase = false;
 					await updateMessageHistory(
 						'AI Assistant',
 						`To restart, please select a related case below.`
 					);
-					showRestartBtn = false;
-					showInstructionInput = false;
-					showLinktoEditCase = false;
 					showCaseSelector = true;
 				}}>Restart</Button
 			>

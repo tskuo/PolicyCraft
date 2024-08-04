@@ -63,9 +63,10 @@
 	};
 
 	const generatePolicy = async () => {
-		await updateMessageHistory('You', `See the suggested new policy`);
 		showCaseSelector = false;
 		loading = true;
+		await updateMessageHistory('You', `See the suggested new policy`);
+
 		let prompt = `You are a helpful assistant focusing on supporting users in creating a new course policy. In a few sentences, propose a course policy that meets the following criteria.`;
 
 		for (const [i, value] of selectedCases.entries()) {
@@ -192,13 +193,13 @@
 			<div class="mx-3 mt-1">
 				<Select.Root
 					onSelectedChange={async (v) => {
+						showPolicySelector = false;
 						await updateMessageHistory('You', v?.label);
 						await updateMessageHistory(
 							'AI Assistant',
 							`Please click the link below to visit the policy page, where the AI assistant can help brainstorm related cases based on the selected policy.`
 						);
 						selectedPolicyId = v?.value;
-						showPolicySelector = false;
 						showPolicyEditLink = true;
 						showRestartBtn = true;
 					}}
@@ -223,13 +224,13 @@
 			<div class="mx-3 mt-1">
 				<Select.Root
 					onSelectedChange={async (v) => {
+						showCaseSelector = false;
 						await updateMessageHistory('You', v?.label);
 						await updateMessageHistory(
 							'AI Assistant',
 							`Should this case be allowed or disallowed by the policy you are about to create?`
 						);
 						selectedCases = [...selectedCases, v?.value];
-						showCaseSelector = false;
 						showLabelBtn = true;
 					}}
 				>
@@ -260,13 +261,13 @@
 				variant="secondary"
 				class="mx-3"
 				on:click={async () => {
+					showLabelBtn = false;
 					selectedCaseLabels = [...selectedCaseLabels, 'allow'];
 					await updateMessageHistory('You', 'Allow');
 					await updateMessageHistory(
 						'AI Assistant',
 						`Select another case to build upon, or see the suggested new policy based on the cases you have already selected.`
 					);
-					showLabelBtn = false;
 					showCaseSelector = true;
 				}}>Allow</Button
 			>
@@ -274,13 +275,13 @@
 				variant="secondary"
 				class="mx-3"
 				on:click={async () => {
+					showLabelBtn = false;
 					selectedCaseLabels = [...selectedCaseLabels, 'disallow'];
 					await updateMessageHistory('You', 'Disallow');
 					await updateMessageHistory(
 						'AI Assistant',
 						`Select another case to build upon, or see the suggested new policy based on the cases you have already selected.`
 					);
-					showLabelBtn = false;
 					showCaseSelector = true;
 				}}>Disallow</Button
 			>
@@ -305,11 +306,6 @@
 				variant="secondary"
 				class="mx-3"
 				on:click={async () => {
-					await updateMessageHistory(
-						'AI Assistant',
-						`To restart, please choose whether you would like to create a policy or a case.`
-					);
-
 					showPolicyEditLink = false;
 					showPolicyOrCaseBtn = true;
 					showInstructionInput = false;
@@ -323,6 +319,10 @@
 					showLabelBtn = false;
 					iterateInstruction = '';
 					suggestedPolicy = '';
+					await updateMessageHistory(
+						'AI Assistant',
+						`To restart, please choose whether you would like to create a policy or a case.`
+					);
 				}}>Restart</Button
 			>
 		{/if}
