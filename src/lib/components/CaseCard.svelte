@@ -103,12 +103,6 @@
 			percentDisallow > percentUnsure
 		) {
 			showAlert = true;
-		} else if (
-			label !== 'unsure' &&
-			percentUnsure > percentAllow &&
-			percentUnsure > percentDisallow
-		) {
-			showAlert = true;
 		} else {
 			showAlert = false;
 		}
@@ -148,8 +142,12 @@
 										<TriangleAlert class="w-4 h-4 mr-2" />
 									</div>
 									<p>
-										The policy may need editing. It's misaligned with the majority vote on this
-										case.
+										{#if label == 'unsure'}
+											The policy may need editing to clarify whether this case is allowed or not.
+										{:else}
+											The policy may need editing to better align with the majority vote on this
+											case.
+										{/if}
 									</p>
 								</div>
 							{/if}
