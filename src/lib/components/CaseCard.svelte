@@ -142,7 +142,7 @@
 							</div> -->
 							{#if showAlert && !hideAlert}
 								<div
-									class="flex items-center justify-between bg-yellow-200 rounded text-foreground px-2 py-1 mb-1"
+									class="flex items-center justify-between bg-yellow-200 rounded-md text-foreground px-2 py-1 mb-1"
 								>
 									<div>
 										<TriangleAlert class="w-4 h-4 mr-2" />
