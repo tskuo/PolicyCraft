@@ -266,7 +266,7 @@
 					await updateMessageHistory('You', 'Allow');
 					await updateMessageHistory(
 						'AI Assistant',
-						`Select another case to build upon, or see the suggested new policy based on the cases you have already selected.`
+						`Select additional cases to build upon, or see the suggested new policy based on the cases you have already selected.`
 					);
 					showCaseSelector = true;
 				}}>Allow</Button
@@ -280,7 +280,7 @@
 					await updateMessageHistory('You', 'Disallow');
 					await updateMessageHistory(
 						'AI Assistant',
-						`Select another case to build upon, or see the suggested new policy based on the cases you have already selected.`
+						`Select additional cases to build upon, or see the suggested new policy based on the cases you have already selected.`
 					);
 					showCaseSelector = true;
 				}}>Disallow</Button
