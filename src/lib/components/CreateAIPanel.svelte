@@ -11,7 +11,7 @@
 	let messageHistory: any[] = [
 		{
 			person: 'AI Assistant',
-			message: `I am an AI assistant here to help you brainstorm a new policy based on selected cases, or brainstorm a new case based on a given policy. To get started, please choose whether you would like to create a policy or a case.`
+			message: `I am an AI assistant who can help brainstorm a new policy based on selected cases, or brainstorm a new case based on a given policy. To get started, please choose whether you would like to create a policy or a case.`
 		}
 	];
 
