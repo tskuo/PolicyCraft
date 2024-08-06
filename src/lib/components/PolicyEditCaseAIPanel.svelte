@@ -57,6 +57,18 @@
 		`In a few sentences, provide an example scenario of a student in this course where it is unclear whether the student violates the following policy or not: `;
 
 	let aiLogsDocId = '';
+
+	const resetButtonAndData = () => {
+		showRestartBtn = false;
+
+		// reset buttons
+		showInstructionInput = false;
+		iterateInstruction = '';
+		suggestedCase = '';
+
+		showGenerateCaseBtn = true;
+	};
+
 	const updateMessageHistory = async (person: string, message: string) => {
 		messageHistory = [...messageHistory, { person, message }];
 		if (aiLogsDocId == '') {
@@ -115,7 +127,7 @@
 				label = `The policy may disallow the following case even though this case should probably be allowed: `;
 			} else {
 				prompt = promptFlawUnclearCase;
-				label = `The policy may be unclear in the following case: `;
+				label = `The policy may be ambiguous in the following case: `;
 			}
 		}
 
@@ -132,21 +144,21 @@
 			await updateMessageHistory('AI Assistant', data.text);
 			await updateMessageHistory(
 				'AI Assistant',
-				`Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
+				`You may use the suggested content to create a new case by clicking the "create new case" button. Alternatively, you may provide instructions on how you would like to iterate on the suggested content or restart the conversation.`
 			);
-			showInstructionInput = true;
 			iterateInstruction = '';
-			showRestartBtn = true;
+			showInstructionInput = true;
 		} else {
-			await updateMessageHistory('AI Assistant', 'Sorry, something went wrong. Please try again.');
-			showGenerateCaseBtn = true;
+			await updateMessageHistory(
+				'AI Assistant',
+				'Sorry, something went wrong. Please restart and try again.'
+			);
 		}
 		loading = false;
 	};
 
 	const iterateCase = async () => {
 		loading = true;
-		showRestartBtn = false;
 		let prompt =
 			`You are a helpful assistant focusing on supporting users in editing the following case: ` +
 			suggestedCase +
@@ -165,16 +177,16 @@
 			await updateMessageHistory('AI Assistant', data.text);
 			await updateMessageHistory(
 				'AI Assistant',
-				`Please provide instructions on how you would like to iterate on the suggested case. If this case looks good, consider creating a new case by clicking the "create new case" button. You may also restart the conversation.`
+				`You may use the suggested content to create a new case by clicking the "create new case" button. Alternatively, you may provide instructions on how you would like to iterate on the suggested content or restart the conversation.`
 			);
-			showInstructionInput = true;
 			iterateInstruction = '';
-			showRestartBtn = true;
+			showInstructionInput = true;
 		} else {
-			await updateMessageHistory('AI Assistant', 'Sorry, something went wrong. Please try again.');
-			showGenerateCaseBtn = true;
+			await updateMessageHistory(
+				'AI Assistant',
+				'Sorry, something went wrong. Please restart and try again.'
+			);
 		}
-
 		loading = false;
 	};
 </script>
@@ -200,6 +212,7 @@
 				class="mx-3"
 				on:click={async () => {
 					await generateCase(messageExample, 'illustrative');
+					showRestartBtn = true;
 				}}
 			>
 				{messageExample}
@@ -209,6 +222,7 @@
 				class="mx-3"
 				on:click={async () => {
 					await generateCase(messageCounterExample, 'flaw');
+					showRestartBtn = true;
 				}}
 			>
 				{messageCounterExample}
@@ -231,14 +245,11 @@
 		{/if}
 		{#if showRestartBtn}
 			<Button
+				bind:disabled={loading}
 				variant="secondary"
 				class="mx-3"
 				on:click={async () => {
-					showInstructionInput = false;
-					showRestartBtn = false;
-					showGenerateCaseBtn = true;
-					iterateInstruction = '';
-					suggestedCase = '';
+					resetButtonAndData();
 					await updateMessageHistory(
 						'AI Assistant',
 						`To restart, please click the buttons below to see some examples.`

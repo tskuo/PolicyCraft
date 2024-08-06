@@ -30,6 +30,25 @@
 	let showRestartBtn = false;
 
 	let aiLogsDocId = '';
+
+	const resetButtonAndData = () => {
+		showRestartBtn = false;
+
+		// reset buttons
+		showPolicySelector = false;
+		selectedPolicyId = '';
+		showPolicyEditLink = false;
+		showCaseSelector = false;
+		selectedCases = [];
+		selectedCaseLabels = [];
+		showLabelBtn = false;
+		showInstructionInput = false;
+		iterateInstruction = '';
+		suggestedPolicy = '';
+
+		showPolicyOrCaseBtn = true;
+	};
+
 	const updateMessageHistory = async (person: string, message: string) => {
 		messageHistory = [...messageHistory, { person, message }];
 		if (aiLogsDocId == '') {
@@ -88,27 +107,27 @@
 		if (res.ok) {
 			const data = await res.json();
 			suggestedPolicy = data.text;
-			await updateMessageHistory('AI Assistant', `Here is the suggested policy:`);
+			await updateMessageHistory(
+				'AI Assistant',
+				`Here is the suggested policy based on the cases you selected:`
+			);
 			await updateMessageHistory('AI Assistant', data.text);
 			await updateMessageHistory(
 				'AI Assistant',
-				`Please provide instructions on how you would like to iterate on the suggested policy. You may also create a policy based on the suggested content or restart the conversation.`
+				`You may use the suggested content to create a new policy. Alternatively, you may provide instructions on how you would like to iterate on the suggested content or restart the conversation.`
 			);
 			showInstructionInput = true;
-			showRestartBtn = true;
+			loading = false;
 		} else {
 			await updateMessageHistory(
 				'AI Assistant',
-				'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
+				'Sorry, something went wrong. Please restart and try again.'
 			);
-			showPolicyOrCaseBtn = true;
+			loading = false;
 		}
-		loading = false;
 	};
 
 	const iteratePolicy = async () => {
-		loading = true;
-		showRestartBtn = false;
 		let prompt =
 			`You are a helpful assistant focusing on supporting users in editing the following course policy: ` +
 			suggestedPolicy +
@@ -123,24 +142,20 @@
 		if (res.ok) {
 			const data = await res.json();
 			suggestedPolicy = data.text;
-			await updateMessageHistory('AI Assistant', `Here is the suggested policy:`);
+			await updateMessageHistory('AI Assistant', `Here is the revised policy:`);
 			await updateMessageHistory('AI Assistant', data.text);
 			await updateMessageHistory(
 				'AI Assistant',
-				`Please provide instructions on how you would like to iterate on the suggested policy. You may also restart the conversation.`
+				`You may use the suggested content to create a new policy. Alternatively, you may provide instructions on how you would like to iterate on the suggested content or restart the conversation.`
 			);
 			showInstructionInput = true;
-			showRestartBtn = true;
 		} else {
 			await updateMessageHistory(
 				'AI Assistant',
-				'Sorry, something went wrong. Please try again. Please choose whether you would like to create a policy or a case.'
+				'Sorry, something went wrong. Please restart and try again.'
 			);
-			showPolicyOrCaseBtn = true;
 		}
 		iterateInstruction = '';
-		loading = false;
-		showRestartBtn = true;
 	};
 </script>
 
@@ -165,14 +180,17 @@
 				class="mx-3"
 				on:click={async () => {
 					showPolicyOrCaseBtn = false;
+					loading = true;
 					await updateMessageHistory('You', 'Create a policy.');
 					await updateMessageHistory(
 						'AI Assistant',
 						`Select a case you'd like to build upon for creating the policy. You may select additional cases later if needed. You may view the details of individual cases in the case repository. If none of the cases are relevant to the policy you're about to create, feel free to create a new case first. This will allow me to assist you in creating a policy based on that case.`
 					);
+					selectedCases = []; // this is supposed to be empty
+					selectedCaseLabels = []; // this is supposed to be empty
 					showCaseSelector = true;
-					selectedCases = [];
-					selectedCaseLabels = [];
+					loading = false;
+					showRestartBtn = true;
 				}}>Policy</Button
 			>
 			<Button
@@ -180,12 +198,15 @@
 				class="mx-3"
 				on:click={async () => {
 					showPolicyOrCaseBtn = false;
+					loading = true;
 					await updateMessageHistory('You', 'Create a case.');
 					await updateMessageHistory(
 						'AI Assistant',
 						`Select a policy for which you'd like to brainstorm related cases.`
 					);
 					showPolicySelector = true;
+					loading = false;
+					showRestartBtn = true;
 				}}>Case</Button
 			>
 		{/if}
@@ -194,6 +215,7 @@
 				<Select.Root
 					onSelectedChange={async (v) => {
 						showPolicySelector = false;
+						loading = true;
 						await updateMessageHistory('You', v?.label);
 						await updateMessageHistory(
 							'AI Assistant',
@@ -201,7 +223,7 @@
 						);
 						selectedPolicyId = v?.value;
 						showPolicyEditLink = true;
-						showRestartBtn = true;
+						loading = false;
 					}}
 				>
 					<Select.Trigger>
@@ -225,13 +247,15 @@
 				<Select.Root
 					onSelectedChange={async (v) => {
 						showCaseSelector = false;
+						loading = true;
+						selectedCases = [...selectedCases, v?.value];
 						await updateMessageHistory('You', v?.label);
 						await updateMessageHistory(
 							'AI Assistant',
 							`Should this case be allowed or disallowed by the policy you are about to create?`
 						);
-						selectedCases = [...selectedCases, v?.value];
 						showLabelBtn = true;
+						loading = false;
 					}}
 				>
 					<Select.Trigger>
@@ -262,6 +286,7 @@
 				class="mx-3"
 				on:click={async () => {
 					showLabelBtn = false;
+					loading = true;
 					selectedCaseLabels = [...selectedCaseLabels, 'allow'];
 					await updateMessageHistory('You', 'Allow');
 					await updateMessageHistory(
@@ -269,6 +294,7 @@
 						`Select additional cases to build upon, or see the suggested new policy based on the cases you have already selected.`
 					);
 					showCaseSelector = true;
+					loading = false;
 				}}>Allow</Button
 			>
 			<Button
@@ -276,6 +302,7 @@
 				class="mx-3"
 				on:click={async () => {
 					showLabelBtn = false;
+					loading = true;
 					selectedCaseLabels = [...selectedCaseLabels, 'disallow'];
 					await updateMessageHistory('You', 'Disallow');
 					await updateMessageHistory(
@@ -283,6 +310,7 @@
 						`Select additional cases to build upon, or see the suggested new policy based on the cases you have already selected.`
 					);
 					showCaseSelector = true;
+					loading = false;
 				}}>Disallow</Button
 			>
 		{/if}
@@ -294,8 +322,10 @@
 					on:keypress={async (e) => {
 						if (e.key === 'Enter') {
 							showInstructionInput = false;
+							loading = true;
 							await updateMessageHistory('You', iterateInstruction);
 							await iteratePolicy();
+							loading = false;
 						}
 					}}
 				/>
@@ -303,22 +333,11 @@
 		{/if}
 		{#if showRestartBtn}
 			<Button
+				bind:disabled={loading}
 				variant="secondary"
 				class="mx-3"
 				on:click={async () => {
-					showPolicyEditLink = false;
-					showPolicyOrCaseBtn = true;
-					showInstructionInput = false;
-					showRestartBtn = false;
-
-					showPolicySelector = false;
-					selectedPolicyId = '';
-					showCaseSelector = false;
-					selectedCases = [];
-					selectedCaseLabels = [];
-					showLabelBtn = false;
-					iterateInstruction = '';
-					suggestedPolicy = '';
+					resetButtonAndData();
 					await updateMessageHistory(
 						'AI Assistant',
 						`To restart, please choose whether you would like to create a policy or a case.`
