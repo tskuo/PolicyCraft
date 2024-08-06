@@ -33,6 +33,7 @@
 	let showMisalignSelector = false;
 	let showLinktoEditCase = false;
 	let showUnsureSelector = false;
+	let showUnsureCaseLink = false;
 	let showReasonSelector = false;
 	let showReasonMunualInput = false;
 	let manualInputValue = '';
@@ -54,6 +55,7 @@
 		showMisalignSelector = false;
 		showLinktoEditCase = false;
 		showUnsureSelector = false;
+		showUnsureCaseLink = false;
 		showReasonSelector = false;
 		showReasonMunualInput = false;
 		manualInputValue = '';
@@ -338,7 +340,7 @@
 								'AI Assistant',
 								`Please consider discussing the case more before editing the policy based on a case where most people are unsure.`
 							);
-							// TODO HERE
+							showUnsureCaseLink = true;
 						}
 						loading = false;
 					}}
@@ -349,10 +351,15 @@
 					<Select.Content>
 						<Select.Item value="allow" label="The case should be allowed" />
 						<Select.Item value="disallow" label="The case should be disallowed" />
-						<Select.Item value="unsure" label="The case is unsure by itself" />
+						<Select.Item value="unsure" label="Most people are unsure" />
 					</Select.Content>
 				</Select.Root>
 			</div>
+		{/if}
+		{#if showUnsureCaseLink}
+			<Button variant="secondary" class="mx-3" href="/cases/{selectedCaseId}">
+				Discuss on the case page
+			</Button>
 		{/if}
 		{#if showReasonSelector}
 			<div class="mx-3 mt-1">
