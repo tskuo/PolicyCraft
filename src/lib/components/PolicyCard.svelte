@@ -32,6 +32,7 @@
 	export let watchList: string[] = [];
 
 	export let userId: string;
+	export let userRole: string;
 	export let stage: string;
 	export let userCounts: number;
 
@@ -146,7 +147,7 @@
 							class="data-[state=on]:bg-green-200"
 						>
 							<ArrowBigUp class="h-4 w-4" />
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								<div class="ml-2">{votes.upvote.length}</div>
 							{/if}
 						</ToggleGroup.Item>
@@ -156,7 +157,7 @@
 							class="data-[state=on]:bg-red-200 "
 						>
 							<ArrowBigDown class="h-4 w-4" />
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								<div class="ml-2">{votes.downvote.length}</div>
 							{/if}
 						</ToggleGroup.Item>
@@ -194,7 +195,7 @@
 					<div class="flex space-x-2 pb-4 w-[57vw]">
 						{#each cases as c}
 							<div class="basis-full md:basis-1/3 flex-none">
-								<CaseCard {...c} {userId} {userCounts}></CaseCard>
+								<CaseCard {...c} {userId} {userRole} {userCounts}></CaseCard>
 							</div>
 						{/each}
 					</div>

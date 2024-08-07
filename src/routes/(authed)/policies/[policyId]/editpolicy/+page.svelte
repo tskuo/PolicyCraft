@@ -27,6 +27,7 @@
 			cases={data.cases}
 			policy={data.policy}
 			userId={data.user?.userId}
+			userRole={data.user?.role}
 			userCounts={data.userCounts}
 		/>
 	</div>

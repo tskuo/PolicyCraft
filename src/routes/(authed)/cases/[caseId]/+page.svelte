@@ -11,6 +11,7 @@
 	export let data;
 
 	const userId = data.user?.userId;
+	const userRole = data.user?.role;
 	let userVote: 'allow' | 'disallow' | 'unsure' | undefined;
 
 	const handleVote = async (value: string | undefined) => {
@@ -119,7 +120,7 @@
 				<Tooltip.Root>
 					<Tooltip.Trigger class="w-full text-left">
 						<div class="flex w-full h-4 my-4 rounded border">
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								{#if percentAllow != 0}
 									<div
 										class="bg-green-200 flex justify-center items-center text-sm"
@@ -147,7 +148,7 @@
 							{/if}
 						</div>
 						<div>
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								<p>
 									<span class="text-muted-foreground">
 										{totalVotes}
@@ -163,7 +164,7 @@
 						</div>
 					</Tooltip.Trigger>
 					<Tooltip.Content>
-						{#if userVote !== undefined}
+						{#if userVote !== undefined || userRole == 'admin'}
 							<p>
 								allow: {data.c.votes.allow.length}
 								{data.c.votes.allow.length > 1 ? 'votes' : 'vote'}

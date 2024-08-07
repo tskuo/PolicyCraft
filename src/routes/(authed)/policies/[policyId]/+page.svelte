@@ -23,6 +23,7 @@
 	let showAlert = false;
 	let userVote: 'upvote' | 'downvote' | undefined;
 	const userId = data.user?.userId;
+	const userRole = data.user?.role;
 
 	const handleVote = async (value: string | undefined) => {
 		if (data.stage == 'vote') {
@@ -175,7 +176,7 @@
 				<Tooltip.Root>
 					<Tooltip.Trigger class="w-full text-left">
 						<div class="flex w-full h-4 my-4 rounded border">
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								{#if percentUpvote != 0}
 									<div
 										class="bg-green-200 flex justify-center items-center text-sm"
@@ -197,7 +198,7 @@
 							{/if}
 						</div>
 						<div>
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								<p>
 									<span class="text-muted-foreground">
 										{totalVotes}
@@ -215,7 +216,7 @@
 						</div>
 					</Tooltip.Trigger>
 					<Tooltip.Content>
-						{#if userVote !== undefined}
+						{#if userVote !== undefined || userRole == 'admin'}
 							<p>
 								upvote: {data.policy.votes.upvote.length}
 								{data.policy.votes.upvote.length > 1 ? 'votes' : 'vote'}
@@ -257,7 +258,7 @@
 		{#if data.cases.length > 0}
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-1 mt-2 auto-rows-fr">
 				{#each data.cases as c}
-					<CaseCard {...c} {userId} userCounts={data.userCounts} />
+					<CaseCard {...c} {userId} {userRole} userCounts={data.userCounts} />
 				{/each}
 			</div>
 		{:else}

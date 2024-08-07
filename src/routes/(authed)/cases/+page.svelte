@@ -148,7 +148,12 @@
 				{#if displayCases.length > 0}
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-1 auto-rows-fr">
 						{#each displayCases as c (c.id)}
-							<CaseCard {...c} userId={data.user?.userId} userCounts={data.userCounts} />
+							<CaseCard
+								{...c}
+								userId={data.user?.userId}
+								userRole={data.user?.role}
+								userCounts={data.userCounts}
+							/>
 						{/each}
 					</div>
 				{:else}

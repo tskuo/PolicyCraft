@@ -160,6 +160,7 @@
 						<PolicyCard
 							{...policy}
 							userId={data.user?.userId}
+							userRole={data.user?.role}
 							stage={data.stage}
 							userCounts={data.userCounts}
 						/>

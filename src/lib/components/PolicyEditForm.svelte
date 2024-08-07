@@ -19,6 +19,7 @@
 	export let cases;
 	export let policy;
 	export let userId;
+	export let userRole;
 	export let userCounts: number;
 
 	let showNextStep = false;
@@ -116,6 +117,7 @@
 									{...cases.get($formData.cases[i].caseId)}
 									label={$formData.cases[i].label}
 									{userId}
+									{userRole}
 									{userCounts}
 								/>
 							</div>
@@ -157,6 +159,7 @@
 											{...cases.get($formData.cases[i].caseId)}
 											bind:label={$formData.cases[i].label}
 											{userId}
+											{userRole}
 											{userCounts}
 										/>
 										<div class="pt-4 md:pt-0 md:px-6">

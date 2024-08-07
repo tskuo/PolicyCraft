@@ -33,6 +33,7 @@
 	};
 	export let label = '';
 	export let userId: string;
+	export let userRole: string;
 	export let userCounts: number;
 	export let hideAlert = false;
 
@@ -183,7 +184,7 @@
 						{/if}
 						<p class="text-sm mb-2 text-muted-foreground">What people say:</p>
 						<div class="flex w-full h-3 mb-2 border">
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								<div class="bg-green-200" style="width: {barAllow}%"></div>
 								<div class="bg-red-200" style="width: {barDisallow}%"></div>
 								<div class="bg-gray-200" style="width: {barUnsure}%"></div>
@@ -195,7 +196,7 @@
 							{/if}
 						</div>
 						<div class="mb-2 text-sm">
-							{#if userVote !== undefined}
+							{#if userVote !== undefined || userRole == 'admin'}
 								<p>
 									<span class="text-muted-foreground">
 										{totalVotes}
@@ -260,7 +261,7 @@
 		<Tooltip.Root>
 			<Tooltip.Trigger>
 				<div class="flex w-full h-4 mt-2 rounded border">
-					{#if userVote !== undefined}
+					{#if userVote !== undefined || userRole == 'admin'}
 						<div class="bg-green-200" style="width: {barAllow}%"></div>
 						<div class="bg-red-200" style="width: {barDisallow}%"></div>
 						<div class="bg-gray-200" style="width: {barUnsure}%"></div>
@@ -269,7 +270,7 @@
 					{/if}
 				</div>
 				<div class="text-left mt-2">
-					{#if userVote !== undefined}
+					{#if userVote !== undefined || userRole == 'admin'}
 						<p>
 							<span class="text-muted-foreground">
 								{totalVotes}
@@ -285,7 +286,7 @@
 				</div>
 			</Tooltip.Trigger>
 			<Tooltip.Content>
-				{#if userVote !== undefined}
+				{#if userVote !== undefined || userRole == 'admin'}
 					<p>
 						allow: {votes.allow.length}
 						{votes.allow.length > 1 ? 'votes' : 'vote'}

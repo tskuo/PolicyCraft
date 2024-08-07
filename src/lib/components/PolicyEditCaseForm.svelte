@@ -33,6 +33,7 @@
 	export let allCases: any[];
 	export let dataNewCase: SuperValidated<Infer<RelatedCaseCreateFormSchema>>;
 	export let userId;
+	export let userRole;
 	export let userCounts: number;
 
 	const casesBeforeEdit = new Map();
@@ -141,6 +142,7 @@
 									{...allCases.find((c) => $formData.cases[i].caseId == c.id)}
 									label={$formData.cases[i].label}
 									{userId}
+									{userRole}
 									{userCounts}
 									hideAlert={true}
 								/>
@@ -399,7 +401,7 @@
 								<div class="basis-full md:basis-1/3 flex-none">
 									<div class="relative h-full">
 										<!-- <div class="w-1/3 shrink-0"> -->
-										<CaseCard {...searchCase} {userId} {userCounts} hideAlert={true} />
+										<CaseCard {...searchCase} {userId} {userRole} {userCounts} hideAlert={true} />
 										<!-- </div> -->
 										<div class="absolute top-0 right-0 mt-4 mr-2">
 											<DropdownMenu.Root>
