@@ -42,7 +42,7 @@ export const POST = async ({ request, locals }) => {
 			},
 			watchList: [locals.user?.userId]
 		});
-		await addDoc(collection(db, 'actionLogs'), {
+		const actionRef = await addDoc(collection(db, 'actionLogs'), {
 			action: 'createPolicy',
 			createAt: serverTimestamp(),
 			input: {
@@ -54,6 +54,13 @@ export const POST = async ({ request, locals }) => {
 			targetSubCollection: '',
 			targetSubDocumentId: '',
 			userId: locals.user?.userId
+		});
+		// survey for the study (should be removed later)
+		await addDoc(collection(db, 'survey'), {
+			action: 'createPolicy',
+			actionLogId: actionRef.id,
+			createAt: serverTimestamp(),
+			response: form.data.survey
 		});
 		return json({ id: docRef.id }, { status: 201 });
 	} catch {

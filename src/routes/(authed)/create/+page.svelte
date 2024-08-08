@@ -19,7 +19,10 @@
 				<Card.Root>
 					<Card.Header>
 						<Card.Title>Create a new policy</Card.Title>
-						<Card.Description>Policy creation guidelines ...</Card.Description>
+						<Card.Description>
+							Please note that policies without any related cases will not be eligible for voting in
+							the final stage. Consider adding related cases once you create the policy.
+						</Card.Description>
 					</Card.Header>
 					<Card.Content class="space-y-2">
 						<PolicyCreateForm data={data.form1} />
@@ -31,7 +34,7 @@
 				<Card.Root>
 					<Card.Header>
 						<Card.Title>Create a new case</Card.Title>
-						<Card.Description>Case creation guidelines ...</Card.Description>
+						<!-- <Card.Description>Case creation guidelines ...</Card.Description> -->
 					</Card.Header>
 					<Card.Content class="space-y-2">
 						<CaseCreateForm data={data.form2} />

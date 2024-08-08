@@ -15,7 +15,11 @@ export const policyCreateFormSchema = z.object({
 		.min(1)
 		.refine((value) => !/\r|\n/.test(value), {
 			message: 'Input cannot include multiple lines or paragraphs'
-		})
+		}),
+	// survey for the study (should be removed later)
+	survey: z.string().trim().array().nonempty({
+		message: 'Please select at least one option'
+	})
 });
 
 export const policyEditFormSchema = z.object({
