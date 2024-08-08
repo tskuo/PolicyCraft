@@ -190,12 +190,16 @@
 				</Form.Control>
 			</div>
 			{#if $formData.survey.some((s) => s.startsWith('other')) && otherOption == ''}
-				<p class="text-sm text-destructive">Please explain your selection for the other option.</p>
+				<p class="text-sm text-destructive">Please explain your selection for the other option</p>
 			{/if}
 		</div>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Button class="mt-6" disabled={disalbeSubmitButton}>
+	<Form.Button
+		class="mt-6"
+		disabled={disalbeSubmitButton ||
+			($formData.survey.some((s) => s.startsWith('other')) && otherOption == '')}
+	>
 		{#if disalbeSubmitButton}
 			<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
 		{/if}

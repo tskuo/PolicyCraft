@@ -43,7 +43,11 @@ export const policyEditFormSchema = z.object({
 			caseId: z.string(),
 			label: z.string()
 		})
-		.array()
+		.array(),
+	// survey for the study (should be removed later)
+	survey: z.string().trim().array().nonempty({
+		message: 'Please select at least one option'
+	})
 });
 
 export const policyEditCaseFormSchema = z.object({

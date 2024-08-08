@@ -79,7 +79,7 @@ export const PATCH = async ({ request, params, locals }) => {
 					description: form.data.description
 				});
 
-				await addDoc(collection(db, 'actionLogs'), {
+				const actionRef = await addDoc(collection(db, 'actionLogs'), {
 					action: 'editPolicy',
 					createAt: serverTimestamp(),
 					input: {
@@ -91,6 +91,13 @@ export const PATCH = async ({ request, params, locals }) => {
 					targetSubCollection: '',
 					targetSubDocumentId: '',
 					userId: locals.user.userId
+				});
+				// survey for the study (should be removed later)
+				await addDoc(collection(db, 'survey'), {
+					action: 'editPolicy',
+					actionLogId: actionRef.id,
+					createAt: serverTimestamp(),
+					response: form.data.survey
 				});
 			}
 
