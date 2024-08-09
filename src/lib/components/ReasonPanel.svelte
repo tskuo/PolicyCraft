@@ -44,13 +44,15 @@
 
 <div class="flex justify-between items-center">
 	<h3 class="font-bold text-lg">Vote Reasons</h3>
-	<Button
-		on:click={() => {
-			showCreateReasonForm = !showCreateReasonForm;
-		}}
-	>
-		<Pencil class="h-4 w-4 mr-2" />Add reason
-	</Button>
+	{#if !showCreateReasonForm}
+		<Button
+			on:click={() => {
+				showCreateReasonForm = true;
+			}}
+		>
+			<Pencil class="h-4 w-4 mr-2" />Add reason
+		</Button>
+	{/if}
 </div>
 {#if showCreateReasonForm}
 	<Card.Root class="mt-2">
@@ -91,6 +93,14 @@
 					{/if}
 					Submit
 				</Form.Button>
+				{#if !disalbeSubmitButton}
+					<Button
+						variant="secondary"
+						on:click={() => {
+							showCreateReasonForm = false;
+						}}>Cancel</Button
+					>
+				{/if}
 			</form>
 		</Card.Content>
 	</Card.Root>
