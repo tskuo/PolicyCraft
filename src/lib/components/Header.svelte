@@ -27,7 +27,7 @@
 				>
 				<Sheet.Content side="left">
 					<Sheet.Header>
-						<Sheet.Title>PolicyCraft</Sheet.Title>
+						<Sheet.Title></Sheet.Title>
 						<Sheet.Description>
 							<nav>
 								<ui class="list-none">
