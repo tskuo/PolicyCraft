@@ -12,7 +12,7 @@
 		ArrowBigDown,
 		ArrowBigUp,
 		BookText,
-		Eye,
+		Bell,
 		FileClock,
 		Pencil,
 		TriangleAlert
@@ -113,11 +113,11 @@
 								});
 							}}
 						>
-							<Eye class="h-4 w-4 mr-2" />{data.policy.watchList.length}
+							<Bell class="h-4 w-4 mr-2" />{data.policy.watchList.length}
 						</Toggle>
 					</Tooltip.Trigger>
 					<Tooltip.Content>
-						<p>Watch to get notifications for updates on this policy</p>
+						<p>Get notifications for edits on this policy</p>
 					</Tooltip.Content>
 				</Tooltip.Root>
 

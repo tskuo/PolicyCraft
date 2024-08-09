@@ -6,7 +6,7 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import {
-		Eye,
+		Bell,
 		MessageSquare,
 		Folder,
 		ArrowBigUp,
@@ -127,11 +127,11 @@
 								});
 							}}
 						>
-							<Eye class="h-4 w-4 mr-2" />{watchList.length}
+							<Bell class="h-4 w-4 mr-2" />{watchList.length}
 						</Toggle>
 					</Tooltip.Trigger>
 					<Tooltip.Content>
-						<p>Watch to get notifications for updates on this policy</p>
+						<p>Get notifications for edits on this policy</p>
 					</Tooltip.Content>
 				</Tooltip.Root>
 				{#if stage == 'vote'}
