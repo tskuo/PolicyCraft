@@ -128,8 +128,12 @@ export const actions: Actions = {
 			newCase.reasons = [
 				{
 					id: reasonData.id,
+					description: form.data.reason,
 					label: form.data.userVote,
-					description: form.data.reason
+					likeList: [event.locals.user?.userId],
+					targetEntity: 'cases',
+					targetEntityId: data.id,
+					userId: event.locals.user?.userId
 				}
 			];
 		}

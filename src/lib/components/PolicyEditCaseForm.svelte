@@ -25,7 +25,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import SuperDebug from 'sveltekit-superforms';
 	import { browser } from '$app/environment';
-	import { Plus, Search, LoaderCircle, Ellipsis, Meh } from 'lucide-svelte';
+	import { Plus, Search, LoaderCircle, Ellipsis, Meh, Pencil } from 'lucide-svelte';
 	import type { ActionData } from '../../routes/(authed)/policies/[policyId]/editcase/$types';
 
 	export let data: SuperValidated<Infer<PolicyEditCaseFormSchema>>;
@@ -125,8 +125,7 @@
 	<Form.Fieldset {form} name="cases">
 		<Form.Legend class="font-bold">Related cases</Form.Legend>
 		<Form.Description>
-			To edit the label of a related case or remove it from the policy, click on the ellipsis icon.
-			Your changes will only be saved once you click the submit button at the bottom of the page.
+			To edit the label of a related case or remove it from the policy, click the pencil icon.
 		</Form.Description>
 		{#if $formData.cases.length == 0}
 			<Card.Root class="w-full h-80 flex items-center justify-center">
@@ -149,7 +148,7 @@
 								<div class="absolute top-0 right-0 mt-4 mr-2">
 									<DropdownMenu.Root>
 										<DropdownMenu.Trigger>
-											<Button variant="ghost"><Ellipsis class="h-4 w-4" /></Button>
+											<Button variant="ghost"><Pencil class="h-4 w-4" /></Button>
 										</DropdownMenu.Trigger>
 										<DropdownMenu.Content>
 											<DropdownMenu.Group>
@@ -169,7 +168,7 @@
 												<DropdownMenu.Item
 													on:click={() => {
 														handleCase($formData.cases[i].caseId, 'unsure');
-													}}>currently unsure under this policy</DropdownMenu.Item
+													}}>currently ambiguous under this policy</DropdownMenu.Item
 												>
 												<DropdownMenu.Item
 													class="text-red-500 data-[highlighted]:text-red-500"
@@ -226,8 +225,7 @@
 			<p class="text-sm text-muted-foreground mb-2">
 				To add an existing case from the case repository as a related case, click the plus icon. To
 				create and add a new case that is not in the case repository, click the "create new case"
-				button. Your changes will only be saved once you click the submit button at the bottom of
-				the page.
+				button.
 			</p>
 			<div class="flex items-center space-x-2">
 				<form
@@ -373,7 +371,7 @@
 										<Form.Control let:attrs>
 											<RadioGroup.Item value="unsure" {...attrs} />
 											<Form.Label class="font-normal">
-												The case is currently unsure under this policy
+												The case is currently ambiguous under this policy
 											</Form.Label>
 										</Form.Control>
 									</div>
@@ -426,7 +424,7 @@
 														<DropdownMenu.Item
 															on:click={() => {
 																handleCase(searchCase.id, 'unsure');
-															}}>currently unsure under this policy</DropdownMenu.Item
+															}}>currently ambiguous under this policy</DropdownMenu.Item
 														>
 													</DropdownMenu.Group>
 												</DropdownMenu.Content>
