@@ -340,8 +340,9 @@
 							{:else}
 								<Alert.Root>
 									<Alert.Description>
-										If you vote "unsure," you can still explain your reasons on the case page once
-										you create it.
+										If you vote "unsure," you can still explain your reasoning on the case page
+										after creating it by adding <span class="italic">separate</span> allow and disallow
+										reasons that together make you unsure.
 									</Alert.Description>
 								</Alert.Root>
 							{/if}

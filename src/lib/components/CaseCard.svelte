@@ -393,8 +393,9 @@
 				<Alert.Root>
 					<Meh class="h-4 w-4" />
 					<Alert.Description>
-						If you vote "unsure," you can still explain your reasons on the case page and start
-						other discussions if you wish.
+						If you vote "unsure," you can still explain your reasoning by opening the case page and
+						adding <span class="italic">separate</span> allow and disallow reasons that together make
+						you unsure.
 					</Alert.Description>
 				</Alert.Root>
 			</div>
