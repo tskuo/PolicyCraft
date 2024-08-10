@@ -5,6 +5,7 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import {
 		messageCreateFormSchema,
 		discussionCreateFormSchema,
@@ -14,7 +15,7 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { LoaderCircle, Plus, Send } from 'lucide-svelte/icons';
+	import { CircleHelp, LoaderCircle, Plus, Send } from 'lucide-svelte/icons';
 	import { invalidateAll } from '$app/navigation';
 
 	export let discussions: any[] = [];
@@ -71,6 +72,18 @@
 				? 'Policy'
 				: 'Case'} Discussions
 	</h3>
+	<Tooltip.Root>
+		<Tooltip.Trigger><CircleHelp class="h-4 w-4 ml-2 text-muted-foreground" /></Tooltip.Trigger>
+		<Tooltip.Content class="max-w-xs">
+			<p>
+				{$page.url.pathname == '/'
+					? `You're welcome to create new discussion threads here about any general topic. The person who creates the thread can close it once the discussion has been resolved.`
+					: $page.url.pathname.startsWith('/policies')
+						? `You're welcome to create new discussion threads here about any aspect of this policy. The person who creates the thread can close it once the discussion has been resolved.`
+						: `You're welcome to create new discussion threads here about any aspect of this case. The person who creates the thread can close it once the discussion has been resolved.`}
+			</p>
+		</Tooltip.Content>
+	</Tooltip.Root>
 </div>
 <Tabs.Root value="open" class="w-full mt-5">
 	<Tabs.List class="grid w-full grid-cols-2">
