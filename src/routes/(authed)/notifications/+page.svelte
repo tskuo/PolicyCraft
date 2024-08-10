@@ -46,16 +46,16 @@
 						<Table.Cell>
 							{#if notification.action == 'editPolicy'}
 								<BookText class="w-4 h-4 mr-2 inline-block" />
-								The policy that you are watching has been edited.
+								A policy that you are following has been edited.
 							{:else if notification.action == 'editRelatedCaseLabel' || notification.action == 'editRelatedCaseLabelWhileEditingPolicy'}
 								<Folder class="w-4 h-4 mr-2 inline-block" />
-								A related case's label of a policy you are watching has been edited.
+								A related case's label of a policy you are following has been edited.
 							{:else if notification.action == 'addRelatedCase'}
 								<Folder class="w-4 h-4 mr-2 inline-block" />
-								A related case has been added to a policy you are watching.
+								A related case has been added to a policy you are following.
 							{:else if notification.action == 'removeRelatedCases'}
 								<Folder class="w-4 h-4 mr-2 inline-block" />
-								A related case has been removed from a policy you are watching.
+								A related case has been removed from a policy you are following.
 							{:else if notification.action == 'createComment'}
 								<MessageSquare class="w-4 h-4 mr-2 inline-block" />
 								A new message has been added to a discussion thread you participated in.

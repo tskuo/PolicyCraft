@@ -328,7 +328,7 @@
 													<Form.Control let:attrs>
 														<RadioGroup.Item value="unsure" {...attrs} />
 														<Form.Label class="font-normal"
-															>currently unsure under this policy</Form.Label
+															>currently ambiguous under this policy</Form.Label
 														>
 													</Form.Control>
 												</div>
