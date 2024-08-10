@@ -34,7 +34,11 @@
 				<Card.Root>
 					<Card.Header>
 						<Card.Title>Create a new case</Card.Title>
-						<!-- <Card.Description>Case creation guidelines ...</Card.Description> -->
+						<Card.Description>
+							Please avoid creating cases that duplicate existing ones so that people can focus
+							votes and discussions in one place. Note that cases cannot be edited (unlike policies)
+							once they are created.
+						</Card.Description>
 					</Card.Header>
 					<Card.Content class="space-y-2">
 						<CaseCreateForm data={data.form2} />
