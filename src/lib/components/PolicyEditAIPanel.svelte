@@ -233,7 +233,7 @@
 										'AI Assistant',
 										`Why should this case be ` +
 											selectedCaseLabel +
-											`ed? Please select a reason that others have submitted for this case, or briefly explain your own reason. You may click on the related case on this page to view the details of each reason.`
+											`ed? Please select a reason that others have submitted for this case, or briefly explain your own reason.`
 									);
 									showReasonSelector = true;
 								} else {
@@ -314,7 +314,7 @@
 										'AI Assistant',
 										`Why should this case be ` +
 											selectedCaseLabel +
-											`ed? Please select a reason that others have submitted for this case, or briefly explain your own reason. You may click on the related case on this page to view the details of each reason.`
+											`ed? Please select a reason that others have submitted for this case, or briefly explain your own reason.`
 									);
 									showReasonSelector = true;
 								} else {
@@ -383,12 +383,7 @@
 					</Select.Trigger>
 					<Select.Content>
 						{#each selectedCaseReasons as reason (reason.id)}
-							<Select.Item
-								value={reason.description}
-								label={reason.description.length > 47
-									? reason.description.substring(0, 47) + '...'
-									: reason.description}
-							/>
+							<Select.Item value={reason.description} label={reason.description} />
 						{/each}
 						<Select.Item value="manual" label="Enter a reason manually" />
 					</Select.Content>
