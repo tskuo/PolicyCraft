@@ -30,7 +30,7 @@
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button class="w-full mt-2">Login</Form.Button>
-	{#if $message}
-		<div class="text-sm text-red-500 mt-2">{$message}</div>
-	{/if}
 </form>
+{#if $message}
+	<div class="text-sm text-red-500 mt-2 text-center">{$message}</div>
+{/if}

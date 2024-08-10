@@ -75,20 +75,6 @@
 	let otherOption = '';
 </script>
 
-{#if $message}
-	<Alert.Root class="my-4 border-primary text-primary">
-		<CircleAlert class="h-4 w-4 stroke-primary" />
-		<Alert.Title>Heads up!</Alert.Title>
-		<Alert.Description>
-			Other people edited the policy while you were working on it. Please review their changes below
-			and consider incorporating them into your submission.
-			<p class="mt-2 font-semibold">Edited title:</p>
-			<p>{$message.uptodateTitle}</p>
-			<p class="mt-2 font-semibold">Edited description:</p>
-			<p>{$message.uptodateDescription}</p>
-		</Alert.Description>
-	</Alert.Root>
-{/if}
 <form method="POST" use:enhance action="?/editPolicy">
 	<h2 class="font-bold mt-4 mb-2">Step 1 of 2: Edit policy title and description</h2>
 	<Form.Field {form} name="title">
@@ -366,6 +352,20 @@
 			This policy currently has no related cases. Please directly submit the edit and consider
 			adding related cases.
 		</p>
+	{/if}
+	{#if $message}
+		<Alert.Root class="my-4 border-primary text-primary">
+			<CircleAlert class="h-4 w-4 stroke-primary" />
+			<Alert.Title>Heads up!</Alert.Title>
+			<Alert.Description>
+				Other people edited the policy while you were working on it. Please review their changes
+				below and consider incorporating them into your submission.
+				<p class="mt-2 font-semibold">Edited title:</p>
+				<p>{$message.uptodateTitle}</p>
+				<p class="mt-2 font-semibold">Edited description:</p>
+				<p>{$message.uptodateDescription}</p>
+			</Alert.Description>
+		</Alert.Root>
 	{/if}
 	{#if showNextStep}
 		<Form.Button
