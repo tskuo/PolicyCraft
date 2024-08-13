@@ -17,6 +17,11 @@
 		Pencil,
 		TriangleAlert
 	} from 'lucide-svelte/icons';
+	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
+	onMount(() => {
+		invalidateAll();
+	});
 
 	export let data;
 
