@@ -113,8 +113,8 @@
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="all">all policies</Select.Item>
-						<Select.Item value="watching">watching</Select.Item>
-						<Select.Item value="notwatching">not watching</Select.Item>
+						<Select.Item value="watching">following</Select.Item>
+						<Select.Item value="notwatching">not following</Select.Item>
 					</Select.Content>
 				</Select.Root>
 			</div>
@@ -133,7 +133,7 @@
 					<Select.Content>
 						<Select.Item value="new">new</Select.Item>
 						<Select.Item value="title">title</Select.Item>
-						<Select.Item value="watch">most watching</Select.Item>
+						<Select.Item value="watch">most following</Select.Item>
 						<Select.Item value="discuss">most discussion</Select.Item>
 						<Select.Item value="case">least cases</Select.Item>
 						{#if data.stage == 'vote'}
