@@ -18,8 +18,9 @@
 	<Form.Field {form} name="email">
 		<Form.Control let:attrs>
 			<Form.Label>Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.email} placeholder="name@example.com" />
+			<Input {...attrs} bind:value={$formData.email} placeholder="AndrewID@andrew.cmu.edu" />
 		</Form.Control>
+		<Form.Description>Please use your Andrew email</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="password">
@@ -34,7 +35,7 @@
 			<Form.Label>Display name</Form.Label>
 			<Input {...attrs} bind:value={$formData.displayName} />
 		</Form.Control>
-		<Form.Description>This will be your public display name.</Form.Description>
+		<Form.Description>Please enter your first and last name</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="code">
@@ -42,7 +43,7 @@
 			<Form.Label>Code</Form.Label>
 			<Input {...attrs} bind:value={$formData.code} />
 		</Form.Control>
-		<Form.Description>Enter the code shared by your course instructor.</Form.Description>
+		<Form.Description>Enter the code shared by your course instructor</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button class="w-full mt-2">Sign Up</Form.Button>
