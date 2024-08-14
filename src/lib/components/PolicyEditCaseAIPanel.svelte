@@ -11,7 +11,7 @@
 	let messageHistory: any[] = [
 		{
 			person: 'AI Assistant',
-			message: `I am an AI assistant who can help brainstorm cases that illustrate the application of the policy, or cases that reveal the potential flaw of the policy. Please click the buttons below to see some examples.`
+			message: `I am an AI assistant who can help brainstorm cases that illustrate the application of the policy, or cases that reveal potential flaws in the policy. Please select one of the options below to generate:`
 		}
 	];
 	let loading = false;
@@ -22,7 +22,7 @@
 	let showRestartBtn = false;
 
 	const messageExample = `Cases that illustrate the policy`;
-	const messageCounterExample = 'Cases that reveal the policy flaws';
+	const messageCounterExample = 'Cases that may reveal flaws in the policy';
 	const promptStarter = `You are a helpful assistant focusing on supporting users' reflections on course policies. Here is an overview of the course.`;
 	const courseInfo = caseContext;
 	const promptIllustrativeAllowCase =
@@ -252,7 +252,7 @@
 					resetButtonAndData();
 					await updateMessageHistory(
 						'AI Assistant',
-						`To restart, please click the buttons below to see some examples.`
+						`To restart, please select one of the options below to generate:`
 					);
 				}}>Restart</Button
 			>
