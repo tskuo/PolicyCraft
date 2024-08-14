@@ -5,7 +5,7 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import * as Tooltip from '$lib/components/ui/tooltip';
+	import * as Popover from '$lib/components/ui/popover';
 	import {
 		messageCreateFormSchema,
 		discussionCreateFormSchema,
@@ -72,9 +72,9 @@
 				? 'Policy'
 				: 'Case'} Discussions
 	</h3>
-	<Tooltip.Root>
-		<Tooltip.Trigger><CircleHelp class="h-4 w-4 ml-2 text-muted-foreground" /></Tooltip.Trigger>
-		<Tooltip.Content class="max-w-xs">
+	<Popover.Root>
+		<Popover.Trigger><CircleHelp class="h-4 w-4 ml-2 text-muted-foreground" /></Popover.Trigger>
+		<Popover.Content class="max-w-xs text-sm">
 			<p>
 				{$page.url.pathname == '/'
 					? `You're welcome to create new discussion threads here about any general topic. The person who creates the thread can close it once the discussion has been resolved.`
@@ -82,8 +82,8 @@
 						? `You're welcome to create new discussion threads here about any aspect of this policy. The person who creates the thread can close it once the discussion has been resolved.`
 						: `You're welcome to create new discussion threads here about any aspect of this case. The person who creates the thread can close it once the discussion has been resolved.`}
 			</p>
-		</Tooltip.Content>
-	</Tooltip.Root>
+		</Popover.Content>
+	</Popover.Root>
 </div>
 <Tabs.Root value="open" class="w-full mt-5">
 	<Tabs.List class="grid w-full grid-cols-2">
