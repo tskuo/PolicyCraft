@@ -80,13 +80,15 @@ exports.policycraftNotificationTrigger = onDocumentCreated(
 				.then((doc) => {
 					if (doc.exists) {
 						for (const userId of doc.data()!.watchList) {
-							db.collection(`users/${userId}/notifications`).add({
-								action: data.action,
-								createAt: data.createAt,
-								read: false,
-								targetCollection: 'policies',
-								targetDocumentId: data.targetDocumentId
-							});
+							if (userId !== data.userId) {
+								db.collection(`users/${userId}/notifications`).add({
+									action: data.action,
+									createAt: data.createAt,
+									read: false,
+									targetCollection: 'policies',
+									targetDocumentId: data.targetDocumentId
+								});
+							}
 						}
 					} else {
 						// doc.data() will be undefined in this case
