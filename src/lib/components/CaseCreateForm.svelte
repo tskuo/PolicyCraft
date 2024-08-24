@@ -40,6 +40,10 @@
 	<Form.Field {form} name="description">
 		<Form.Control let:attrs>
 			<Form.Label>Case description</Form.Label>
+			<Form.Description>
+				The description of cases should not include judgments about whether the use of AI is allowed
+				or not. You can specify your judgments through votes and reasons instead.
+			</Form.Description>
 			<Textarea {...attrs} bind:value={$formData.description} />
 		</Form.Control>
 		<Form.FieldErrors />

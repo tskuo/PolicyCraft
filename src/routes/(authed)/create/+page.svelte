@@ -35,9 +35,9 @@
 					<Card.Header>
 						<Card.Title>Create a new case</Card.Title>
 						<Card.Description>
-							Please avoid creating cases that duplicate existing ones so that people can focus
-							votes and discussions in one place. Note that cases cannot be edited (unlike policies)
-							once they are created.
+							Cases are concrete scenarios where one or more characters use generative AI for
+							coursework under specific circumstances. Please avoid creating cases that duplicate
+							existing ones. Cases cannot be edited once created.
 						</Card.Description>
 					</Card.Header>
 					<Card.Content class="space-y-2">

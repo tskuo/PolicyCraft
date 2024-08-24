@@ -274,7 +274,8 @@
 							<Dialog.Title>Create a new case</Dialog.Title>
 							<Dialog.Description>
 								A new case will be created as soon as you click the create button, but it will not
-								be added to the policy as a related case until you click the submit button.
+								be added to the policy as a related case until you click the submit button. Cases
+								cannot be edited once created.
 							</Dialog.Description>
 						</Dialog.Header>
 						<form method="POST" use:enhance2 action="?/createCase">
@@ -288,9 +289,13 @@
 							<Form.Field form={formNewCase} name="description">
 								<Form.Control let:attrs>
 									<Form.Label>Case description</Form.Label>
+									<Form.Description>
+										The description of cases should not include judgments about whether the use of
+										AI is allowed or not. You can specify your judgments through votes and reasons
+										instead.
+									</Form.Description>
 									<Textarea {...attrs} bind:value={$formNewCaseData.description} />
 								</Form.Control>
-								<!-- <Form.Description>This is your public display name.</Form.Description> -->
 								<Form.FieldErrors />
 							</Form.Field>
 							<Form.Fieldset form={formNewCase} name="userVote" class="mt-4 mb-2">
