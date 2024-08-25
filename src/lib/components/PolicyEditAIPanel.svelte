@@ -257,7 +257,7 @@
 						} else if (v?.value == 'unsure') {
 							await updateMessageHistory(
 								'AI Assistant',
-								'Should this case be allowed or disallowed, or are most people unsure?'
+								'Do you think this case should be allowed or disallowed, or are you unsure?'
 							);
 							showUnsureSelector = true;
 						} else if (v?.value == 'unrelated') {
@@ -338,7 +338,7 @@
 						} else {
 							await updateMessageHistory(
 								'AI Assistant',
-								`Please consider discussing the case more before editing the policy based on a case where most people are unsure.`
+								`Please consider discussing the case more before editing the policy based on a case where you are unsure.`
 							);
 							showUnsureCaseLink = true;
 						}
@@ -349,9 +349,9 @@
 						<Select.Value placeholder="Select a condition" />
 					</Select.Trigger>
 					<Select.Content>
-						<Select.Item value="allow" label="The case should be allowed" />
-						<Select.Item value="disallow" label="The case should be disallowed" />
-						<Select.Item value="unsure" label="Most people are unsure" />
+						<Select.Item value="allow" label="This case should be allowed" />
+						<Select.Item value="disallow" label="This case should be disallowed" />
+						<Select.Item value="unsure" label="I am unsure" />
 					</Select.Content>
 				</Select.Root>
 			</div>

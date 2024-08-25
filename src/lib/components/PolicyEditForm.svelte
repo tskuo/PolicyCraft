@@ -247,7 +247,7 @@
 	{#if !showNextStep}
 		<h3 class="text-sm font-medium my-3">
 			Related Cases
-			<span class="text-muted-foreground">(for reference only, not editable here)</span>
+			<span class="text-muted-foreground">(for reference)</span>
 		</h3>
 		{#if $formData.cases.length !== 0}
 			<ScrollArea orientation="horizontal" class="rounded-lg md:w-[60vw]">
