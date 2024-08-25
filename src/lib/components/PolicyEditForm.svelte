@@ -15,6 +15,8 @@
 	import { CircleAlert, LoaderCircle } from 'lucide-svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import Button from './ui/button/button.svelte';
+	import SuperDebug from 'sveltekit-superforms';
+	import { browser } from '$app/environment';
 
 	export let data: SuperValidated<Infer<PolicyEditFormSchema>>;
 	export let cases;
@@ -94,7 +96,9 @@
 	<!-- survey for the study (should be removed later) -->
 	<Form.Field {form} name="survey">
 		<div class="mt-3 mb-3">
-			<Form.Legend class="text-sm">What inspired you to edit this policy?</Form.Legend>
+			<Form.Legend class="text-sm">
+				What inspired you to edit this policy? Select at least one option.
+			</Form.Legend>
 			<Form.Description class="my-1">I am editing this policy to ...</Form.Description>
 		</div>
 		<div class="space-y-2">
@@ -372,7 +376,8 @@
 			class="mt-6"
 			disabled={!allowSubmit ||
 				disalbeSubmitButton ||
-				($formData.survey.some((s) => s.startsWith('other')) && otherOption == '')}
+				($formData.survey.some((s) => s.startsWith('other')) && otherOption == '') ||
+				$formData.survey.length == 0}
 		>
 			{#if disalbeSubmitButton}
 				<LoaderCircle class="w-4 h-4 mr-2 animate-spin" />
@@ -381,3 +386,6 @@
 		</Form.Button>
 	{/if}
 </form>
+<!-- {#if browser}
+	<SuperDebug data={$formData} />
+{/if} -->
