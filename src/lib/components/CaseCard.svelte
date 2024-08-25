@@ -16,7 +16,8 @@
 		Meh,
 		Plus,
 		LoaderCircle,
-		ThumbsUp
+		ThumbsUp,
+		Sticker
 	} from 'lucide-svelte/icons';
 	import type { Timestamp } from 'firebase/firestore';
 
@@ -249,7 +250,7 @@
 			</ToggleGroup.Root>
 		</div> -->
 	</div>
-	<Dialog.Content class="sm:max-w-lg max-h-[80%] overflow-y-scroll">
+	<Dialog.Content class="sm:max-w-xl max-h-[80%] overflow-y-scroll">
 		<Dialog.Header>
 			<Dialog.Title class="leading-normal">
 				{title}
@@ -307,6 +308,17 @@
 				{/if}
 			</Tooltip.Content>
 		</Tooltip.Root>
+		{#if userVote == undefined}
+			<div class="flex w-full items-center space-x-1 mt-1">
+				<Alert.Root>
+					<Sticker class="h-4 w-4" />
+					<Alert.Description>
+						Reminder: Your vote and reasons should reflect what you think about this case,
+						regardless of what current policies say.
+					</Alert.Description>
+				</Alert.Root>
+			</div>
+		{/if}
 		<ToggleGroup.Root
 			type="single"
 			class="w-full grid grid-cols-3"
@@ -341,7 +353,7 @@
 				<Input
 					class="flex-1"
 					bind:value={newReason}
-					placeholder={`This case should be ${userVote}ed because ...`}
+					placeholder={`I think this case should be ${userVote}ed because ...`}
 				/>
 				<Button
 					disabled={!(userVote == 'allow' || userVote == 'disallow') ||
