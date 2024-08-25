@@ -86,7 +86,7 @@ export const messageCreateFormSchema = z.object({
 });
 
 export const discussionCreateFormSchema = z.object({
-	title: z.string().trim().min(1).max(30),
+	title: z.string().trim().min(1).max(40),
 	message: z.string().trim().min(1)
 });
 
