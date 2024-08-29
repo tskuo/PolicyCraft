@@ -176,9 +176,10 @@
 	</div>
 	{#if compactView === false}
 		<Card.Content>
-			<h3 class="font-bold mb-2">Related Cases</h3>
-			{#if cases.length > 0}
-				<!-- <div class="flex justify-center w-full">
+			{#if stage !== 'vote'}
+				<h3 class="font-bold mb-2">Related Cases</h3>
+				{#if cases.length > 0}
+					<!-- <div class="flex justify-center w-full">
 					<Carousel.Root opts={{ align: 'start' }} class="w-11/12">
 						<Carousel.Content>
 							{#each cases as c}
@@ -191,17 +192,18 @@
 						<Carousel.Next />
 					</Carousel.Root>
 				</div> -->
-				<ScrollArea orientation="horizontal" class="rounded-lg md:w-[57vw]">
-					<div class="flex space-x-2 pb-4 w-[57vw]">
-						{#each cases as c}
-							<div class="basis-full md:basis-1/3 flex-none">
-								<CaseCard {...c} {userId} {userRole} {userCounts}></CaseCard>
-							</div>
-						{/each}
-					</div>
-				</ScrollArea>
-			{:else}
-				<p class="text-sm">There are no related cases.</p>
+					<ScrollArea orientation="horizontal" class="rounded-lg md:w-[57vw]">
+						<div class="flex space-x-2 pb-4 w-[57vw]">
+							{#each cases as c}
+								<div class="basis-full md:basis-1/3 flex-none">
+									<CaseCard {...c} {userId} {userRole} {userCounts}></CaseCard>
+								</div>
+							{/each}
+						</div>
+					</ScrollArea>
+				{:else}
+					<p class="text-sm">There are no related cases.</p>
+				{/if}
 			{/if}
 			<h3 class="font-bold mt-4 mb-2">Open discussions</h3>
 			<Table.Root>
